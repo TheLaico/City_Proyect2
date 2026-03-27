@@ -1,0 +1,39 @@
+/* Modal de información de edificio */
+.building-info-modal {
+  /* Hereda de .modal */
+  max-width: 420px;
+}
+
+.building-info-modal__icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.building-info-modal__title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.building-info-modal__type {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.7rem;
+}
+
+.building-info-modal__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+.building-info-modal__stat {
+  font-size: 0.98rem;
+  color: var(--color-text-secondary);
+}
+
+.building-info-modal__description {
+  font-size: 1.05rem;
+  margin-bottom: 0.7rem;
+}

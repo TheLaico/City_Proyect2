@@ -65,6 +65,44 @@ class InputController {
           break;
       }
     });
+        // Listeners para inputs configurables
+    const turnDurationInput = document.getElementById('turn-duration');
+    if (turnDurationInput) {
+      turnDurationInput.addEventListener('change', (e) => {
+        const seconds = parseInt(e.target.value, 10);
+        if (!isNaN(seconds) && seconds > 0) {
+          this.eventBus.emit(EventType.TURN_DURATION_CHANGED, { seconds });
+        }
+      });
+    }
+    
+    // Inputs de configuración general
+    const configInputs = [
+      { id: 'init-electricity', key: 'initElectricity' },
+      { id: 'init-water', key: 'initWater' },
+      { id: 'init-food', key: 'initFood' },
+      { id: 'citizen-water', key: 'citizenWaterConsumption' },
+      { id: 'citizen-elec', key: 'citizenElecConsumption' },
+      { id: 'citizen-food', key: 'citizenFoodConsumption' },
+      { id: 'bonus-police', key: 'bonusPolice' },
+      { id: 'bonus-fire', key: 'bonusFire' },
+      { id: 'bonus-hospital', key: 'bonusHospital' }
+    ];
+    configInputs.forEach(({ id, key }) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener('change', () => {
+          // Leer todos los valores actuales
+          const config = {};
+          configInputs.forEach(({ id, key }) => {
+            const el = document.getElementById(id);
+            if (el) config[key] = parseFloat(el.value);
+          });
+          this.gameStore.setState({ config });
+          this.eventBus.emit(EventType.CONFIG_CHANGED, { config });
+        });
+      }
+    });
   }
 }
 

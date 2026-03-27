@@ -1,0 +1,57 @@
+/* Layout principal desktop (≥1024px) */
+#game-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-left-width) 1fr var(--sidebar-right-width);
+  grid-template-areas:
+    'left main right';
+  height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
+  min-height: 0;
+}
+#left-sidebar {
+  grid-area: left;
+  overflow-y: auto;
+  background: var(--color-surface);
+  min-width: var(--sidebar-left-width);
+  max-width: var(--sidebar-left-width);
+}
+#map-container {
+  grid-area: main;
+  overflow: auto;
+  background: var(--color-bg);
+  max-height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+}
+#map-grid {
+  display: grid;
+  /* grid-template-columns se define dinámicamente desde JS */
+  justify-content: start;
+  align-content: start;
+  gap: 0;
+}
+#right-sidebar {
+  grid-area: right;
+  overflow-y: auto;
+  background: var(--color-surface-2);
+  min-width: var(--sidebar-right-width);
+  max-width: var(--sidebar-right-width);
+}
+#top-bar {
+  height: var(--topbar-height);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+}
+#bottom-bar {
+  height: var(--bottombar-height);
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  border-top: 1px solid var(--color-border);
+  z-index: 10;
+}

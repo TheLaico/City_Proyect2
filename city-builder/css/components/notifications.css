@@ -1,0 +1,54 @@
+#notifications-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notification {
+  min-width: 280px;
+  max-width: 360px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  border-left: 5px solid var(--color-border);
+  font-size: 1rem;
+  animation: slideInRight 0.3s;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.notification--success {
+  border-left-color: var(--color-success);
+}
+
+.notification--error {
+  border-left-color: var(--color-danger);
+}
+
+.notification--warning {
+  border-left-color: var(--color-warning);
+}
+
+.notification--info {
+  border-left-color: var(--color-accent);
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(60px); }
+}
+
+.notification--hide {
+  animation: slideOutRight 0.3s forwards;
+}

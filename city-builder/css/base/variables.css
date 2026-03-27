@@ -1,0 +1,47 @@
+:root {
+  /* Paleta de colores — temática urbana/estrategia */
+  --color-bg:            #0f1923;
+  --color-surface:       #1a2635;
+  --color-surface-2:     #243447;
+  --color-border:        #2e4460;
+  --color-text:          #c8d8e8;
+  --color-text-muted:    #6b8299;
+  --color-accent:        #4fc3f7;
+  --color-success:       #66bb6a;
+  --color-warning:       #ffa726;
+  --color-danger:        #ef5350;
+  --color-gold:          #ffd54f;
+
+  /* Recursos */
+  --color-money:         #66bb6a;
+  --color-electricity:   #ffd54f;
+  --color-water:         #4fc3f7;
+  --color-food:          #a5d6a7;
+
+  /* Edificios — colores por tipo */
+  --color-building-residential: #81c784;
+  --color-building-commercial:  #64b5f6;
+  --color-building-industrial:  #ffb74d;
+  --color-building-service:     #f48fb1;
+  --color-building-utility:     #ce93d8;
+  --color-building-park:        #a5d6a7;
+  --color-road:                 #78909c;
+
+  /* Tipografía */
+  --font-ui:     'Rajdhani', sans-serif;
+  --font-body:   'Source Sans 3', sans-serif;
+  --font-mono:   'JetBrains Mono', monospace;
+
+  /* Tamaños */
+  --sidebar-left-width:  260px;
+  --sidebar-right-width: 300px;
+  --topbar-height:       52px;
+  --bottombar-height:    36px;
+  --cell-size:           40px;
+  --border-radius:       6px;
+  --border-radius-lg:    12px;
+
+  /* Transiciones */
+  --transition-fast:  0.15s ease;
+  --transition-med:   0.3s ease;
+}

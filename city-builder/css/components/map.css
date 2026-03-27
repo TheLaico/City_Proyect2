@@ -1,0 +1,69 @@
+/* Estilos base para celdas del mapa */
+.map-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+
+.map-cell:hover {
+  box-shadow: 0 0 0 2px var(--color-primary);
+  z-index: 2;
+}
+
+.map-cell--empty {
+  background: #1a2820;
+}
+
+.map-cell--road {
+  background: var(--color-road);
+  background-image: repeating-radial-gradient(circle at 2px 2px, #222 1px, transparent 2px);
+}
+
+.map-cell--building-residential {
+  background: var(--color-building-residential);
+}
+
+.map-cell--building-commercial {
+  background: var(--color-building-commercial);
+}
+
+.map-cell--building-industrial {
+  background: var(--color-building-industrial);
+}
+
+.map-cell--building-service {
+  background: var(--color-building-service);
+}
+
+.map-cell--building-utility {
+  background: var(--color-building-utility);
+}
+
+.map-cell--building-park {
+  background: var(--color-building-park);
+}
+
+.map-cell--route {
+  animation: route-pulse 1s infinite;
+  box-shadow: 0 0 8px 2px yellow;
+}
+
+@keyframes route-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px yellow; }
+  50% { box-shadow: 0 0 16px 4px gold; }
+}
+
+.map-cell--selected {
+  border: 2px dotted #fff;
+}
+
+body.mode-build {
+  cursor: crosshair;
+}
+
+body.mode-demolish {
+  cursor: not-allowed;
+}

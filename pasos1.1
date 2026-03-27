@@ -1,0 +1,311 @@
+# OBJETIVO
+
+Implementar completamente el flujo de creación de ciudad (setup inicial) en el proyecto City Builder, asegurando:
+
+* Cumplimiento de principios SOLID
+* Uso correcto de EventBus
+* Cero acoplamiento entre UI y lógica
+* Inicialización correcta de GameStore
+* Emisión del evento GAME_STARTED
+
+Este prompt DEBE crear e integrar correctamente:
+
+* InputValidator.js
+* SetupController.js
+* SetupScreen.js
+* constants.js (completado)
+
+NO modificar arquitectura existente. NO usar variables globales.
+
+---
+
+# CONTEXTO DEL PROYECTO
+
+Arquitectura actual:
+
+* EventBus como canal único de comunicación
+* GameStore como estado global
+* Controllers coordinan lógica
+* UI solo emite y escucha eventos
+* Servicios contienen lógica de negocio
+
+Eventos relevantes ya definidos en EventType.js:
+
+* SETUP_REQUESTED
+* GAME_STARTED
+* NOTIFICATION_SHOW
+
+---
+
+# PARTE 1 — InputValidator.js
+
+Archivo: js/validators/InputValidator.js
+
+Crear clase InputValidator con un único método público:
+
+validateSetupData(data)
+
+Parámetro:
+data = {
+cityName,
+mayorName,
+width,
+height,
+region
+}
+
+Debe retornar:
+
+{
+valid: boolean,
+errors: string[]
+}
+
+Validaciones obligatorias:
+
+1. cityName:
+
+* requerido
+* mínimo 3 caracteres
+* máximo 50 caracteres
+
+2. mayorName:
+
+* requerido
+* mínimo 3 caracteres
+
+3. width y height:
+
+* deben ser números
+* rango permitido: entre 15 y 30
+
+4. region:
+
+* debe existir
+* debe tener lat y lon
+
+Errores deben ser claros y en español.
+
+NO usar EventBus aquí.
+NO modificar estado.
+
+---
+
+# PARTE 2 — SetupController.js
+
+Archivo: js/controllers/SetupController.js
+
+Responsabilidad:
+
+* Validar datos
+* Crear ciudad
+* Inicializar GameStore
+* Emitir GAME_STARTED
+
+Constructor:
+
+constructor(gameStore, eventBus)
+
+Método init():
+
+* suscribirse a evento "setup:submitted"
+
+Flujo al recibir datos:
+
+1. Validar con InputValidator
+
+2. Si NO válido:
+   emitir NOTIFICATION_SHOW con:
+   {
+   message: errores concatenados,
+   type: "error"
+   }
+   detener ejecución
+
+3. Si válido:
+
+Crear instancia de City:
+
+new City({
+name: cityName,
+mayorName,
+region,
+gridWidth: width,
+gridHeight: height
+})
+
+4. Crear mapa:
+
+new Map(width, height)
+
+5. Inicializar estado en GameStore usando setState:
+
+{
+city,
+map,
+buildings: [],
+roads: [],
+citizens: [],
+resources: {
+money: 50000,
+electricity: 0,
+water: 0,
+food: 0
+},
+turn: 0,
+score: 0,
+selectedBuildingType: null,
+mode: 'view'
+}
+
+IMPORTANTE:
+NO mutar estado directamente.
+
+6. Emitir:
+
+GAME_STARTED con:
+
+{
+cityName
+}
+
+---
+
+# PARTE 3 — SetupScreen.js
+
+Archivo: js/ui/SetupScreen.js
+
+Responsabilidad:
+
+* Renderizar formulario
+* Capturar datos
+* Emitir evento
+
+Constructor:
+
+constructor(eventBus)
+
+Método init():
+
+1. Obtener contenedor:
+
+#setup-container
+
+2. Renderizar formulario con:
+
+* input nombre ciudad
+* input nombre alcalde
+* input ancho mapa
+* input alto mapa
+* botón "Crear Ciudad"
+
+3. Al hacer submit:
+
+* prevenir comportamiento por defecto
+* leer valores
+* construir objeto:
+
+{
+cityName,
+mayorName,
+width: Number,
+height: Number,
+region: {
+cityName: "Default",
+lat: 0,
+lon: 0
+}
+}
+
+4. Emitir evento:
+
+"setup:submitted" con los datos
+
+NO validar aquí
+NO usar GameStore
+
+---
+
+# PARTE 4 — constants.js
+
+Archivo: js/config/constants.js
+
+Agregar:
+
+export const BUILDING_COSTS = {
+road: 100,
+residential_house: 1000,
+residential_apartment: 3000,
+commercial_shop: 2000,
+commercial_mall: 8000,
+industrial_factory: 5000,
+industrial_farm: 3000,
+service_police: 4000,
+service_fire: 4000,
+service_hospital: 6000,
+utility_power_plant: 10000,
+utility_water_plant: 8000,
+park: 1500
+}
+
+NO lógica adicional.
+
+---
+
+# PARTE 5 — INTEGRACIÓN EN main.js
+
+Actualizar main.js:
+
+1. importar:
+
+* SetupController
+* SetupScreen
+
+2. crear instancias:
+
+const setupController = new SetupController(gameStore, eventBus)
+const setupScreen = new SetupScreen(eventBus)
+
+3. inicializar:
+
+setupController.init()
+setupScreen.init()
+
+4. al iniciar app:
+
+emitir:
+
+SETUP_REQUESTED
+
+---
+
+# RESTRICCIONES CRÍTICAS
+
+* NO usar window
+* NO usar variables globales
+* NO mezclar UI con lógica
+* NO mutar GameStore directamente
+* TODO flujo debe pasar por EventBus
+
+---
+
+# RESULTADO ESPERADO
+
+Al abrir la app:
+
+1. Se muestra formulario
+2. Usuario ingresa datos
+3. Se valida correctamente
+4. Se crea la ciudad
+5. Se inicializa GameStore
+6. Se emite GAME_STARTED
+7. El resto del sistema puede arrancar
+
+---
+
+# IMPORTANTE
+
+Código limpio, modular, legible.
+Usar ES Modules.
+No agregar funcionalidades extra.
+Solo cumplir este flujo correctamente.

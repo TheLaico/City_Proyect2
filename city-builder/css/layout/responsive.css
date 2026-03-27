@@ -1,0 +1,95 @@
+/* Tablet (768px–1023px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+  #game-layout {
+    grid-template-columns: 1fr var(--sidebar-right-width);
+    grid-template-areas: 'main right';
+  }
+  #left-sidebar {
+    position: absolute;
+    left: 0;
+    top: var(--topbar-height);
+    width: 100vw;
+    max-width: 100vw;
+    height: 60vh;
+    z-index: 20;
+    background: var(--color-surface);
+    transform: translateY(-100%);
+    transition: transform var(--transition-fast);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  #left-sidebar.open {
+    transform: translateY(0);
+  }
+  #map-container {
+    min-width: 0;
+    max-width: 100vw;
+  }
+  #build-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--bottombar-height);
+    width: 100vw;
+    z-index: 30;
+    background: var(--color-surface-2);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
+  }
+}
+
+/* Móvil (<768px) */
+@media (max-width: 767px) {
+  #game-layout {
+    display: block;
+    height: auto;
+  }
+  #left-sidebar, #right-sidebar {
+    display: none;
+  }
+  #btn-open-left, #btn-open-right {
+    display: block;
+    position: fixed;
+    top: calc(var(--topbar-height) + 12px);
+    z-index: 50;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    font-size: 1.5rem;
+    border: none;
+  }
+  #btn-open-left { left: 12px; }
+  #btn-open-right { right: 12px; }
+  #map-container {
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+  #map-grid {
+    min-width: 100vw;
+    grid-auto-rows: minmax(44px, auto);
+  }
+  #build-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    z-index: 40;
+    background: var(--color-surface-2);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
+    min-height: 60px;
+    max-height: 60vh;
+    overflow-y: auto;
+    transition: transform var(--transition-fast);
+    transform: translateY(100%);
+  }
+  #build-menu.open {
+    transform: translateY(0);
+  }
+}

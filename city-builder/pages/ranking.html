@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking | City Builder</title>
+  <link rel="stylesheet" href="../css/base/reset.css">
+  <link rel="stylesheet" href="../css/base/variables.css">
+  <link rel="stylesheet" href="../css/pages/ranking.css">
+  <link rel="stylesheet" href="../css/components/ranking-modal.css">
+  <link href="https://fonts.googleapis.com/css?family=Rajdhani:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+3:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=JetBrains+Mono:400,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <h1>Ranking de ciudades</h1>
+    <table id="ranking-table">
+      <thead>
+        <tr>
+          <th>Pos</th>
+          <th>Ciudad</th>
+          <th>Alcalde</th>
+          <th>Puntuación</th>
+          <th>Población</th>
+          <th>Felicidad</th>
+          <th>Turnos</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas de ranking generadas dinámicamente -->
+      </tbody>
+    </table>
+    <tr id="ranking-current"></tr>
+    <div class="ranking-actions">
+      <button id="btn-reset-ranking">Borrar ranking</button>
+      <button id="btn-export-ranking">Exportar JSON</button>
+      <button id="btn-back">Volver a la partida</button>
+    </div>
+  </main>
+  <script type="module" src="../js/pages/ranking-page.js"></script>
+</body>
+</html>
