@@ -1,0 +1,51 @@
+import { BuildingType } from '../../types/BuildingType.js';
+import BuildingAdapter from '../../adapters/BuildingAdapter.js';
+
+class Building {
+  constructor({ id, type, x, y, buildingData }) {
+    if (new.target === Building) {
+      throw new Error('Building es una clase abstracta y no puede ser instanciada directamente.');
+    }
+    this.id = id;
+    this.type = type;
+    this.x = x;
+    this.y = y;
+    this.cost = buildingData?.cost ?? 0;
+    this.maintenanceCost = buildingData?.maintenanceCost ?? 0;
+    this.electricityConsumption = buildingData?.electricityConsumption ?? 0;
+    this.waterConsumption = buildingData?.waterConsumption ?? 0;
+    this.active = true;
+  }
+
+  getCost() {
+    throw new Error('getCost() debe ser implementado por la subclase.');
+  }
+
+  getConsumption() {
+    throw new Error('getConsumption() debe ser implementado por la subclase.');
+  }
+
+  getProduction() {
+    throw new Error('getProduction() debe ser implementado por la subclase.');
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      type: this.type,
+      x: this.x,
+      y: this.y,
+      cost: this.cost,
+      maintenanceCost: this.maintenanceCost,
+      electricityConsumption: this.electricityConsumption,
+      waterConsumption: this.waterConsumption,
+      active: this.active
+    };
+  }
+
+  static fromJSON(data) {
+    return BuildingAdapter.fromJSON(data);
+  }
+}
+
+export default Building;

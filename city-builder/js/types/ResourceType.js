@@ -1,1 +1,6 @@
-// Tipos de recursos (dinero, agua, luz, comida)
+export const ResourceType = Object.freeze({
+  MONEY: 'money',
+  ELECTRICITY: 'electricity',
+  WATER: 'water',
+  FOOD: 'food'
+});
