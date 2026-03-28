@@ -14,8 +14,9 @@ class BuildController {
     this.eventBus.subscribe(EventType.DEMOLISH_REQUESTED, ({ x, y }) => {
       this.buildingService.demolish(x, y);
     });
-    this.eventBus.subscribe(EventType.BUILDING_SELECTED, ({ selectedBuildingType }) => {
-      this.gameStore.setState({ selectedBuildingType, mode: 'build' });
+    // BUILD_TYPE_SELECTED: selección de tipo desde el menú o tecla R
+    this.eventBus.subscribe(EventType.BUILD_TYPE_SELECTED, ({ buildingType }) => {
+      this.gameStore.setState({ selectedBuildingType: buildingType, mode: 'build' });
       this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'build' });
     });
   }

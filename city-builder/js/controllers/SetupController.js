@@ -27,19 +27,22 @@ class SetupController {
       // Crear ciudad y mapa
       const width  = parseInt(data.width,  10) || 20;
       const height = parseInt(data.height, 10) || 20;
+
+      // Usar mapa ya cargado desde archivo si existe (sin importar si los inputs de tamaño coinciden),
+      // si no crear uno vacío con las dimensiones del formulario.
+      const existingState = this.gameStore.getState();
+      const map = existingState.map ? existingState.map : new Map(width, height);
+      // Sincronizar dimensiones reales de la ciudad con el mapa que se va a usar
+      const finalWidth  = map.width;
+      const finalHeight = map.height;
+
       const city = new City({
         name: data.cityName,
         mayorName: data.mayorName,
         region: data.region,
-        gridWidth: width,
-        gridHeight: height
+        gridWidth: finalWidth,
+        gridHeight: finalHeight
       });
-
-      // Usar mapa ya cargado desde archivo si existe, si no crear uno vacío
-      const existingState = this.gameStore.getState();
-      const map = (existingState.map && existingState.map.width === width && existingState.map.height === height)
-        ? existingState.map
-        : new Map(width, height);
       // Recursos iniciales (pueden venir de campos del form)
       const resources = {
         ...INITIAL_RESOURCES,

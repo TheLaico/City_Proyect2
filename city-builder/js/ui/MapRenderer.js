@@ -61,7 +61,7 @@ class MapRenderer {
           div.textContent = '🛣️';
           div.title = 'Vía';
         } else {
-          div.classList.add('map-cell--building');
+          div.classList.add('map-cell--building', `map-cell--building-${this.#getBuildingCategory(cell.type)}`);
           div.textContent = this.#getIconForType(cell.type);
           div.title = cell.type;
         }
@@ -84,7 +84,7 @@ class MapRenderer {
       cellDiv.textContent = '🛣️';
       cellDiv.title = 'Vía';
     } else {
-      cellDiv.classList.add('map-cell--building');
+      cellDiv.classList.add('map-cell--building', `map-cell--building-${this.#getBuildingCategory(content.type)}`);
       cellDiv.textContent = this.#getIconForType(content.type);
       cellDiv.title = content.type;
     }
@@ -103,6 +103,16 @@ class MapRenderer {
         if (cellDiv) cellDiv.classList.remove('map-cell--route');
       });
     }, 3000);
+  }
+
+  #getBuildingCategory(type) {
+    if (type.startsWith('residential')) return 'residential';
+    if (type.startsWith('commercial'))  return 'commercial';
+    if (type.startsWith('industrial'))  return 'industrial';
+    if (type.startsWith('service'))     return 'service';
+    if (type.startsWith('utility'))     return 'utility';
+    if (type === 'park')                return 'park';
+    return 'residential';
   }
 
   #getIconForType(type) {

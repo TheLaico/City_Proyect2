@@ -49,14 +49,31 @@ class SaveService {
         const width = data.map[0]?.length ?? 20;
         map = Map.fromJSON(data.map, width, height);
       }
-      const buildings = data.buildings?.map(BuildingAdapter.fromJSON) ?? [];
-      const roads = data.roads ?? [];
+      // Reconstruir buildings desde el mapa (fuente de verdad) para evitar desincronía
+      const buildings = [];
+      if (map) {
+        for (let y = 0; y < map.height; y++) {
+          for (let x = 0; x < map.width; x++) {
+            const cell = map.getCell(x, y);
+            if (cell && cell.type !== 'road') buildings.push(cell);
+          }
+        }
+      }
+      const roads = [];
+      if (map) {
+        for (let y = 0; y < map.height; y++) {
+          for (let x = 0; x < map.width; x++) {
+            const cell = map.getCell(x, y);
+            if (cell && cell.type === 'road') roads.push(cell);
+          }
+        }
+      }
       const citizens = data.citizens ?? [];
       const resources = data.resources ?? {};
       const turn = data.turn ?? 0;
       const score = data.score ?? 0;
       this.gameStore.setState({ city, map, buildings, roads, citizens, resources, turn, score });
-      this.eventBus.emit(EventType.GAME_STARTED, { city });
+      this.eventBus.emit(EventType.GAME_LOADED, { city });
     } catch (e) {
       console.error('Error cargando partida:', e);
       this.eventBus.emit(EventType.SETUP_REQUESTED);

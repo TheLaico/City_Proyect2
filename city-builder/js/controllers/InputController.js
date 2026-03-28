@@ -49,7 +49,7 @@ class InputController {
           this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'build' });
           break;
         case 'r':
-          this.eventBus.emit(EventType.BUILDING_SELECTED, { buildingType: BuildingType.ROAD });
+          this.eventBus.emit(EventType.BUILD_TYPE_SELECTED, { buildingType: BuildingType.ROAD });
           break;
         case 'd':
           this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'demolish' });

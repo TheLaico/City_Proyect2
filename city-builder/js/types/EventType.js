@@ -32,6 +32,7 @@ export const EventType = Object.freeze({
   // UI
   NOTIFICATION_SHOW: 'ui:notification_show',
   BUILDING_SELECTED: 'ui:building_selected',
+  BUILD_TYPE_SELECTED: 'ui:build_type_selected',
   MODE_CHANGED: 'ui:mode_changed',
   MAP_CELL_CLICKED: 'ui:map_cell_clicked',
 

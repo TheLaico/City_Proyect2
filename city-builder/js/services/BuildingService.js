@@ -54,8 +54,28 @@ class BuildingService {
     this.eventBus.emit(EventType.DEMOLISH_SUCCESS, { refund, buildingType: cell.type });
   }
 
+  #subtypeFromBuildingType(buildingType) {
+    const map = {
+      'residential_house':      'house',
+      'residential_apartment':  'apartment',
+      'commercial_shop':        'shop',
+      'commercial_mall':        'mall',
+      'industrial_factory':     'factory',
+      'industrial_farm':        'farm',
+      'service_police':         'police',
+      'service_fire':           'fire',
+      'service_hospital':       'hospital',
+      'utility_power_plant':    'power_plant',
+      'utility_water_plant':    'water_plant',
+    };
+    return map[buildingType] ?? null;
+  }
+
   _createBuilding({ x, y, buildingType, subtype }) {
     const id = crypto.randomUUID ? crypto.randomUUID() : (Math.random().toString(36).slice(2) + Date.now());
+    // Derivar subtype desde buildingType si no viene explícito
+    const resolvedSubtype = subtype ?? this.#subtypeFromBuildingType(buildingType);
+    subtype = resolvedSubtype;
     switch (buildingType) {
       case BuildingType.RESIDENTIAL_HOUSE:
       case BuildingType.RESIDENTIAL_APARTMENT:

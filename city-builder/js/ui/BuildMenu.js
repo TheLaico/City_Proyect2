@@ -92,7 +92,7 @@ class BuildMenu {
         btn.innerHTML = `<span class="icon">${item.icon}</span> <span class="name">${item.name}</span> <span class="cost">$${item.cost}</span>`;
         btn.addEventListener('click', () => {
           this.activeType = item.type;
-          this.eventBus.emit(EventType.BUILDING_SELECTED, { buildingType: item.type });
+          this.eventBus.emit(EventType.BUILD_TYPE_SELECTED, { buildingType: item.type });
           container.querySelectorAll('.build-menu-item').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
         });

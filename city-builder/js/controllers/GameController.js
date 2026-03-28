@@ -29,11 +29,21 @@ class GameController {
     this.eventBus.subscribe(EventType.GAME_LOAD_REQUESTED, () => {
       this.saveService.loadGame();
     });
-    this.eventBus.subscribe(EventType.GAME_STARTED, () => {
-      // Solo arrancar turnos en la página del juego, no en setup
+    const startTurnsIfInGame = () => {
       if (!window.location.pathname.includes('setup.html')) {
+        this.turnService.stop(); // evitar doble intervalo
         this.turnService.start();
       }
+    };
+    this.eventBus.subscribe(EventType.GAME_STARTED, startTurnsIfInGame);
+    this.eventBus.subscribe(EventType.GAME_LOADED,  startTurnsIfInGame);
+
+    // Guardar inmediatamente después de construir o demoler
+    this.eventBus.subscribe(EventType.BUILD_SUCCESS, () => {
+      this.saveService.saveGame();
+    });
+    this.eventBus.subscribe(EventType.DEMOLISH_SUCCESS, () => {
+      this.saveService.saveGame();
     });
     this.eventBus.subscribe(EventType.SAVE_REQUESTED, () => {
       this.saveService.saveGame();
