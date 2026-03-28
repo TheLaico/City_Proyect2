@@ -65,7 +65,8 @@ class InputController {
           break;
       }
     });
-        // Listeners para inputs configurables
+
+    // Listeners para inputs configurables
     const turnDurationInput = document.getElementById('turn-duration');
     if (turnDurationInput) {
       turnDurationInput.addEventListener('change', (e) => {
@@ -75,7 +76,7 @@ class InputController {
         }
       });
     }
-    
+
     // Inputs de configuración general
     const configInputs = [
       { id: 'init-electricity', key: 'initElectricity' },

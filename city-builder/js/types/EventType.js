@@ -9,6 +9,8 @@ export const EventType = Object.freeze({
   // Turnos
   TURN_STARTED: 'turn:started',
   TURN_ENDED: 'turn:ended',
+  TURN_DURATION_CHANGED: 'turn:duration_changed',
+  CONFIG_CHANGED: 'config:changed',
 
   // Recursos
   RESOURCES_UPDATED: 'resources:updated',

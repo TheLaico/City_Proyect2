@@ -1,0 +1,28 @@
+/* Score Panel Styles */
+#score-panel {
+  padding: 0.7rem 0.5rem;
+}
+.score-total {
+  font-family: var(--font-ui, 'Rajdhani', sans-serif);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.score-breakdown {
+  margin-top: 0.5rem;
+  border-radius: 0.6rem;
+  background: #f5f5f5;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+}
+.score-breakdown details {
+  margin-bottom: 0.3rem;
+}
+.score-bonus {
+  color: #43a047;
+  font-weight: bold;
+}
+.score-penalty {
+  color: #e53935;
+  font-weight: bold;
+}

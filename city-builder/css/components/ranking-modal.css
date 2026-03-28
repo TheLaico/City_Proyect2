@@ -1,0 +1,36 @@
+/* Ranking Modal Styles */
+.ranking-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.ranking-table th, .ranking-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+}
+.ranking-table tr {
+  transition: background 0.2s;
+}
+.ranking-table tr:hover {
+  background: #e3f2fd;
+}
+.ranking-row--current {
+  background: rgba(79,195,247,0.15) !important;
+  border-left: 5px solid #2196f3;
+}
+.ranking-pos-1 {
+  color: #ffd700;
+  font-weight: bold;
+}
+.ranking-pos-2 {
+  color: #c0c0c0;
+  font-weight: bold;
+}
+.ranking-pos-3 {
+  color: #cd7f32;
+  font-weight: bold;
+}

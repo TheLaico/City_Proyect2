@@ -1,0 +1,58 @@
+/* Ranking Page Styles */
+body, html {
+  min-height: 100vh;
+  background: var(--color-bg, #f5f7fa);
+  margin: 0;
+  padding: 0;
+}
+.ranking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 2.5rem 1.2rem 2.5rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+.ranking-header-title {
+  font-size: 2.1rem;
+  font-family: var(--font-ui, 'Rajdhani', sans-serif);
+  font-weight: bold;
+}
+.ranking-header-back {
+  background: var(--color-accent, #2196f3);
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.7rem 1.3rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.ranking-header-back:hover {
+  background: #1976d2;
+}
+.ranking-table-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1.5rem 2rem;
+}
+.ranking-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.ranking-table th, .ranking-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+}
+.ranking-table tr {
+  transition: background 0.2s;
+}
+.ranking-table tr:hover {
+  background: #e3f2fd;
+}

@@ -75,3 +75,4 @@ if (gameController.saveService.hasSavedGame()) {
 } else {
   // Si estamos en index.html sin partida → redirigir a setup
   window.location.href = 'pages/setup.html';
+}

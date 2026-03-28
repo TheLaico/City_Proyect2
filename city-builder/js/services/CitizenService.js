@@ -79,6 +79,7 @@ class CitizenService {
 
   #updateHappiness(citizen) {
     const state = this.gameStore.getState();
+    const config = state.config || {};
     let happiness = 0;
     happiness += citizen.homeId ? 20 : -20;
     happiness += citizen.jobId ? 15 : -15;
@@ -86,9 +87,9 @@ class CitizenService {
     const fire = state.buildings.filter(b => b.type === 'service_fire').length;
     const hospital = state.buildings.filter(b => b.type === 'service_hospital').length;
     const parks = state.buildings.filter(b => b.type === 'park').length;
-    happiness += police * 10;
-    happiness += fire * 10;
-    happiness += hospital * 10;
+    happiness += police * (config.bonusPolice ?? 10);
+    happiness += fire * (config.bonusFire ?? 10);
+    happiness += hospital * (config.bonusHospital ?? 10);
     happiness += parks * 5;
     return Math.max(0, Math.min(100, happiness));
   }

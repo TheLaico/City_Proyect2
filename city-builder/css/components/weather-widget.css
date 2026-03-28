@@ -1,0 +1,50 @@
+/* Weather Widget Styles */
+.weather-widget {
+  padding: 1rem;
+  border-radius: 1rem;
+  color: #fff;
+  font-family: var(--font-ui, 'Rajdhani', sans-serif);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+  min-height: 120px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%); /* Default: soleado */
+}
+.weather-widget.sunny {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+}
+.weather-widget.rainy {
+  background: linear-gradient(135deg, #2196f3 0%, #90caf9 100%);
+}
+.weather-widget.cloudy {
+  background: linear-gradient(135deg, #757575 0%, #bdbdbd 100%);
+}
+.weather-widget .weather-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.weather-widget.sunny .weather-icon {
+  animation: spin-slow 4s linear infinite;
+}
+.weather-widget.rainy .weather-icon {
+  animation: bounce 1.2s infinite;
+}
+@keyframes spin-slow {
+  100% { transform: rotate(360deg); }
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.weather-widget .weather-temp {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+.weather-widget .weather-desc {
+  font-size: 1rem;
+  opacity: 0.85;
+}
