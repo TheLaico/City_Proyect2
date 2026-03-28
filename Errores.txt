@@ -1,0 +1,11 @@
+// Errores.txt
+// PROPÓSITO: Registro de errores, bugs o problemas encontrados en la lógica de negocio del proyecto City Builder.
+// NO incluir problemas de interfaz gráfica, CSS, ni visuales.
+// Cada error debe tener: fecha, autor, descripción clara, pasos para reproducir, y (si aplica) sugerencia de solución.
+// Cuando un error sea resuelto, marcarlo como RESUELTO y dejar constancia de la solución aplicada.
+// Este archivo ayuda a priorizar y organizar el trabajo técnico del equipo, y a evitar duplicidad de reportes.
+
+// Ejemplo de formato de error:
+// [FECHA] [AUTOR] [MÓDULO] Descripción del error.
+// [PASOS] Cómo reproducirlo.
+// [SOLUCIÓN] (opcional) Idea de cómo resolverlo o link a la propuesta en Mejoras.txt.

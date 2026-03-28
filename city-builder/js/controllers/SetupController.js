@@ -50,6 +50,9 @@ class SetupController {
         water: data.initWater ?? INITIAL_RESOURCES.water,
         food: data.initFood ?? INITIAL_RESOURCES.food
       };
+      // Borrar save anterior para que index.html no lo cargue encima
+      this.saveService.deleteSave();
+      this.gameStore.resetState();
       this.gameStore.setState({
         city,
         map,

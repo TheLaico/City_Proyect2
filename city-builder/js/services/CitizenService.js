@@ -24,18 +24,22 @@ class CitizenService {
     const residentials = state.buildings.filter(b => b.type && b.type.startsWith('residential_'));
     const availableCapacity = residentials.reduce((sum, b) => sum + (b.capacity - b.currentOccupants.length), 0);
     const citizens = state.citizens;
+    // Si no hay ciudadanos aún, la "felicidad" no bloquea el crecimiento inicial
     const avgHappiness = citizens.length
       ? citizens.reduce((sum, c) => sum + (c.happiness || 0), 0) / citizens.length
-      : 0;
+      : 100;
     const jobs = state.buildings.filter(b => b.jobs).reduce((sum, b) => sum + b.jobs, 0);
     const employed = citizens.filter(c => c.jobId).length;
     const availableJobs = jobs - employed;
-    if (availableCapacity > 0 && avgHappiness > 60 && availableJobs > 0) {
+    const happinessOk = citizens.length === 0 || avgHappiness > 60;
+    if (availableCapacity > 0 && happinessOk && availableJobs > 0) {
       const n = RandomUtils.randomInt(1, 3);
+      const newCitizens = [];
       for (let i = 0; i < n; i++) {
         const id = crypto.randomUUID ? crypto.randomUUID() : (Math.random().toString(36).slice(2) + Date.now());
-        state.citizens.push({ id, homeId: null, jobId: null, happiness: 50 });
+        newCitizens.push({ id, homeId: null, jobId: null, happiness: 50 });
       }
+      this.gameStore.setState({ citizens: [...state.citizens, ...newCitizens] });
     }
   }
 

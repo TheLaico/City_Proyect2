@@ -103,6 +103,13 @@ eventBus.subscribe(EventType.GAME_LOADED, () => {
 });
 
 // Botón exportar ciudad
+document.getElementById('btn-new-city')?.addEventListener('click', () => {
+  if (confirm('¿Crear una nueva ciudad? Se perderá la partida actual.')) {
+    saveService.deleteSave();
+    window.location.href = 'pages/setup.html';
+  }
+});
+
 document.getElementById('btn-export')?.addEventListener('click', () => {
   eventBus.emit(EventType.EXPORT_REQUESTED);
 });
