@@ -30,7 +30,10 @@ class GameController {
       this.saveService.loadGame();
     });
     this.eventBus.subscribe(EventType.GAME_STARTED, () => {
-      this.turnService.start();
+      // Solo arrancar turnos en la página del juego, no en setup
+      if (!window.location.pathname.includes('setup.html')) {
+        this.turnService.start();
+      }
     });
     this.eventBus.subscribe(EventType.SAVE_REQUESTED, () => {
       this.saveService.saveGame();

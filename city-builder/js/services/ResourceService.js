@@ -37,15 +37,30 @@ class ResourceService {
     this.gameStore.updateResource(ResourceType.WATER, totalWater - consumptionWater);
     this.gameStore.updateResource(ResourceType.FOOD, totalFood - consumptionFood);
 
-    // Verificar recursos críticos
+    // Verificar recursos críticos — solo si hay ciudadanos activos
     const resources = this.gameStore.getState().resources;
-    if (resources.electricity <= 0) {
-      this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.ELECTRICITY });
-      this.eventBus.emit(EventType.GAME_OVER);
-    }
-    if (resources.water <= 0) {
-      this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.WATER });
-      this.eventBus.emit(EventType.GAME_OVER);
+    const hasCitizens = (state.citizens || []).length > 0;
+
+    if (hasCitizens) {
+      if (resources.electricity < -50) {
+        this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.ELECTRICITY });
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Crisis de electricidad grave', type: 'error' });
+      }
+      if (resources.water < -50) {
+        this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.WATER });
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Crisis de agua grave', type: 'error' });
+      }
+      if (resources.electricity < -200 || resources.water < -200) {
+        this.eventBus.emit(EventType.GAME_OVER);
+      }
+    } else {
+      // Sin ciudadanos: avisar si recursos en negativo pero no game over
+      if (resources.electricity < 0) {
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Sin electricidad — construye una planta eléctrica', type: 'warning' });
+      }
+      if (resources.water < 0) {
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Sin agua — construye una planta de agua', type: 'warning' });
+      }
     }
 
     // Actualizar estado activo de edificios comerciales

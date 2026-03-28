@@ -1,6 +1,3 @@
-import { BuildingType } from '../../types/BuildingType.js';
-import BuildingAdapter from '../../adapters/BuildingAdapter.js';
-
 class Building {
   constructor({ id, type, x, y, buildingData }) {
     if (new.target === Building) {
@@ -33,6 +30,7 @@ class Building {
     return {
       id: this.id,
       type: this.type,
+      subtype: this.subtype ?? null,
       x: this.x,
       y: this.y,
       cost: this.cost,
@@ -41,10 +39,6 @@ class Building {
       waterConsumption: this.waterConsumption,
       active: this.active
     };
-  }
-
-  static fromJSON(data) {
-    return BuildingAdapter.fromJSON(data);
   }
 }
 

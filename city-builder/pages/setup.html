@@ -40,16 +40,31 @@
         <input id="lon-display" type="text" readonly>
       </div>
       <div>
-        <label for="map-width">Ancho del mapa</label>
-        <input id="map-width" name="map-width" type="number" min="15" max="30" value="20">
-        <label for="map-height">Alto del mapa</label>
-        <input id="map-height" name="map-height" type="number" min="15" max="30" value="20">
+        <label>Mapa de la ciudad</label>
+        <div id="map-load-section">
+          <p style="margin-bottom:0.5rem; font-size:0.9em; color: var(--color-text-muted)">
+            Opcional: carga un archivo <code>.txt</code> con el diseño del mapa.
+            Si no cargas uno, se generará un terreno vacío.
+            Archivo de ejemplo: <code>assets/maps/example-map.txt</code>
+          </p>
+          <button type="button" id="btn-load-map">📂 Cargar mapa desde .txt</button>
+          <input id="map-file-input" type="file" accept=".txt" hidden>
+          <div id="map-preview" style="margin-top:0.5rem"></div>
+        </div>
       </div>
       <div>
-        <button type="button" id="btn-load-map">Cargar mapa desde archivo</button>
-        <input id="map-file-input" type="file" accept=".txt" hidden>
+        <label>Tamaño del mapa (si no cargas archivo)</label>
+        <div style="display:flex;gap:1rem;margin-top:0.25rem">
+          <div>
+            <label for="map-width" style="font-size:0.85em">Ancho</label>
+            <input id="map-width" name="map-width" type="number" min="15" max="30" value="20">
+          </div>
+          <div>
+            <label for="map-height" style="font-size:0.85em">Alto</label>
+            <input id="map-height" name="map-height" type="number" min="15" max="30" value="20">
+          </div>
+        </div>
       </div>
-      <div id="map-preview"></div>
       <div id="setup-errors"></div>
       <button type="submit" id="btn-create-city">Crear ciudad</button>
     </form>

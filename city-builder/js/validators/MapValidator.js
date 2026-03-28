@@ -30,8 +30,8 @@ class MapValidator {
     // Parseo de columnas y consistencia
     let colCount = null;
     grid = rows.map((row, i) => {
-      // Soporta celdas de 1 o 2 caracteres (ej: R1, S2, g, r)
-      const cells = row.match(/([A-Z][0-9]|[a-z][0-9]?)/g) || [];
+      // Separar por espacios (formato: "g g r R1 C2 ...")
+      const cells = row.trim().split(/\s+/);
       if (colCount === null) colCount = cells.length;
       if (cells.length !== colCount) {
         errors.push(`Fila ${i + 1} tiene ${cells.length} columnas, se esperaban ${colCount}`);

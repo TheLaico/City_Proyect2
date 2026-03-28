@@ -78,9 +78,9 @@ export const SERVICE_RADIUS = Object.freeze({
 // RECURSOS INICIALES DE LA CIUDAD
 export const INITIAL_RESOURCES = Object.freeze({
   money:       50000,
-  electricity: 0,
-  water:       0,
-  food:        0,
+  electricity: 100,
+  water:       100,
+  food:        100,
 });
 
 // REGLAS DE POBLACIÓN

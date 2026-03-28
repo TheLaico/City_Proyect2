@@ -25,13 +25,13 @@ import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
 import { EventType } from './types/EventType.js';
 
-// 0. Servicios de carga y guardado (necesitan store y eventBus, pero se crean antes para evitar circularidad)
-const mapLoaderService = new MapLoaderService(gameStore, eventBus);
-const saveService = new SaveService(gameStore, eventBus);
-
-// 1. Singletons base
+// 1. Singletons base (deben inicializarse primero)
 const gameStore = new GameStore();
 const eventBus = new EventBus();
+
+// 2. Servicios de carga y guardado (dependen de store y eventBus)
+const mapLoaderService = new MapLoaderService(gameStore, eventBus);
+const saveService = new SaveService(gameStore, eventBus);
 
 // 2. APIs externas
 const colombiaAPI = new ColombiaAPI();
@@ -57,8 +57,7 @@ const setupController = new SetupController(gameStore, eventBus, colombiaAPI, ma
 setupController.init();
 
 if (document.getElementById('setup-form')) {
-  const setupScreen = new SetupScreen(eventBus, colombiaAPI, mapLoaderService);
-  setupScreen.hasSavedGame = () => saveService.hasSavedGame();
+  const setupScreen = new SetupScreen(eventBus, colombiaAPI, mapLoaderService, () => saveService.hasSavedGame());
   setupScreen.init();
 }
 
@@ -101,7 +100,7 @@ eventBus.subscribe(EventType.GAME_LOADED, () => {
 // 8. Detectar partida guardada
 if (gameController.saveService.hasSavedGame()) {
   eventBus.emit(EventType.GAME_LOAD_REQUESTED);
-} else {
+} else if (!window.location.pathname.includes('setup.html')) {
   // Si estamos en index.html sin partida → redirigir a setup
   window.location.href = 'pages/setup.html';
 }

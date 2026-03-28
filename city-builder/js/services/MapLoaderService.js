@@ -52,7 +52,15 @@ class MapLoaderService {
       }
     }
     this.gameStore.setState({ map, buildings });
-    this.eventBus.emit(EventType.GAME_STARTED);
+    // Guardar en localStorage para que index.html pueda recuperar el mapa
+    const state = this.gameStore.getState();
+    if (state.city) {
+      this.eventBus.emit(EventType.GAME_STARTED, { city: state.city });
+    } else {
+      // Si aún no hay ciudad (se carga el mapa desde setup antes de crear la ciudad),
+      // solo actualizamos el estado — SetupController lo usará al hacer submit
+      this.eventBus.emit('map:loaded', { map, buildings });
+    }
   }
 
   #readFileAsync(file) {

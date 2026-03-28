@@ -46,7 +46,11 @@ class TurnService {
 
   #executeTurn() {
     if (this.#paused) return;
-    this.gameStore.setState({ turn: this.gameStore.getState().turn + 1 });
+    // No ejecutar si no hay juego activo
+    const state = this.gameStore.getState();
+    if (!state.city || !state.map) return;
+
+    this.gameStore.setState({ turn: state.turn + 1 });
     const turn = this.gameStore.getState().turn;
     this.eventBus.emit(EventType.TURN_STARTED, { turn });
     this.resourceService.calculateTurnResources();

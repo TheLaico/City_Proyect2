@@ -25,14 +25,21 @@ class SetupController {
         return;
       }
       // Crear ciudad y mapa
+      const width  = parseInt(data.width,  10) || 20;
+      const height = parseInt(data.height, 10) || 20;
       const city = new City({
         name: data.cityName,
         mayorName: data.mayorName,
         region: data.region,
-        gridWidth: data.width,
-        gridHeight: data.height
+        gridWidth: width,
+        gridHeight: height
       });
-      const map = new Map(data.width, data.height);
+
+      // Usar mapa ya cargado desde archivo si existe, si no crear uno vacío
+      const existingState = this.gameStore.getState();
+      const map = (existingState.map && existingState.map.width === width && existingState.map.height === height)
+        ? existingState.map
+        : new Map(width, height);
       // Recursos iniciales (pueden venir de campos del form)
       const resources = {
         ...INITIAL_RESOURCES,
@@ -43,7 +50,7 @@ class SetupController {
       this.gameStore.setState({
         city,
         map,
-        buildings: [],
+        buildings: existingState.map ? (existingState.buildings || []) : [],
         roads: [],
         citizens: [],
         resources,
@@ -53,11 +60,14 @@ class SetupController {
         mode: 'view'
       });
       this.eventBus.emit(EventType.GAME_STARTED, { city });
+      // Guardar en localStorage antes de redirigir para que index.html pueda recuperar el estado
+      this.saveService.saveGame();
       window.location.href = '../index.html';
     });
 
     // Al iniciar el juego, notificar a WeatherWidget y NewsPanel si hay coordenadas
-    this.eventBus.subscribe(EventType.GAME_STARTED, ({ city }) => {
+    this.eventBus.subscribe(EventType.GAME_STARTED, (payload) => {
+      const city = payload?.city ?? this.gameStore.getState()?.city;
       if (city?.region?.lat && city?.region?.lon) {
         this.eventBus.emit('weather:init', { lat: city.region.lat, lon: city.region.lon });
         this.eventBus.emit('news:init', { countryCode: 'co' });

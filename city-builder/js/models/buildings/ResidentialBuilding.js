@@ -3,10 +3,12 @@ import { BuildingType } from '../../types/BuildingType.js';
 
 class ResidentialBuilding extends Building {
   constructor({ id, subtype, x, y }) {
-    const data = subtype === 'apartment'
-      ? { cost: 3000, capacity: 12, electricityConsumption: 15, waterConsumption: 10 }
-      : { cost: 1000, capacity: 4, electricityConsumption: 5, waterConsumption: 3 };
-    super({ id, type: BuildingType.RESIDENTIAL_HOUSE, x, y, buildingData: data });
+    const isApartment = subtype === 'apartment';
+    const type = isApartment ? BuildingType.RESIDENTIAL_APARTMENT : BuildingType.RESIDENTIAL_HOUSE;
+    const data = isApartment
+      ? { cost: 15000, capacity: 12, electricityConsumption: 15, waterConsumption: 10 }
+      : { cost: 5000,  capacity: 4,  electricityConsumption: 5,  waterConsumption: 3  };
+    super({ id, type, x, y, buildingData: data });
     this.subtype = subtype;
     this.capacity = data.capacity;
     this.currentOccupants = [];

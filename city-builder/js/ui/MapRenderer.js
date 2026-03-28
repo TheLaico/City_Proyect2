@@ -12,23 +12,41 @@ class MapRenderer {
   init() {
     this.mapGrid = document.getElementById('map-grid');
     if (!this.mapGrid) return;
+
     this.eventBus.subscribe(EventType.GAME_STARTED, () => this.#renderFullMap());
+    this.eventBus.subscribe(EventType.GAME_LOADED,  () => this.#renderFullMap());
+
     this.eventBus.subscribe(EventType.BUILD_SUCCESS, ({ building }) => {
       this.#updateCell(building.x, building.y, building);
     });
-    this.eventBus.subscribe(EventType.DEMOLISH_SUCCESS, ({ buildingType, refund, x, y }) => {
+    this.eventBus.subscribe(EventType.DEMOLISH_SUCCESS, ({ x, y }) => {
       this.#updateCell(x, y, null);
     });
     this.eventBus.subscribe(EventType.ROUTE_CALCULATED, ({ path }) => {
       this.#highlightRoute(path);
     });
+
+    // Render inmediato si el mapa ya está cargado en el store (ej: recarga de página)
+    const state = this.gameStore.getState();
+    if (state.map) {
+      this.#renderFullMap();
+    }
   }
 
   #renderFullMap() {
-    const map = this.gameStore.getState().map;
-    if (!map || !this.mapGrid) return;
+    const state = this.gameStore.getState();
+    const map = state.map;
+
+    if (!map || !this.mapGrid) {
+      console.warn('[MapRenderer] No hay mapa en el store o #map-grid no existe', { map, grid: this.mapGrid });
+      return;
+    }
+
+    console.log(`[MapRenderer] Renderizando mapa ${map.width}x${map.height}`);
     this.mapGrid.innerHTML = '';
-    this.mapGrid.style.gridTemplateColumns = `repeat(${map.width}, 1fr)`;
+    this.mapGrid.style.gridTemplateColumns = `repeat(${map.width}, var(--cell-size))`;
+    this.mapGrid.style.width = `${map.width * 40}px`;
+
     for (let y = 0; y < map.height; y++) {
       for (let x = 0; x < map.width; x++) {
         const cell = map.getCell(x, y);

@@ -80,14 +80,14 @@ class InputController {
     // Inputs de configuración general
     const configInputs = [
       { id: 'init-electricity', key: 'initElectricity' },
-      { id: 'init-water', key: 'initWater' },
-      { id: 'init-food', key: 'initFood' },
-      { id: 'citizen-water', key: 'citizenWaterConsumption' },
-      { id: 'citizen-elec', key: 'citizenElecConsumption' },
-      { id: 'citizen-food', key: 'citizenFoodConsumption' },
-      { id: 'bonus-police', key: 'bonusPolice' },
-      { id: 'bonus-fire', key: 'bonusFire' },
-      { id: 'bonus-hospital', key: 'bonusHospital' }
+      { id: 'init-water',       key: 'initWater' },
+      { id: 'init-food',        key: 'initFood' },
+      { id: 'citizen-water',    key: 'citizenWaterConsumption' },
+      { id: 'citizen-elec',     key: 'citizenElecConsumption' },
+      { id: 'citizen-food',     key: 'citizenFoodConsumption' },
+      { id: 'bonus-police',     key: 'bonusPolice' },
+      { id: 'bonus-fire',       key: 'bonusFire' },
+      { id: 'bonus-hospital',   key: 'bonusHospital' }
     ];
     configInputs.forEach(({ id, key }) => {
       const input = document.getElementById(id);
@@ -97,9 +97,20 @@ class InputController {
           const config = {};
           configInputs.forEach(({ id, key }) => {
             const el = document.getElementById(id);
-            if (el) config[key] = parseFloat(el.value);
+            if (el) config[key] = parseFloat(el.value) || 0;
           });
           this.gameStore.setState({ config });
+
+          // Aplicar recursos iniciales directamente al store
+          const resources = {};
+          if (config.initElectricity > 0) resources.electricity = config.initElectricity;
+          if (config.initWater > 0)       resources.water       = config.initWater;
+          if (config.initFood > 0)        resources.food        = config.initFood;
+          if (Object.keys(resources).length > 0) {
+            this.gameStore.setState({ resources });
+            this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources: this.gameStore.getState().resources });
+          }
+
           this.eventBus.emit(EventType.CONFIG_CHANGED, { config });
         });
       }
