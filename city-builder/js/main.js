@@ -1,3 +1,6 @@
+import MapLoaderService from './services/MapLoaderService.js';
+import SaveService from './services/SaveService.js';
+import SetupScreen from './ui/SetupScreen.js';
 import GameStore from './store/GameStore.js';
 import EventBus from './events/EventBus.js';
 import ColombiaAPI from './api/ColombiaAPI.js';
@@ -22,14 +25,18 @@ import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
 import { EventType } from './types/EventType.js';
 
+// 0. Servicios de carga y guardado (necesitan store y eventBus, pero se crean antes para evitar circularidad)
+const mapLoaderService = new MapLoaderService(gameStore, eventBus);
+const saveService = new SaveService(gameStore, eventBus);
+
 // 1. Singletons base
 const gameStore = new GameStore();
-const eventBus  = new EventBus();
+const eventBus = new EventBus();
 
 // 2. APIs externas
 const colombiaAPI = new ColombiaAPI();
-const weatherAPI  = new WeatherAPI(''); // sin key → mock
-const newsAPI     = new NewsAPI('');    // sin key → mock
+const weatherAPI = new WeatherAPI(''); // sin key → mock
+const newsAPI = new NewsAPI('');    // sin key → mock
 
 // 3. Servicios de dominio
 const resourceHistory = new ResourceHistory();
@@ -46,28 +53,50 @@ const inputController = new InputController(gameStore, eventBus);
 inputController.init();
 
 // 6. Setup (solo en index.html; condicionado a que exista #setup-container)
-const setupController = new SetupController(gameStore, eventBus, colombiaAPI);
+const setupController = new SetupController(gameStore, eventBus, colombiaAPI, mapLoaderService, saveService);
 setupController.init();
 
+if (document.getElementById('setup-form')) {
+  const setupScreen = new SetupScreen(eventBus, colombiaAPI, mapLoaderService);
+  setupScreen.hasSavedGame = () => saveService.hasSavedGame();
+  setupScreen.init();
+}
+
 // 7. UI principal (condicionada a que el juego esté activo)
-const mapRenderer      = new MapRenderer(gameStore, eventBus);
-const resourcePanel    = new ResourcePanel(gameStore, eventBus);
-const buildMenu        = new BuildMenu(gameStore, eventBus);
-const notifManager     = new NotificationManager(eventBus);
-const citizenPanel     = new CitizenPanel(gameStore, eventBus);
-const scorePanel       = new ScorePanel(gameStore, eventBus);
-const weatherWidget    = new WeatherWidget(eventBus, weatherAPI);
-const newsPanel        = new NewsPanel(eventBus, newsAPI);
-const chartPanel       = new ChartPanel(gameStore, eventBus);
-const rankingService   = new RankingService(gameStore, eventBus);
-const rankingModal     = new RankingModal(gameStore, eventBus, rankingService);
-const buildInfoModal   = new BuildingInfoModal(gameStore, eventBus);
+const mapRenderer = new MapRenderer(gameStore, eventBus);
+const resourcePanel = new ResourcePanel(gameStore, eventBus);
+const buildMenu = new BuildMenu(gameStore, eventBus);
+const notifManager = new NotificationManager(eventBus);
+const citizenPanel = new CitizenPanel(gameStore, eventBus);
+const scorePanel = new ScorePanel(gameStore, eventBus);
+const weatherWidget = new WeatherWidget(eventBus, weatherAPI);
+const newsPanel = new NewsPanel(eventBus, newsAPI);
+const chartPanel = new ChartPanel(gameStore, eventBus);
+const rankingService = new RankingService(gameStore, eventBus);
+const rankingModal = new RankingModal(gameStore, eventBus, rankingService);
+const buildInfoModal = new BuildingInfoModal(gameStore, eventBus);
 
 // Inicializar UI
 [
   mapRenderer, resourcePanel, buildMenu, notifManager, citizenPanel,
   scorePanel, chartPanel, rankingModal, buildInfoModal, rankingService
 ].forEach(m => m.init && m.init());
+
+// Inicializar widgets de clima y noticias cuando el juego arranque con una ciudad
+eventBus.subscribe('weather:init', ({ lat, lon }) => {
+  weatherWidget.init(lat, lon);
+});
+eventBus.subscribe('news:init', ({ countryCode }) => {
+  newsPanel.init(countryCode || 'co');
+});
+
+eventBus.subscribe(EventType.GAME_LOADED, () => {
+  const region = gameStore.getState()?.city?.region;
+  if (region?.lat && region?.lon) {
+    weatherWidget.init(region.lat, region.lon);
+    newsPanel.init('co');
+  }
+});
 
 // 8. Detectar partida guardada
 if (gameController.saveService.hasSavedGame()) {
