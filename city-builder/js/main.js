@@ -21,6 +21,7 @@ import WeatherWidget from './ui/WeatherWidget.js';
 import NewsPanel from './ui/NewsPanel.js';
 import ChartPanel from './ui/ChartPanel.js';
 import RankingService from './services/RankingService.js';
+import ExportService from './services/ExportService.js';
 import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
 import { EventType } from './types/EventType.js';
@@ -72,6 +73,7 @@ const weatherWidget = new WeatherWidget(eventBus, weatherAPI);
 const newsPanel = new NewsPanel(eventBus, newsAPI);
 const chartPanel = new ChartPanel(gameStore, eventBus);
 const rankingService = new RankingService(gameStore, eventBus);
+const exportService = new ExportService(gameStore, eventBus);
 const rankingModal = new RankingModal(gameStore, eventBus, rankingService);
 const buildInfoModal = new BuildingInfoModal(gameStore, eventBus);
 
@@ -95,6 +97,11 @@ eventBus.subscribe(EventType.GAME_LOADED, () => {
     weatherWidget.init(region.lat, region.lon);
     newsPanel.init('co');
   }
+});
+
+// Botón exportar ciudad
+document.getElementById('btn-export')?.addEventListener('click', () => {
+  eventBus.emit(EventType.EXPORT_REQUESTED);
 });
 
 // 8. Detectar partida guardada
