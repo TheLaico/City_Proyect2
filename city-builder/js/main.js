@@ -22,6 +22,7 @@ import NewsPanel from './ui/NewsPanel.js';
 import ChartPanel from './ui/ChartPanel.js';
 import RankingService from './services/RankingService.js';
 import ExportService from './services/ExportService.js';
+import ImportService from './services/ImportService.js';
 import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
 import { EventType } from './types/EventType.js';
@@ -74,6 +75,8 @@ const newsPanel = new NewsPanel(eventBus, newsAPI);
 const chartPanel = new ChartPanel(gameStore, eventBus);
 const rankingService = new RankingService(gameStore, eventBus);
 const exportService = new ExportService(gameStore, eventBus);
+const importService = new ImportService(gameStore, eventBus, saveService);
+importService.init();
 const rankingModal = new RankingModal(gameStore, eventBus, rankingService);
 const buildInfoModal = new BuildingInfoModal(gameStore, eventBus);
 
@@ -102,6 +105,9 @@ eventBus.subscribe(EventType.GAME_LOADED, () => {
 // Botón exportar ciudad
 document.getElementById('btn-export')?.addEventListener('click', () => {
   eventBus.emit(EventType.EXPORT_REQUESTED);
+});
+document.getElementById('btn-import')?.addEventListener('click', () => {
+  eventBus.emit('import:requested');
 });
 
 // 8. Detectar partida guardada
