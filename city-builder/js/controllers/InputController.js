@@ -11,14 +11,6 @@ class InputController {
   }
 
   init() {
-    // Sincronizar el store cada vez que cambia el modo (desde cualquier origen)
-    this.eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
-      this.gameStore.setState({ mode });
-      if (mode !== 'route') {
-        this.routeSelection.origin = null;
-      }
-    });
-
     // Click en celdas del mapa
     const mapGrid = document.getElementById('map-grid');
     if (mapGrid) {
@@ -111,9 +103,9 @@ class InputController {
 
           // Aplicar recursos iniciales directamente al store
           const resources = {};
-          if (config.initElectricity > 0) resources.electricity = config.initElectricity;
-          if (config.initWater > 0)       resources.water       = config.initWater;
-          if (config.initFood > 0)        resources.food        = config.initFood;
+          if (config.initElectricity !== undefined) resources.electricity = config.initElectricity;
+          if (config.initWater !== undefined)       resources.water       = config.initWater;
+          if (config.initFood !== undefined)        resources.food        = config.initFood;
           if (Object.keys(resources).length > 0) {
             this.gameStore.setState({ resources });
             this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources: this.gameStore.getState().resources });

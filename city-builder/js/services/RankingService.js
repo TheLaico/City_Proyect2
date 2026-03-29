@@ -35,27 +35,31 @@ class RankingService {
 
   #updateCurrentEntry() {
     const state = this.gameStore.getState();
-    const { city, score, turns } = state;
+    const { city, score, turn, citizens } = state;
     if (!city) return;
-    const key = `${city.name}::${city.mayor}`;
+    const key = `${city.name}::${city.mayorName}`;
+    const population = citizens?.length ?? 0;
+    const happiness = population > 0
+      ? Math.round(citizens.reduce((sum, c) => sum + (c.happiness || 0), 0) / population)
+      : 0;
     const data = this.#getRaw();
     let entry = data.ranking.find(e => `${e.cityName}::${e.mayor}` === key);
     if (!entry) {
       entry = {
         cityName: city.name,
-        mayor: city.mayor,
-        score: score.current,
-        population: city.population,
-        happiness: city.happiness,
-        turns,
+        mayor: city.mayorName,
+        score,
+        population,
+        happiness,
+        turns: turn,
         date: new Date().toISOString()
       };
       data.ranking.push(entry);
     } else {
-      entry.score = score.current;
-      entry.population = city.population;
-      entry.happiness = city.happiness;
-      entry.turns = turns;
+      entry.score = score;
+      entry.population = population;
+      entry.happiness = happiness;
+      entry.turns = turn;
       entry.date = new Date().toISOString();
     }
     this.#saveRaw(data);
@@ -84,7 +88,7 @@ class RankingService {
     const state = this.gameStore.getState();
     const { city } = state;
     if (!city) return null;
-    const key = `${city.name}::${city.mayor}`;
+    const key = `${city.name}::${city.mayorName}`;
     const data = this.#getRaw();
     const sorted = data.ranking.slice().sort((a, b) => b.score - a.score);
     const idx = sorted.findIndex(e => `${e.cityName}::${e.mayor}` === key);

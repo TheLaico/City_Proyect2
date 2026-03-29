@@ -42,15 +42,13 @@ class ResourceService {
     const hasCitizens = (state.citizens || []).length > 0;
 
     if (hasCitizens) {
-      if (resources.electricity < -50) {
+      if (resources.electricity < 0) {
         this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.ELECTRICITY });
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Crisis de electricidad grave', type: 'error' });
-      }
-      if (resources.water < -50) {
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Sin electricidad — ¡Game Over!', type: 'error' });
+        this.eventBus.emit(EventType.GAME_OVER);
+      } else if (resources.water < 0) {
         this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.WATER });
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Crisis de agua grave', type: 'error' });
-      }
-      if (resources.electricity < -200 || resources.water < -200) {
+        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Sin agua — ¡Game Over!', type: 'error' });
         this.eventBus.emit(EventType.GAME_OVER);
       }
     } else {
