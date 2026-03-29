@@ -22,6 +22,7 @@ export const EventType = Object.freeze({
   BUILD_FAILED: 'build:failed',
   DEMOLISH_REQUESTED: 'demolish:requested',
   DEMOLISH_SUCCESS: 'demolish:success',
+  BUILDING_INFO_REQUESTED: 'building:info_requested',
 
   // Ciudadanos
   CITIZENS_UPDATED: 'citizens:updated',

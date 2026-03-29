@@ -18,6 +18,10 @@ class Building {
     throw new Error('getCost() debe ser implementado por la subclase.');
   }
 
+  getMaintenanceCost() {
+    return this.maintenanceCost ?? 0;
+  }
+
   getConsumption() {
     throw new Error('getConsumption() debe ser implementado por la subclase.');
   }

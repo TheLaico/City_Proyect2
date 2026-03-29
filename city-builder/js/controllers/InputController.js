@@ -30,8 +30,7 @@ class InputController {
         } else if (mode === 'route') {
           this.#handleRouteClick(x, y);
         } else if (mode === 'view') {
-          // Mostrar info del edificio si hay uno en la celda
-          this.eventBus.emit(EventType.BUILDING_SELECTED, { x, y });
+          this.eventBus.emit(EventType.BUILDING_INFO_REQUESTED, { x, y });
         }
       });
     }

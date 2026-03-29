@@ -51,7 +51,7 @@ class BuildingService {
     const idx = buildings.findIndex(b => b.id === cell.id);
     if (idx !== -1) buildings.splice(idx, 1);
     map.setCell(x, y, null);
-    this.eventBus.emit(EventType.DEMOLISH_SUCCESS, { refund, buildingType: cell.type });
+    this.eventBus.emit(EventType.DEMOLISH_SUCCESS, { x, y, refund, buildingType: cell.type });
   }
 
   #subtypeFromBuildingType(buildingType) {

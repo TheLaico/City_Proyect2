@@ -1,39 +1,92 @@
-/* Modal de información de edificio */
-.building-info-modal {
-  /* Hereda de .modal */
-  max-width: 420px;
-}
-
+/* ── Encabezado ─────────────────────────────────── */
 .building-info-modal__icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
 .building-info-modal__title {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 0.3rem;
+  vertical-align: middle;
 }
 
-.building-info-modal__type {
-  font-size: 1rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.7rem;
+.building-info-modal__status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  margin-left: 0.6rem;
+  vertical-align: middle;
 }
 
+.building-active {
+  background: var(--color-success, #2d6a4f);
+  color: #d8f3dc;
+}
+
+.building-inactive {
+  background: var(--color-danger, #c1121f);
+  color: #ffe5e5;
+}
+
+/* ── Grid de grupos de stats ────────────────────── */
 .building-info-modal__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem 1.2rem;
-  margin-bottom: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
 }
 
+.building-info-modal__stat-group {
+  background: var(--color-surface-alt, rgba(255,255,255,0.05));
+  border: 1px solid var(--color-border, #333);
+  border-radius: var(--border-radius, 6px);
+  padding: 0.6rem 0.8rem;
+}
+
+.building-info-modal__stat-group h4 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary, #aaa);
+  margin-bottom: 0.5rem;
+}
+
+/* ── Fila de stat individual ────────────────────── */
 .building-info-modal__stat {
-  font-size: 0.98rem;
-  color: var(--color-text-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  padding: 0.15rem 0;
+  gap: 0.5rem;
 }
 
-.building-info-modal__description {
-  font-size: 1.05rem;
-  margin-bottom: 0.7rem;
+.stat-label {
+  color: var(--color-text-secondary, #aaa);
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--color-text, #eee);
+  text-align: right;
+}
+
+/* ── Botón demoler ──────────────────────────────── */
+.btn-demolish {
+  background: var(--color-danger, #c1121f);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius, 6px);
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-demolish:hover {
+  background: #e5383b;
 }
