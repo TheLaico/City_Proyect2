@@ -1,13 +1,14 @@
 import Building from './Building.js';
 import { BuildingType } from '../../types/BuildingType.js';
+import { BUILDING_COSTS, BUILDING_CAPACITY, BUILDING_CONSUMPTION } from '../../config/constants.js';
 
 class ResidentialBuilding extends Building {
   constructor({ id, subtype, x, y }) {
     const isApartment = subtype === 'apartment';
     const type = isApartment ? BuildingType.RESIDENTIAL_APARTMENT : BuildingType.RESIDENTIAL_HOUSE;
     const data = isApartment
-      ? { cost: 15000, capacity: 12, electricityConsumption: 15, waterConsumption: 10 }
-      : { cost: 5000,  capacity: 4,  electricityConsumption: 5,  waterConsumption: 3  };
+      ? { cost: BUILDING_COSTS[BuildingType.RESIDENTIAL_APARTMENT], capacity: BUILDING_CAPACITY[BuildingType.RESIDENTIAL_APARTMENT], electricityConsumption: BUILDING_CONSUMPTION[BuildingType.RESIDENTIAL_APARTMENT].electricity, waterConsumption: BUILDING_CONSUMPTION[BuildingType.RESIDENTIAL_APARTMENT].water }
+      : { cost: BUILDING_COSTS[BuildingType.RESIDENTIAL_HOUSE],     capacity: BUILDING_CAPACITY[BuildingType.RESIDENTIAL_HOUSE],     electricityConsumption: BUILDING_CONSUMPTION[BuildingType.RESIDENTIAL_HOUSE].electricity,     waterConsumption: BUILDING_CONSUMPTION[BuildingType.RESIDENTIAL_HOUSE].water     };
     super({ id, type, x, y, buildingData: data });
     this.subtype = subtype;
     this.capacity = data.capacity;

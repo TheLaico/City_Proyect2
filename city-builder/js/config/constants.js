@@ -1,18 +1,18 @@
 // COSTOS DE CONSTRUCCIÓN
 export const BUILDING_COSTS = Object.freeze({
-  residential_house: 5000,
-  residential_apartment: 15000,
-  commercial_shop: 8000,
-  commercial_mall: 25000,
-  industrial_factory: 20000,
-  industrial_farm: 12000,
-  service_police: 10000,
-  service_fire: 10000,
-  service_hospital: 20000,
-  utility_power_plant: 30000,
-  utility_water_plant: 25000,
-  park: 4000,
-  road: 1000,
+  residential_house: 1000,
+  residential_apartment: 3000,
+  commercial_shop: 2000,
+  commercial_mall: 8000,
+  industrial_factory: 5000,
+  industrial_farm: 3000,
+  service_police: 4000,
+  service_fire: 4000,
+  service_hospital: 6000,
+  utility_power_plant: 10000,
+  utility_water_plant: 8000,
+  park: 1500,
+  road: 100,
 });
 
 // CAPACIDADES RESIDENCIALES
