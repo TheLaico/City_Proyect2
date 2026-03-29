@@ -1,58 +1,197 @@
-/* Ranking Page Styles */
+/* ── Ranking Page ─────────────────────────────────────────────────────────── */
+
 body, html {
   min-height: 100vh;
   background: var(--color-bg, #f5f7fa);
   margin: 0;
   padding: 0;
 }
-.ranking-header {
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  font-family: var(--font-ui, 'Rajdhani', sans-serif);
+  font-size: 2rem;
+}
+
+/* ── Tabla principal ─────────────────────────────────────────────────────── */
+
+#ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+#ranking-table th,
+#ranking-table td {
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+}
+
+#ranking-table th {
+  font-weight: 700;
+  background: #f0f0f0;
+}
+
+#ranking-table tr:hover td {
+  background: #f5f5f5;
+}
+
+.ranking-row--current td {
+  background: rgba(33, 150, 243, 0.08) !important;
+}
+
+.ranking-empty {
+  text-align: center;
+  padding: 2rem !important;
+  opacity: 0.6;
+}
+
+/* ── Ciudad actual fuera del top 10 ──────────────────────────────────────── */
+
+.ranking-current-info {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  font-size: 0.9rem;
+}
+
+/* ── Botones de acción ───────────────────────────────────────────────────── */
+
+.ranking-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ranking-actions button,
+.btn-detail {
+  padding: 0.5rem 1rem;
+  border: 1px solid #bbb;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 3px;
+}
+
+.ranking-actions button:hover,
+.btn-detail:hover {
+  background: #f0f0f0;
+}
+
+/* ── Modal de detalle ────────────────────────────────────────────────────── */
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.detail-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem 2.5rem 1.2rem 2.5rem;
-  background: #fff;
+  padding: 1rem 1.25rem 0.75rem;
   border-bottom: 1px solid #e0e0e0;
 }
-.ranking-header-title {
-  font-size: 2.1rem;
+
+.detail-modal__header h2 {
+  font-size: 1.1rem;
   font-family: var(--font-ui, 'Rajdhani', sans-serif);
-  font-weight: bold;
+  margin: 0;
 }
-.ranking-header-back {
-  background: var(--color-accent, #2196f3);
-  color: #fff;
+
+.detail-modal__close {
+  background: none;
   border: none;
-  border-radius: 0.6rem;
-  padding: 0.7rem 1.3rem;
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 1.4rem;
   cursor: pointer;
-  transition: background 0.18s;
+  line-height: 1;
+  padding: 0 0.25rem;
+  color: #555;
 }
-.ranking-header-back:hover {
-  background: #1976d2;
+
+.detail-modal__body {
+  padding: 1rem 1.25rem 1.5rem;
 }
-.ranking-table-container {
+
+/* ── Contenido del desglose ──────────────────────────────────────────────── */
+
+.detail-table {
   width: 100%;
-  max-width: 900px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 1.5rem 2rem;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
-.ranking-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+
+.detail-table td {
+  padding: 0.4rem 0.25rem;
+  border-bottom: 1px solid #eee;
 }
-.ranking-table th, .ranking-table td {
-  padding: 0.7rem 1rem;
-  text-align: left;
+
+.detail-table td:last-child {
+  text-align: right;
 }
-.ranking-table tr {
-  transition: background 0.2s;
+
+.detail-section-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin: 0.75rem 0 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555;
 }
-.ranking-table tr:hover {
-  background: #e3f2fd;
+
+.detail-list {
+  margin: 0 0 0.5rem 1.2rem;
+  padding: 0;
+  font-size: 0.88rem;
+}
+
+.detail-list li {
+  margin-bottom: 0.2rem;
+}
+
+.detail-hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0 0.75rem;
+}
+
+.detail-total {
+  font-size: 1rem;
+  text-align: right;
+  margin: 0;
+}
+
+.detail-note {
+  font-size: 0.8rem;
+  opacity: 0.55;
+  margin: 0 0 1rem;
+  font-style: italic;
 }
