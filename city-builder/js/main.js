@@ -116,6 +116,13 @@ document.getElementById('btn-export')?.addEventListener('click', () => {
 document.getElementById('btn-import')?.addEventListener('click', () => {
   eventBus.emit('import:requested');
 });
+document.getElementById('btn-set-money')?.addEventListener('click', () => {
+  const val = parseInt(document.getElementById('init-money')?.value, 10);
+  if (isNaN(val)) return;
+  gameStore.setState({ resources: { money: val } });
+  eventBus.emit(EventType.RESOURCES_UPDATED, { resources: gameStore.getState().resources });
+  eventBus.emit(EventType.NOTIFICATION_SHOW, { message: `💰 Dinero ajustado a $${val.toLocaleString()}` });
+});
 document.getElementById('btn-route')?.addEventListener('click', () => {
   eventBus.emit(EventType.MODE_CHANGED, { mode: 'route' });
   eventBus.emit(EventType.NOTIFICATION_SHOW, {
