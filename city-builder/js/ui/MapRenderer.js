@@ -25,6 +25,9 @@ class MapRenderer {
     this.eventBus.subscribe(EventType.ROUTE_CALCULATED, ({ path }) => {
       this.#highlightRoute(path);
     });
+    this.eventBus.subscribe(EventType.ROUTE_PENDING, ({ origin }) => {
+      this.#markRouteOrigin(origin);
+    });
 
     // Render inmediato si el mapa ya está cargado en el store (ej: recarga de página)
     const state = this.gameStore.getState();
@@ -132,6 +135,17 @@ class MapRenderer {
       case BuildingType.PARK: return '🌳';
       default: return '🏢';
     }
+  }
+
+  #markRouteOrigin(origin) {
+    if (!this.mapGrid) return;
+    // Limpiar marcador anterior
+    this.mapGrid.querySelectorAll('.map-cell--route-origin').forEach(el => {
+      el.classList.remove('map-cell--route-origin');
+    });
+    if (!origin) return;
+    const cellDiv = this.mapGrid.querySelector(`[data-x="${origin.x}"][data-y="${origin.y}"]`);
+    if (cellDiv) cellDiv.classList.add('map-cell--route-origin');
   }
 }
 

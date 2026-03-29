@@ -1,14 +1,24 @@
 import { EventType } from '../types/EventType.js';
 import { BuildingType } from '../types/BuildingType.js';
+import RouteService from '../services/RouteService.js';
 
 class InputController {
   constructor(gameStore, eventBus) {
     this.gameStore = gameStore;
     this.eventBus = eventBus;
     this.routeSelection = { origin: null };
+    this.routeService = new RouteService(gameStore, eventBus);
   }
 
   init() {
+    // Sincronizar el store cada vez que cambia el modo (desde cualquier origen)
+    this.eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
+      this.gameStore.setState({ mode });
+      if (mode !== 'route') {
+        this.routeSelection.origin = null;
+      }
+    });
+
     // Click en celdas del mapa
     const mapGrid = document.getElementById('map-grid');
     if (mapGrid) {
@@ -26,14 +36,7 @@ class InputController {
         } else if (mode === 'demolish') {
           this.eventBus.emit(EventType.DEMOLISH_REQUESTED, { x, y });
         } else if (mode === 'route') {
-          if (!this.routeSelection.origin) {
-            this.routeSelection.origin = { x, y };
-          } else {
-            this.eventBus.emit(EventType.ROUTE_CALCULATED, {
-              from: this.routeSelection.origin, to: { x, y }
-            });
-            this.routeSelection.origin = null;
-          }
+          this.#handleRouteClick(x, y);
         } else if (mode === 'view') {
           // Mostrar info del edificio si hay uno en la celda
           this.eventBus.emit(EventType.BUILDING_SELECTED, { x, y });
@@ -54,7 +57,12 @@ class InputController {
         case 'd':
           this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'demolish' });
           break;
+        case 'f':
+          this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'route' });
+          break;
         case 'escape':
+          this.routeSelection.origin = null;
+          this.eventBus.emit(EventType.ROUTE_PENDING, { origin: null });
           this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'view' });
           break;
         case ' ':
@@ -115,6 +123,36 @@ class InputController {
         });
       }
     });
+  }
+
+  #handleRouteClick(x, y) {
+    const map = this.gameStore.getState().map;
+    const cell = map?.getCell(x, y);
+
+    // Solo se pueden seleccionar edificios reales (no vías ni celdas vacías)
+    const isBuilding = cell && cell.type !== BuildingType.ROAD;
+
+    if (!isBuilding) {
+      this.eventBus.emit(EventType.NOTIFICATION_SHOW, {
+        message: 'Selecciona un edificio (no una vía ni celda vacía)'
+      });
+      return;
+    }
+
+    if (!this.routeSelection.origin) {
+      // Primer edificio seleccionado
+      this.routeSelection.origin = { x, y };
+      this.eventBus.emit(EventType.ROUTE_PENDING, { origin: { x, y } });
+      this.eventBus.emit(EventType.NOTIFICATION_SHOW, {
+        message: `Origen: ${cell.type} (${x},${y}). Ahora selecciona el edificio destino.`
+      });
+    } else {
+      // Segundo edificio → calcular ruta
+      const { x: ox, y: oy } = this.routeSelection.origin;
+      this.routeSelection.origin = null;
+      this.eventBus.emit(EventType.ROUTE_PENDING, { origin: null }); // limpiar marcador
+      this.routeService.calculateRoute(ox, oy, x, y);
+    }
   }
 }
 

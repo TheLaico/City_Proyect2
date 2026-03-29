@@ -45,5 +45,7 @@ export const EventType = Object.freeze({
   WEATHER_UPDATED: 'api:weather_updated',
   NEWS_UPDATED: 'api:news_updated',
   ROUTE_CALCULATED: 'api:route_calculated',
-  ROUTE_FAILED: 'api:route_failed'
+  ROUTE_FAILED: 'api:route_failed',
+  ROUTE_PENDING: 'api:route_pending',
+  ROUTE_MODE_CHANGED: 'api:route_mode_changed'
 });

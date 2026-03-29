@@ -56,6 +56,18 @@
   50% { box-shadow: 0 0 16px 4px gold; }
 }
 
+.map-cell--route-origin {
+  outline: 3px solid #00e5ff;
+  outline-offset: -3px;
+  animation: origin-pulse 0.8s infinite alternate;
+  z-index: 3;
+}
+
+@keyframes origin-pulse {
+  from { outline-color: #00e5ff; box-shadow: 0 0 8px 2px #00e5ff88; }
+  to   { outline-color: #ffffff; box-shadow: 0 0 14px 4px #00e5ffcc; }
+}
+
 .map-cell--selected {
   border: 2px dotted #fff;
 }

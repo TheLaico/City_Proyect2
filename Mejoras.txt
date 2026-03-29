@@ -3,7 +3,7 @@ EVITAR PROPONER MEJORAR DE INTERFAZ GRAFICA, NECECITAMOS MEJORAR LA LOGICA DE NE
 // PROPÓSITO: Este archivo es SOLO para proponer ideas, mejoras y tareas relacionadas con la lógica de negocio del proyecto City Builder.
 // NO incluir sugerencias de interfaz gráfica, estilos, ni cambios visuales.
 // Antes de implementar cualquier cambio importante en la lógica, proponerlo aquí y discutirlo con el equipo.
-// Basar las propuestas en el documento de requisitos del profesor y en la estructura actual del proyecto.
+// Basar las propuestass en el documento de requisitos del profesor y en la estructura actual del proyecto.
 // Cuando una mejora sea aceptada por el equipo, moverla a la lista de tareas a implementar.
 // ¡Mantener este archivo ordenado y claro para todos!
 

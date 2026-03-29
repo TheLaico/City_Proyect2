@@ -116,6 +116,23 @@ document.getElementById('btn-export')?.addEventListener('click', () => {
 document.getElementById('btn-import')?.addEventListener('click', () => {
   eventBus.emit('import:requested');
 });
+document.getElementById('btn-route')?.addEventListener('click', () => {
+  eventBus.emit(EventType.MODE_CHANGED, { mode: 'route' });
+  eventBus.emit(EventType.NOTIFICATION_SHOW, {
+    message: '🗺️ Modo ruta: haz clic en el edificio ORIGEN'
+  });
+});
+
+// Resaltar btn-route cuando el modo es 'route'
+eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
+  const btnRoute = document.getElementById('btn-route');
+  if (btnRoute) btnRoute.classList.toggle('active', mode === 'route');
+});
+
+// Notificar cuando no se encuentra ruta
+eventBus.subscribe(EventType.ROUTE_FAILED, ({ message }) => {
+  eventBus.emit(EventType.NOTIFICATION_SHOW, { message: `❌ ${message}` });
+});
 
 // 8. Detectar partida guardada
 if (gameController.saveService.hasSavedGame()) {
