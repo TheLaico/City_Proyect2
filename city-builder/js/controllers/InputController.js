@@ -11,9 +11,10 @@ class InputController {
   }
 
   init() {
-    // Click en celdas del mapa
     const mapGrid = document.getElementById('map-grid');
     if (mapGrid) {
+
+      // Click IZQUIERDO → build / demolish / route
       mapGrid.addEventListener('click', (e) => {
         const cell = e.target.closest('[data-x][data-y]');
         if (!cell) return;
@@ -29,9 +30,17 @@ class InputController {
           this.eventBus.emit(EventType.DEMOLISH_REQUESTED, { x, y });
         } else if (mode === 'route') {
           this.#handleRouteClick(x, y);
-        } else if (mode === 'view') {
-          this.eventBus.emit(EventType.BUILDING_INFO_REQUESTED, { x, y });
         }
+      });
+
+      // Click DERECHO → siempre muestra info del edificio, sin importar el modo
+      mapGrid.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const cell = e.target.closest('[data-x][data-y]');
+        if (!cell) return;
+        const x = parseInt(cell.getAttribute('data-x'), 10);
+        const y = parseInt(cell.getAttribute('data-y'), 10);
+        this.eventBus.emit(EventType.BUILDING_INFO_REQUESTED, { x, y });
       });
     }
 
@@ -92,7 +101,6 @@ class InputController {
       const input = document.getElementById(id);
       if (input) {
         input.addEventListener('change', () => {
-          // Leer todos los valores actuales
           const config = {};
           configInputs.forEach(({ id, key }) => {
             const el = document.getElementById(id);
@@ -100,7 +108,6 @@ class InputController {
           });
           this.gameStore.setState({ config });
 
-          // Aplicar recursos iniciales directamente al store
           const resources = {};
           if (config.initElectricity !== undefined) resources.electricity = config.initElectricity;
           if (config.initWater !== undefined)       resources.water       = config.initWater;
@@ -120,7 +127,6 @@ class InputController {
     const map = this.gameStore.getState().map;
     const cell = map?.getCell(x, y);
 
-    // Solo se pueden seleccionar edificios reales (no vías ni celdas vacías)
     const isBuilding = cell && cell.type !== BuildingType.ROAD;
 
     if (!isBuilding) {
@@ -131,17 +137,15 @@ class InputController {
     }
 
     if (!this.routeSelection.origin) {
-      // Primer edificio seleccionado
       this.routeSelection.origin = { x, y };
       this.eventBus.emit(EventType.ROUTE_PENDING, { origin: { x, y } });
       this.eventBus.emit(EventType.NOTIFICATION_SHOW, {
         message: `Origen: ${cell.type} (${x},${y}). Ahora selecciona el edificio destino.`
       });
     } else {
-      // Segundo edificio → calcular ruta
       const { x: ox, y: oy } = this.routeSelection.origin;
       this.routeSelection.origin = null;
-      this.eventBus.emit(EventType.ROUTE_PENDING, { origin: null }); // limpiar marcador
+      this.eventBus.emit(EventType.ROUTE_PENDING, { origin: null });
       this.routeService.calculateRoute(ox, oy, x, y);
     }
   }

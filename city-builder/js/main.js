@@ -132,6 +132,7 @@ document.getElementById('btn-route')?.addEventListener('click', () => {
 
 // Resaltar btn-route cuando el modo es 'route'
 eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
+  gameStore.setState({ mode });
   const btnRoute = document.getElementById('btn-route');
   if (btnRoute) btnRoute.classList.toggle('active', mode === 'route');
 });
