@@ -8,7 +8,7 @@ class Building {
     this.x = x;
     this.y = y;
     this.cost = buildingData?.cost ?? 0;
-    this.maintenanceCost = buildingData?.maintenanceCost ?? 0;
+    this.maintenanceCost = Math.round(this.cost * 0.0001);
     this.electricityConsumption = buildingData?.electricityConsumption ?? 0;
     this.waterConsumption = buildingData?.waterConsumption ?? 0;
     this.active = true;

@@ -14,9 +14,11 @@ class ResourceService {
     let totalMoney = 0, totalElectricity = 0, totalWater = 0, totalFood = 0;
     let consumptionElectricity = 0, consumptionWater = 0, consumptionFood = 0;
 
+    let totalMaintenance = 0;
     for (const b of buildings) {
       const prod = b.getProduction();
       totalMoney += prod.money || 0;
+      totalMaintenance += b.getMaintenanceCost?.() ?? 0;
       totalElectricity += prod.electricity || 0;
       totalWater += prod.water || 0;
       totalFood += prod.food || 0;
@@ -32,7 +34,7 @@ class ResourceService {
     consumptionFood += (config.citizenFoodConsumption || 1) * citizens.length;
 
     // Balance y actualización de recursos
-    this.gameStore.updateResource(ResourceType.MONEY, totalMoney);
+    this.gameStore.updateResource(ResourceType.MONEY, totalMoney - totalMaintenance);
     this.gameStore.updateResource(ResourceType.ELECTRICITY, totalElectricity - consumptionElectricity);
     this.gameStore.updateResource(ResourceType.WATER, totalWater - consumptionWater);
     this.gameStore.updateResource(ResourceType.FOOD, totalFood - consumptionFood);

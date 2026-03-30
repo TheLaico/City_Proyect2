@@ -11,6 +11,9 @@ class TurnService {
     this.resourceService = resourceService;
     this.citizenService = citizenService;
     this.scoreService = scoreService;
+    this.eventBus.subscribe(EventType.TURN_DURATION_CHANGED, ({ seconds }) => {
+      this.setTurnDuration(seconds);
+    });
   }
 
   start(turnDurationSeconds = 10) {
