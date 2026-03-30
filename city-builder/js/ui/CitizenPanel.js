@@ -15,20 +15,23 @@ class CitizenPanel {
 
   #render() {
     if (!this.container) return;
-    const citizens = (this.gameStore.getState().citizens || []);
-    const total = citizens.length;
-    const empleados = citizens.filter(c => c.hasJob).length;
+    const citizens = this.gameStore.getState().citizens || [];
+    const total        = citizens.length;
+    const empleados    = citizens.filter(c => c.jobId).length;
     const desempleados = total - empleados;
-    const sinHogar = citizens.filter(c => !c.hasHome).length;
-    const felicidad = total ? Math.round(citizens.reduce((a, c) => a + (c.happiness || 0), 0) / total) : 0;
-    // Color barra felicidad
-    let color = '#fbbf24'; // amarillo
-    if (felicidad < 40) color = '#ef4444'; // rojo
-    else if (felicidad > 80) color = '#22c55e'; // verde
-    // Advertencias
+    const sinHogar     = citizens.filter(c => !c.homeId).length;
+    const felicidad    = total
+      ? Math.round(citizens.reduce((a, c) => a + (c.happiness || 0), 0) / total)
+      : 0;
+
+    let color = '#fbbf24';
+    if (felicidad < 40) color = '#ef4444';
+    else if (felicidad > 80) color = '#22c55e';
+
     let adv = '';
     if (felicidad < 40) adv = '<span class="citizen-warning">⚠️ Felicidad muy baja</span>';
     else if (felicidad > 80) adv = '<span class="citizen-bonus">🎉 Bonificación de felicidad</span>';
+
     this.container.innerHTML = `
       <div class="citizen-header">
         <span class="citizen-population">👥 ${total}</span>

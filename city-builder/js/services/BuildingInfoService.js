@@ -96,7 +96,7 @@ class BuildingInfoService {
     const jobs = BUILDING_JOBS[type] ?? building.jobs ?? null;
     if (jobs !== null) {
       info.jobs      = jobs;
-      info.employees = building.currentEmployees?.length ?? 0;
+      info.employees = building.employees?.length ?? 0;
     }
 
     return info;
