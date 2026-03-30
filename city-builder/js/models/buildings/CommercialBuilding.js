@@ -6,7 +6,8 @@ class CommercialBuilding extends Building {
     const data = subtype === 'mall'
       ? { cost: 8000, jobs: 20, production: 2000, electricityConsumption: 25 }
       : { cost: 2000, jobs: 6, production: 500, electricityConsumption: 8 };
-    super({ id, type: BuildingType.COMMERCIAL_SHOP, x, y, buildingData: data });
+    const type = subtype === 'mall' ? BuildingType.COMMERCIAL_MALL : BuildingType.COMMERCIAL_SHOP;
+    super({ id, type, x, y, buildingData: data });
     this.subtype = subtype;
     this.jobs = data.jobs;
     this.production = data.production;
@@ -20,4 +21,4 @@ class CommercialBuilding extends Building {
   toJSON() { return { ...super.toJSON(), subtype: this.subtype, jobs: this.jobs, production: this.production }; }
 }
 
-export default CommercialBuilding;
+export default CommercialBuilding;  

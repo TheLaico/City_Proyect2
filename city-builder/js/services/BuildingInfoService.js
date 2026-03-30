@@ -93,7 +93,7 @@ class BuildingInfoService {
     }
 
     // Empleos
-    const jobs = BUILDING_JOBS[type] ?? building.jobs ?? null;
+    const jobs = building.jobs ?? BUILDING_JOBS[type] ?? null;
     if (jobs !== null) {
       info.jobs      = jobs;
       info.employees = building.employees?.length ?? 0;
