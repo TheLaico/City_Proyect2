@@ -25,6 +25,7 @@ import ExportService from './services/ExportService.js';
 import ImportService from './services/ImportService.js';
 import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
+import GameOverScreen from './ui/GameOverScreen.js';
 import { EventType } from './types/EventType.js';
 
 // 1. Singletons base (deben inicializarse primero)
@@ -79,11 +80,13 @@ const importService = new ImportService(gameStore, eventBus, saveService);
 importService.init();
 const rankingModal = new RankingModal(gameStore, eventBus, rankingService);
 const buildInfoModal = new BuildingInfoModal(gameStore, eventBus);
+const gameOverScreen = new GameOverScreen(gameStore, eventBus, rankingService, saveService);
 
 // Inicializar UI
 [
   mapRenderer, resourcePanel, buildMenu, notifManager, citizenPanel,
-  scorePanel, chartPanel, rankingModal, buildInfoModal, rankingService
+  scorePanel, chartPanel, rankingModal, buildInfoModal, rankingService,
+  gameOverScreen
 ].forEach(m => m.init && m.init());
 
 // Inicializar widgets de clima y noticias cuando el juego arranque con una ciudad

@@ -37,28 +37,22 @@ class ResourceService {
     this.gameStore.updateResource(ResourceType.WATER, totalWater - consumptionWater);
     this.gameStore.updateResource(ResourceType.FOOD, totalFood - consumptionFood);
 
-    // Verificar recursos críticos — solo si hay ciudadanos activos
+    // Verificar recursos críticos — leer estado actualizado del store
     const resources = this.gameStore.getState().resources;
-    const hasCitizens = (state.citizens || []).length > 0;
 
-    if (hasCitizens) {
-      if (resources.electricity < 0) {
-        this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.ELECTRICITY });
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Sin electricidad — ¡Game Over!', type: 'error' });
-        this.eventBus.emit(EventType.GAME_OVER);
-      } else if (resources.water < 0) {
-        this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: ResourceType.WATER });
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Sin agua — ¡Game Over!', type: 'error' });
-        this.eventBus.emit(EventType.GAME_OVER);
+    const critical = [];
+    if (resources.money       < 0) critical.push({ resource: ResourceType.MONEY,       message: '💰 Sin dinero'       });
+    if (resources.electricity < 0) critical.push({ resource: ResourceType.ELECTRICITY, message: '⚡ Sin electricidad' });
+    if (resources.water       < 0) critical.push({ resource: ResourceType.WATER,       message: '💧 Sin agua'         });
+    if (resources.food        < 0) critical.push({ resource: ResourceType.FOOD,        message: '🍞 Sin alimentos'    });
+
+    if (critical.length > 0) {
+      const msg = critical.map(c => c.message).join(', ') + ' — ¡Game Over!';
+      for (const c of critical) {
+        this.eventBus.emit(EventType.RESOURCE_CRITICAL, { resource: c.resource });
       }
-    } else {
-      // Sin ciudadanos: avisar si recursos en negativo pero no game over
-      if (resources.electricity < 0) {
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '⚡ Sin electricidad — construye una planta eléctrica', type: 'warning' });
-      }
-      if (resources.water < 0) {
-        this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💧 Sin agua — construye una planta de agua', type: 'warning' });
-      }
+      this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: msg, type: 'error' });
+      this.eventBus.emit(EventType.GAME_OVER);
     }
 
     // Actualizar estado activo de edificios comerciales

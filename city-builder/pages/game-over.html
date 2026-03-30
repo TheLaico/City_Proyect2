@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fin del Juego — City Builder</title>
+  <link rel="stylesheet" href="../css/base/reset.css">
+  <link rel="stylesheet" href="../css/base/variables.css">
+  <link rel="stylesheet" href="../css/components/game-over.css">
+  <link href="https://fonts.googleapis.com/css?family=Rajdhani:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+3:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=JetBrains+Mono:400,700&display=swap" rel="stylesheet">
+</head>
+<body class="game-over-page">
+
+  <div class="game-over-card">
+
+    <!-- Header -->
+    <div class="game-over-header">
+      <span class="go-icon">🏚️</span>
+      <h1>Fin del Juego</h1>
+      <p class="go-subtitle">Tu ciudad ha colapsado por falta de recursos críticos.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="go-stats" id="go-stats">
+      <div class="go-stat">
+        <span class="go-stat__label">Ciudad</span>
+        <span class="go-stat__value go-stat__value--sm" id="go-city-name">—</span>
+      </div>
+      <div class="go-stat">
+        <span class="go-stat__label">Alcalde</span>
+        <span class="go-stat__value go-stat__value--sm" id="go-mayor-name">—</span>
+      </div>
+      <div class="go-stat">
+        <span class="go-stat__label">Turno</span>
+        <span class="go-stat__value" id="go-turn">—</span>
+      </div>
+      <div class="go-stat">
+        <span class="go-stat__label">Población</span>
+        <span class="go-stat__value" id="go-population">—</span>
+      </div>
+      <div class="go-stat">
+        <span class="go-stat__label">Felicidad</span>
+        <span class="go-stat__value" id="go-happiness">—</span>
+      </div>
+      <div class="go-stat">
+        <span class="go-stat__label">Puntaje</span>
+        <span class="go-stat__value gold" id="go-score">—</span>
+      </div>
+    </div>
+
+    <!-- Causa del colapso -->
+    <div class="go-cause">
+      <p class="go-cause__title">⚠ Causa del colapso</p>
+      <ul class="go-cause__list" id="go-causes">
+        <li>Cargando...</li>
+      </ul>
+    </div>
+
+    <!-- Ranking -->
+    <div id="go-ranking-section">
+      <p class="go-ranking-title">🏆 Ranking de ciudades</p>
+      <table class="go-ranking-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ciudad</th>
+            <th>Alcalde</th>
+            <th>Puntaje</th>
+            <th>Pobl.</th>
+            <th>Turnos</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="go-ranking-body">
+          <tr><td colspan="7" style="text-align:center;color:var(--color-text-muted)">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Acciones -->
+    <div class="go-actions">
+      <button id="go-btn-inicio" class="go-btn go-btn--primary">
+        🏙️ Volver al inicio
+      </button>
+    </div>
+
+  </div>
+
+  <script type="module" src="../js/pages/GameOverPage.js"></script>
+</body>
+</html>
