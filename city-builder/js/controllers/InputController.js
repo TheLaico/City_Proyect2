@@ -33,7 +33,7 @@ class InputController {
         }
       });
 
-      // Click DERECHO → siempre muestra info del edificio, sin importar el modo
+      // Click DERECHO → siempre muestra info del edificio
       mapGrid.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         const cell = e.target.closest('[data-x][data-y]');
@@ -47,8 +47,6 @@ class InputController {
     // Atajos de teclado
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return;
-
-      // Evitar disparar atajos si el foco está en un input
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
       switch (e.key.toLowerCase()) {
@@ -72,10 +70,10 @@ class InputController {
           this.routeSelection.origin = null;
           this.eventBus.emit(EventType.ROUTE_PENDING, { origin: null });
           this.eventBus.emit(EventType.MODE_CHANGED, { mode: 'view' });
-          this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '👁️ Modo vista' });
+          this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '👁️ Modo vista — arrastra para mover el mapa' });
           break;
         case ' ':
-          e.preventDefault(); // evita scroll de página
+          e.preventDefault();
           this.eventBus.emit('turn:toggle_pause');
           break;
         case 's':
@@ -85,7 +83,6 @@ class InputController {
       }
     });
 
-    // Listeners para inputs configurables
     const turnDurationInput = document.getElementById('turn-duration');
     if (turnDurationInput) {
       turnDurationInput.addEventListener('change', (e) => {
@@ -96,17 +93,16 @@ class InputController {
       });
     }
 
-    // Inputs de configuración general
     const configInputs = [
       { id: 'init-electricity', key: 'initElectricity' },
-      { id: 'init-water', key: 'initWater' },
-      { id: 'init-food', key: 'initFood' },
-      { id: 'citizen-water', key: 'citizenWaterConsumption' },
-      { id: 'citizen-elec', key: 'citizenElecConsumption' },
-      { id: 'citizen-food', key: 'citizenFoodConsumption' },
-      { id: 'bonus-police', key: 'bonusPolice' },
-      { id: 'bonus-fire', key: 'bonusFire' },
-      { id: 'bonus-hospital', key: 'bonusHospital' }
+      { id: 'init-water',       key: 'initWater' },
+      { id: 'init-food',        key: 'initFood' },
+      { id: 'citizen-water',    key: 'citizenWaterConsumption' },
+      { id: 'citizen-elec',     key: 'citizenElecConsumption' },
+      { id: 'citizen-food',     key: 'citizenFoodConsumption' },
+      { id: 'bonus-police',     key: 'bonusPolice' },
+      { id: 'bonus-fire',       key: 'bonusFire' },
+      { id: 'bonus-hospital',   key: 'bonusHospital' },
     ];
     configInputs.forEach(({ id, key }) => {
       const input = document.getElementById(id);
@@ -121,8 +117,8 @@ class InputController {
 
           const resources = {};
           if (config.initElectricity !== undefined) resources.electricity = config.initElectricity;
-          if (config.initWater !== undefined) resources.water = config.initWater;
-          if (config.initFood !== undefined) resources.food = config.initFood;
+          if (config.initWater !== undefined)        resources.water       = config.initWater;
+          if (config.initFood !== undefined)         resources.food        = config.initFood;
           if (Object.keys(resources).length > 0) {
             this.gameStore.setState({ resources });
             this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources: this.gameStore.getState().resources });
@@ -135,9 +131,8 @@ class InputController {
   }
 
   #handleRouteClick(x, y) {
-    const map = this.gameStore.getState().map;
+    const map  = this.gameStore.getState().map;
     const cell = map?.getCell(x, y);
-
     const isBuilding = cell && cell.type !== BuildingType.ROAD;
 
     if (!isBuilding) {

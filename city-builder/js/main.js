@@ -133,9 +133,17 @@ document.getElementById('btn-route')?.addEventListener('click', () => {
   });
 });
 
-// Resaltar btn-route cuando el modo es 'route'
+// Actualizar modo: clases del body, botón de ruta y cursor del viewport
 eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
   gameStore.setState({ mode });
+
+  // Clases CSS en body para cursores y estilos por modo
+  document.body.classList.remove('mode-view', 'mode-build', 'mode-demolish', 'mode-route');
+  document.body.classList.add(`mode-${mode}`);
+
+  // Evento DOM para que ViewportController actualice el cursor
+  document.dispatchEvent(new CustomEvent('mode:changed', { detail: { mode } }));
+
   const btnRoute = document.getElementById('btn-route');
   if (btnRoute) btnRoute.classList.toggle('active', mode === 'route');
 });
