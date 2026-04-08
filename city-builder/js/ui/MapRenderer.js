@@ -12,64 +12,174 @@ import { ViewportController } from './viewport/ViewportController.js';
 
 /** S: provee código corto y color por tipo de edificio */
 class BuildingMetaProvider {
+  static #COLORS = {
+    residential: '#81c784',
+    commercial:  '#64b5f6',
+    industrial:  '#ffb74d',
+    service:     '#f48fb1',
+    utility:     '#ce93d8',
+    park:        '#a5d6a7',
+    road:        '#8FA19A',
+    empty:       '#5AD959',
+  };
+
   static #meta = {
-    [BuildingType.RESIDENTIAL_HOUSE]:      { code: 'R1', category: 'residential' },
-    [BuildingType.RESIDENTIAL_APARTMENT]:  { code: 'R2', category: 'residential' },
-    [BuildingType.COMMERCIAL_SHOP]:        { code: 'C1', category: 'commercial'  },
-    [BuildingType.COMMERCIAL_MALL]:        { code: 'C2', category: 'commercial'  },
-    [BuildingType.INDUSTRIAL_FACTORY]:     { code: 'I1', category: 'industrial'  },
-    [BuildingType.INDUSTRIAL_FARM]:        { code: 'I2', category: 'industrial'  },
-    [BuildingType.SERVICE_POLICE]:         { code: 'S1', category: 'service'     },
-    [BuildingType.SERVICE_FIRE]:           { code: 'S2', category: 'service'     },
-    [BuildingType.SERVICE_HOSPITAL]:       { code: 'S3', category: 'service'     },
-    [BuildingType.UTILITY_POWER_PLANT]:    { code: 'U1', category: 'utility'     },
-    [BuildingType.UTILITY_WATER_PLANT]:    { code: 'U2', category: 'utility'     },
-    [BuildingType.PARK]:                   { code: 'PK', category: 'park'        },
-    road:                                  { code: '',   category: 'road'        },
+    [BuildingType.RESIDENTIAL_HOUSE]:     { code: 'R1', category: 'residential' },
+    [BuildingType.RESIDENTIAL_APARTMENT]: { code: 'R2', category: 'residential' },
+    [BuildingType.COMMERCIAL_SHOP]:       { code: 'C1', category: 'commercial'  },
+    [BuildingType.COMMERCIAL_MALL]:       { code: 'C2', category: 'commercial'  },
+    [BuildingType.INDUSTRIAL_FACTORY]:    { code: 'I1', category: 'industrial'  },
+    [BuildingType.INDUSTRIAL_FARM]:       { code: 'I2', category: 'industrial'  },
+    [BuildingType.SERVICE_POLICE]:        { code: 'S1', category: 'service'     },
+    [BuildingType.SERVICE_FIRE]:          { code: 'S2', category: 'service'     },
+    [BuildingType.SERVICE_HOSPITAL]:      { code: 'S3', category: 'service'     },
+    [BuildingType.UTILITY_POWER_PLANT]:   { code: 'U1', category: 'utility'     },
+    [BuildingType.UTILITY_WATER_PLANT]:   { code: 'U2', category: 'utility'     },
+    [BuildingType.PARK]:                  { code: 'PK', category: 'park'        },
+    road:                                 { code: '',   category: 'road'        },
   };
 
   static get(type) {
-    return this.#meta[type] ?? { code: '??', category: 'residential' };
+    const meta = this.#meta[type] ?? { code: '??', category: 'empty' };
+    return { ...meta, color: this.#COLORS[meta.category] ?? this.#COLORS.empty };
+  }
+
+  static color(category) {
+    return this.#COLORS[category] ?? this.#COLORS.empty;
   }
 }
 
 
-/** S: construye/actualiza el DOM de una celda isométrica plana */
+/** S: construye/actualiza el canvas de una celda isométrica */
 class IsoCellRenderer {
+  static #TW = 64;
+  static #TH = 32;
+  // Resolución interna alta para que el zoom CSS no pixele
+  static #DPR = Math.min(window.devicePixelRatio ?? 1, 3);
+
   static create(x, y, content) {
-    const el = document.createElement('div');
-    el.classList.add('iso-cell');
-    el.dataset.x = x;
-    el.dataset.y = y;
-    this.#populate(el, content);
-    return el;
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('iso-cell');
+    wrapper.dataset.x = x;
+    wrapper.dataset.y = y;
+
+    const canvas = document.createElement('canvas');
+    // Tamaño físico en px CSS (lo que ocupa en pantalla)
+    canvas.style.width  = `${this.#TW}px`;
+    canvas.style.height = `${this.#TH}px`;
+    // Tamaño real del buffer — multiplicado por DPR para alta resolución
+    canvas.width  = this.#TW  * this.#DPR;
+    canvas.height = this.#TH * this.#DPR;
+    canvas.classList.add('iso-canvas');
+    wrapper.appendChild(canvas);
+
+    this.#paint(canvas, content);
+    return wrapper;
   }
 
   static update(el, content) {
+    const canvas = el.querySelector('.iso-canvas');
+    if (!canvas) return;
+    this.#paint(canvas, content);
+
+    // sync categoria en el wrapper para los estados de hover/route via CSS
     el.className = 'iso-cell';
-    el.innerHTML = '';
-    this.#populate(el, content);
+    if (content) {
+      const { category } = BuildingMetaProvider.get(content.type);
+      el.classList.add(`iso-cell--${category}`);
+    } else {
+      el.classList.add('iso-cell--empty');
+    }
   }
 
-  static #populate(el, content) {
-    const top = document.createElement('div');
-    top.classList.add('iso-face--top');
+  static #paint(canvas, content) {
+    const dpr = this.#DPR;
+    // Coordenadas lógicas (sin DPR) — más fácil de leer
+    const tw = this.#TW;
+    const th = this.#TH;
+    const ctx = canvas.getContext('2d');
+    // Escalar el contexto una sola vez para que todo lo que dibujes
+    // use coordenadas lógicas normales (64×32) pero se renderice
+    // en la resolución real del buffer (tw*dpr × th*dpr)
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, tw, th);
 
-    if (!content) {
-      el.classList.add('iso-cell--empty');
-    } else {
-      const { code, category } = BuildingMetaProvider.get(content.type);
-      el.classList.add(`iso-cell--${category}`);
+    // Determinar color y código
+    let fillColor = '#5AD959';
+    let code = '';
+    let category = 'empty';
 
-      if (code) {
-        const label = document.createElement('span');
-        label.classList.add('iso-cell__label');
-        label.textContent = code;
-        el.appendChild(label);
-      }
+    if (content) {
+      const meta = BuildingMetaProvider.get(content.type);
+      fillColor = meta.color;
+      code      = meta.code;
+      category  = meta.category;
     }
 
-    el.appendChild(top);
+    // Dibujar rombo isométrico (diamond)
+    ctx.beginPath();
+    ctx.moveTo(tw / 2, 0);        // top
+    ctx.lineTo(tw,     th / 2);   // right
+    ctx.lineTo(tw / 2, th);       // bottom
+    ctx.lineTo(0,      th / 2);   // left
+    ctx.closePath();
+
+    if (category === 'empty') {
+      // ── Césped continuo sin bordes visibles ──────────
+      // Color sólido idéntico en todas las celdas vacías.
+      // Al no haber stroke ni variación de tono, los diamantes
+      // adyacentes se fusionan visualmente en una sola superficie.
+      ctx.fillStyle = '#5AD959';
+      ctx.fill();
+      // Sin stroke — los bordes desaparecen
+    } else {
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+
+      // Borde solo en celdas con edificio
+      ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+      ctx.lineWidth   = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(tw / 2, 0);
+      ctx.lineTo(tw,     th / 2);
+      ctx.lineTo(tw / 2, th);
+      ctx.lineTo(0,      th / 2);
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    // Etiqueta de código centrada en el rombo
+    if (code) {
+      ctx.font         = 'bold 7px "JetBrains Mono", monospace';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+
+      // sombra de texto
+      ctx.fillStyle    = 'rgba(0,0,0,0.75)';
+      ctx.fillText(code, tw / 2 + 0.5, th / 2 + 0.5);
+
+      ctx.fillStyle    = 'rgba(255,255,255,0.92)';
+      ctx.fillText(code, tw / 2, th / 2);
+    }
+
+    // Guardar categoría en el dataset del canvas para highlight CSS
+    canvas.dataset.category = category;
+  }
+
+  /** Re-pinta con brillo para hover/route — llamado externamente si hace falta */
+  static repaintHighlighted(canvas, content, brightnessMultiplier = 1.4) {
+    this.#paint(canvas, content);
+    const ctx = canvas.getContext('2d');
+    // Overlay semitransparente blanco para simular brightness
+    ctx.fillStyle = `rgba(255,255,255,${(brightnessMultiplier - 1) * 0.35})`;
+    const tw = this.#TW, th = this.#TH;
+    ctx.beginPath();
+    ctx.moveTo(tw / 2, 0);
+    ctx.lineTo(tw,     th / 2);
+    ctx.lineTo(tw / 2, th);
+    ctx.lineTo(0,      th / 2);
+    ctx.closePath();
+    ctx.fill();
   }
 }
 

@@ -4,7 +4,8 @@ city-builder/
 │
 ├── pages/
 │   ├── setup.html                      # Pantalla de creación/carga de ciudad
-│   └── ranking.html                    # Página de ranking local
+│   ├── ranking.html                    # Página de ranking local
+│   └── game-over.html                  # Pantalla de fin de juego
 │
 ├── css/
 │   ├── base/
@@ -26,23 +27,34 @@ city-builder/
 │   │   ├── news-panel.css              # Panel / carrusel de noticias
 │   │   ├── citizen-panel.css           # Panel de ciudadanos y felicidad
 │   │   ├── score-panel.css             # Panel de puntuación
-│   │   └── chart-panel.css             # Gráficas de histórico de recursos
+│   │   ├── chart-panel.css             # Gráficas de histórico de recursos
+│   │   └── game-over.css               # Estilos de pantalla de fin de juego
 │   └── pages/
 │       ├── setup.css                   # Estilos exclusivos de la pantalla de setup
 │       └── ranking.css                 # Estilos exclusivos de la página de ranking
 │
+├── assets/
+│   ├── icons/
+│   │   ├── favicon.ico
+│   │   ├── buildings/                  # Íconos por tipo de edificio
+│   │   └── ui/                         # Íconos de interfaz (recursos, botones)
+│   └── maps/
+│       ├── 1map.txt
+│       ├── example-map.txt
+│       └── example-map-30x30.txt
+│
 ├── js/
+│   ├── main.js                         # Bootstrap: inicializa todo
 │   ├── config/
 │   │   └── constants.js                # Costos, capacidades, radios, valores por defecto
-│   │
-│   ├── models/                         # SRP: cada clase representa UNA entidad del dominio
+│   ├── models/
 │   │   ├── City.js
 │   │   ├── Map.js
 │   │   ├── Citizen.js
 │   │   ├── Resource.js
 │   │   ├── Score.js
 │   │   └── buildings/
-│   │       ├── Building.js             # Clase base abstracta (OCP / LSP)
+│   │       ├── Building.js
 │   │       ├── ResidentialBuilding.js
 │   │       ├── CommercialBuilding.js
 │   │       ├── IndustrialBuilding.js
@@ -50,29 +62,28 @@ city-builder/
 │   │       ├── UtilityBuilding.js
 │   │       ├── Park.js
 │   │       └── Road.js
-│   │
-│   ├── services/                       # SRP: lógica de negocio separada de la UI
+│   ├── services/
 │   │   ├── TurnService.js
 │   │   ├── CitizenService.js
 │   │   ├── ResourceService.js
 │   │   ├── BuildingService.js
-│   │   ├── RouteService.js             # Algoritmo Dijkstra
+│   │   ├── RouteService.js
 │   │   ├── ScoreService.js
 │   │   ├── RankingService.js
-│   │   ├── SaveService.js              # Guardar / cargar (LocalStorage)
-│   │   ├── ExportService.js            # Exportar / importar JSON
-│   │   └── MapLoaderService.js         # Carga de mapa desde .txt
-│   │
-│   ├── api/                            # ISP / DIP: cada integración es independiente
-│   │   ├── WeatherAPI.js               # Open-Meteo
+│   │   ├── SaveService.js
+│   │   ├── ExportService.js
+│   │   ├── ImportService.js
+│   │   └── MapLoaderService.js
+│   ├── api/
+│   │   ├── WeatherAPI.js
 │   │   ├── NewsAPI.js
-│   │   └── ColombiaAPI.js              # api-colombia.com
-│   │
-│   ├── ui/                             # SRP: cada componente gestiona su propia vista
+│   │   └── ColombiaAPI.js
+│   ├── ui/
 │   │   ├── MapRenderer.js
 │   │   ├── ResourcePanel.js
 │   │   ├── BuildMenu.js
 │   │   ├── BuildingInfoModal.js
+│   │   ├── BuildingInfoRenderer.js
 │   │   ├── CitizenPanel.js
 │   │   ├── WeatherWidget.js
 │   │   ├── NewsPanel.js
@@ -80,49 +91,41 @@ city-builder/
 │   │   ├── RankingModal.js
 │   │   ├── NotificationManager.js
 │   │   ├── SetupScreen.js
-│   │   └── ChartPanel.js
-│   │
-│   ├── controllers/                    # SRP: coordinan UI ↔ servicios
+│   │   ├── ChartPanel.js
+│   │   ├── GameOverScreen.js
+│   │   └── viewport/
+│   ├── controllers/
 │   │   ├── GameController.js
 │   │   ├── BuildController.js
 │   │   ├── InputController.js
 │   │   └── SetupController.js
-│   │
 │   ├── store/
-│   │   └── GameStore.js                # Guarda TODO el estado global del juego (ciudad, recursos, turno, ciudadanos)
-│   │
+│   │   └── GameStore.js
 │   ├── events/
-│   │   └── EventBus.js                 # Sistema de eventos para comunicar módulos sin acoplarlos (ej: "cambio_turno")
-│   │
+│   │   └── EventBus.js
 │   ├── validators/
-│   │   ├── BuildingValidator.js        # Valida si se puede construir (dinero, vía adyacente, celda libre)
-│   │   ├── MapValidator.js             # Valida formato del mapa .txt antes de cargarlo
-│   │   └── InputValidator.js           # Valida datos del usuario (nombre, tamaño del mapa, etc)
-│   │
+│   │   ├── BuildingValidator.js
+│   │   ├── MapValidator.js
+│   │   └── InputValidator.js
 │   ├── utils/
-│   │   ├── GridUtils.js                # Funciones del mapa (vecinos, posiciones, límites)
-│   │   ├── MathUtils.js                # Cálculos generales (promedios, fórmulas, etc)
-│   │   ├── RandomUtils.js              # Generación de valores aleatorios (ciudadanos por turno)
-│   │   └── DateUtils.js                # Manejo de tiempo (turnos, fechas, timers)
-│   │
+│   │   ├── GridUtils.js
+│   │   ├── MathUtils.js
+│   │   ├── RandomUtils.js
+│   │   ├── DateUtils.js
+│   │   ├── Logger.js
+│   │   └── tests.manual-tests.md
 │   ├── adapters/
-│   │   ├── CityAdapter.js              # Convierte JSON a objetos City
-│   │   ├── BuildingAdapter.js          # Convierte datos a instancias de edificios correctos
-│   │   └── ApiAdapter.js               # Adapta respuestas de APIs externas al formato interno
-│   │
+│   │   ├── CityAdapter.js
+│   │   ├── BuildingAdapter.js
+│   │   └── ApiAdapter.js
 │   ├── history/
-│   │   └── ResourceHistory.js          # Guarda histórico de recursos por turnos (para gráficas)
-│   │
+│   │   └── ResourceHistory.js
 │   ├── types/
-│   │   ├── BuildingType.js             # Tipos de edificios (residencial, comercial, etc)
-│   │   ├── ResourceType.js             # Tipos de recursos (dinero, agua, luz, comida)
-│   │   └── EventType.js                # Nombres de eventos del sistema (constantes)
-│   │
-│   └── main.js                         # Bootstrap: inicializa todo
+│   │   ├── BuildingType.js
+│   │   ├── ResourceType.js
+│   │   └── EventType.js
+│   └── pages/
+│       ├── ranking-page.js
+│       └── GameOverPage.js
 │
-└── assets/
-    ├── icons/
-    │   ├── buildings/                  # Íconos por tipo de edificio
-    │   └── ui/                         # Íconos de interfaz (recursos, botones)
-    └── maps/
-        └── example-map.txt             # Mapa de ejemplo cargable (.txt)   
+└── README.md

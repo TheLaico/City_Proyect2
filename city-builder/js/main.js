@@ -38,7 +38,7 @@ const saveService = new SaveService(gameStore, eventBus);
 
 // 2. APIs externas
 const colombiaAPI = new ColombiaAPI();
-const weatherAPI = new WeatherAPI(''); // sin key → mock
+const weatherAPI = new WeatherAPI('a0c168823b34e25b3b630192f6c141b1');
 const newsAPI = new NewsAPI('');    // sin key → mock
 
 // 3. Servicios de dominio

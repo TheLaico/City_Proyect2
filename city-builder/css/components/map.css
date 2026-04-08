@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   MAPA ISOMÉTRICO — edificios planos con etiqueta
+   MAPA ISOMÉTRICO — celdas dibujadas en Canvas
    ═══════════════════════════════════════════════════ */
 
 :root {
@@ -20,62 +20,30 @@
   cursor:   pointer;
 }
 
-/* ── Cara superior: rombo iso con clip-path ──────── */
-.iso-face--top {
-  position:  absolute;
-  inset:     0;
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  background: #1a2820;
-  transition: filter 0.12s;
+/* ── Canvas que ocupa toda la celda ─────────────── */
+.iso-canvas {
+  display:  block;
+  width:    var(--iso-tw);
+  height:   var(--iso-th);
+  /* El diamante tiene sus propios bordes — sin sombra de caja */
 }
-
-/* ── Etiqueta centrada sobre el rombo ────────────── */
-.iso-cell__label {
-  position:    absolute;
-  left:        50%;
-  top:         50%;
-  transform:   translate(-50%, -50%);
-  font-family: var(--font-mono, monospace);
-  font-size:   9px;
-  font-weight: 700;
-  line-height: 1;
-  color:       rgba(0, 0, 0, 0.75);
-  pointer-events: none;
-  z-index:     5;
-  letter-spacing: 0.03em;
-}
-
-/* ═══════════════════════════════════════════════════
-   COLORES POR CATEGORÍA
-   ═══════════════════════════════════════════════════ */
-
-.iso-cell--empty     .iso-face--top { background: #1a2820; }
-.iso-cell--road      .iso-face--top { background: #78909c; }
-
-.iso-cell--residential .iso-face--top { background: var(--color-building-residential); }
-.iso-cell--commercial  .iso-face--top { background: var(--color-building-commercial);  }
-.iso-cell--industrial  .iso-face--top { background: var(--color-building-industrial);  }
-.iso-cell--service     .iso-face--top { background: var(--color-building-service);     }
-.iso-cell--utility     .iso-face--top { background: var(--color-building-utility);     }
-.iso-cell--park        .iso-face--top { background: var(--color-building-park);        }
-
-/* Color de etiqueta para categorías claras */
-.iso-cell--residential .iso-cell__label,
-.iso-cell--commercial  .iso-cell__label,
-.iso-cell--industrial  .iso-cell__label,
-.iso-cell--park        .iso-cell__label { color: rgba(0,0,0,0.70); }
-
-.iso-cell--service  .iso-cell__label,
-.iso-cell--utility  .iso-cell__label   { color: rgba(255,255,255,0.85); }
 
 /* ═══════════════════════════════════════════════════
    ESTADOS INTERACTIVOS
+   Los efectos se aplican al canvas con CSS filter.
+   El color base lo pinta JS directamente.
    ═══════════════════════════════════════════════════ */
 
-.iso-cell:hover .iso-face--top { filter: brightness(1.4); }
-.iso-cell:hover                 { z-index: 9999 !important; }
+.iso-cell:hover {
+  z-index: 9999 !important;
+}
 
-.iso-cell--route .iso-face--top {
+.iso-cell:hover .iso-canvas {
+  filter: brightness(1.4);
+}
+
+/* ── Ruta calculada ─────────────────────────────── */
+.iso-cell--route .iso-canvas {
   animation: route-pulse 1s infinite;
 }
 @keyframes route-pulse {
@@ -83,23 +51,30 @@
   50%       { filter: brightness(2.0); }
 }
 
-.iso-cell--route-origin .iso-face--top {
-  animation: origin-pulse .8s infinite alternate;
+/* ── Origen de ruta ─────────────────────────────── */
+.iso-cell--route-origin .iso-canvas {
+  animation: origin-pulse 0.8s infinite alternate;
 }
 @keyframes origin-pulse {
   from { filter: brightness(1.3) drop-shadow(0 0 4px #00e5ff); }
   to   { filter: brightness(1.7) drop-shadow(0 0 8px #00e5ff); }
 }
 
+/* ═══════════════════════════════════════════════════
+   CURSORES POR MODO
+   ═══════════════════════════════════════════════════ */
+
 body.mode-build    { cursor: crosshair; }
 body.mode-demolish { cursor: not-allowed; }
+
 body.mode-view     #map-container,
 body:not(.mode-build):not(.mode-demolish):not(.mode-route) #map-container {
   cursor: grab;
 }
-body.mode-build    #map-container { cursor: crosshair; }
+
+body.mode-build    #map-container { cursor: crosshair;   }
 body.mode-demolish #map-container { cursor: not-allowed; }
-body.mode-route    #map-container { cursor: cell; }
+body.mode-route    #map-container { cursor: cell;        }
 
 /* ── Hint de navegación ─────────────────────────── */
 #map-container::after {
