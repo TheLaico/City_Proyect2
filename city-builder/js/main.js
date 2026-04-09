@@ -27,6 +27,7 @@ import RankingModal from './ui/RankingModal.js';
 import BuildingInfoModal from './ui/BuildingInfoModal.js';
 import GameOverScreen from './ui/GameOverScreen.js';
 import { EventType } from './types/EventType.js';
+import ENV from './config/env.js';
 
 // 1. Singletons base (deben inicializarse primero)
 const gameStore = new GameStore();
@@ -36,26 +37,26 @@ const eventBus = new EventBus();
 const mapLoaderService = new MapLoaderService(gameStore, eventBus);
 const saveService = new SaveService(gameStore, eventBus);
 
-// 2. APIs externas
+// 3. APIs externas
 const colombiaAPI = new ColombiaAPI();
-const weatherAPI = new WeatherAPI('a0c168823b34e25b3b630192f6c141b1');
+const weatherAPI = new WeatherAPI(ENV.WEATHER_API_KEY);
 const newsAPI = new NewsAPI('');    // sin key → mock
 
-// 3. Servicios de dominio
+// 4. Servicios de dominio
 const resourceHistory = new ResourceHistory();
 
-// 4. GameController
+// 5. GameController
 const gameController = new GameController(gameStore, eventBus, resourceHistory);
 gameController.init();
 
-// 5. Controladores de input
+// 6. Controladores de input
 const buildController = new BuildController(gameStore, eventBus, gameController.buildingService);
 buildController.init();
 
 const inputController = new InputController(gameStore, eventBus);
 inputController.init();
 
-// 6. Setup (solo en index.html; condicionado a que exista #setup-container)
+// 7. Setup (solo en index.html; condicionado a que exista #setup-container)
 const setupController = new SetupController(gameStore, eventBus, colombiaAPI, mapLoaderService, saveService);
 setupController.init();
 
@@ -64,14 +65,19 @@ if (document.getElementById('setup-form')) {
   setupScreen.init();
 }
 
-// 7. UI principal (condicionada a que el juego esté activo)
+// 8. UI principal
 const mapRenderer = new MapRenderer(gameStore, eventBus);
 const resourcePanel = new ResourcePanel(gameStore, eventBus);
 const buildMenu = new BuildMenu(gameStore, eventBus);
 const notifManager = new NotificationManager(eventBus);
 const citizenPanel = new CitizenPanel(gameStore, eventBus);
 const scorePanel = new ScorePanel(gameStore, eventBus);
-const weatherWidget = new WeatherWidget(eventBus, weatherAPI);
+const weatherWidget = new WeatherWidget(
+  eventBus,
+  weatherAPI,
+  document.getElementById('weather-widget'),
+  document.getElementById('weather-template')
+);
 const newsPanel = new NewsPanel(eventBus, newsAPI);
 const chartPanel = new ChartPanel(gameStore, eventBus);
 const rankingService = new RankingService(gameStore, eventBus);
@@ -105,7 +111,7 @@ eventBus.subscribe(EventType.GAME_LOADED, () => {
   }
 });
 
-// Botón exportar ciudad
+// Botón nueva ciudad
 document.getElementById('btn-new-city')?.addEventListener('click', () => {
   if (confirm('¿Crear una nueva ciudad? Se perderá la partida actual.')) {
     saveService.deleteSave();
@@ -137,11 +143,9 @@ document.getElementById('btn-route')?.addEventListener('click', () => {
 eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
   gameStore.setState({ mode });
 
-  // Clases CSS en body para cursores y estilos por modo
   document.body.classList.remove('mode-view', 'mode-build', 'mode-demolish', 'mode-route');
   document.body.classList.add(`mode-${mode}`);
 
-  // Evento DOM para que ViewportController actualice el cursor
   document.dispatchEvent(new CustomEvent('mode:changed', { detail: { mode } }));
 
   const btnRoute = document.getElementById('btn-route');
@@ -153,10 +157,9 @@ eventBus.subscribe(EventType.ROUTE_FAILED, ({ message }) => {
   eventBus.emit(EventType.NOTIFICATION_SHOW, { message: `❌ ${message}` });
 });
 
-// 8. Detectar partida guardada
+// 9. Detectar partida guardada
 if (gameController.saveService.hasSavedGame()) {
   eventBus.emit(EventType.GAME_LOAD_REQUESTED);
 } else if (!window.location.pathname.includes('setup.html')) {
-  // Si estamos en index.html sin partida → redirigir a setup
   window.location.href = 'pages/setup.html';
 }

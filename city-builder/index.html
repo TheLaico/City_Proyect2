@@ -52,7 +52,26 @@
         <div id="notifications-container"></div>
       </section>
       <aside id="right-sidebar">
+        
         <section id="weather-widget"></section>
+        <template id="weather-template">
+          <div class="weather-main">
+            <img class="weather-icon" alt="" loading="lazy">
+            <span class="weather-temp"></span>
+          </div>
+          <div class="weather-condition"></div>
+          <div class="weather-details">
+            <div class="weather-detail-item">
+              <span class="weather-detail-label">💧 Humedad</span>
+              <span class="weather-detail-value" data-field="humidity"></span>
+            </div>
+            <div class="weather-detail-item">
+              <span class="weather-detail-label">💨 Viento</span>
+              <span class="weather-detail-value" data-field="windSpeed"></span>
+            </div>
+          </div>
+        </template>
+
         <section id="news-panel"></section>
         <section id="score-panel"></section>
         <section id="chart-panel"></section>
