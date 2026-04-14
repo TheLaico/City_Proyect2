@@ -1,75 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configurar Ciudad | City Builder</title>
-  <link rel="stylesheet" href="../css/base/reset.css">
-  <link rel="stylesheet" href="../css/base/variables.css">
-  <link rel="stylesheet" href="../css/pages/setup.css">
-  <link rel="stylesheet" href="../css/components/notifications.css">
-  <link href="https://fonts.googleapis.com/css?family=Rajdhani:700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+3:400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=JetBrains+Mono:400,700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <main>
-    <h1>Crear nueva ciudad</h1>
-    <form id="setup-form" autocomplete="off">
-      <div>
-        <label for="city-name">Nombre de la ciudad</label>
-        <input id="city-name" name="city-name" type="text" maxlength="50" required>
-      </div>
-      <div>
-        <label for="mayor-name">Nombre del alcalde</label>
-        <input id="mayor-name" name="mayor-name" type="text" maxlength="50" required>
-      </div>
-      <div>
-        <label for="region-search">Buscar ciudad colombiana</label>
-        <input id="region-search" name="region-search" type="text" placeholder="Ej: Bogotá">
-        <ul id="region-results"></ul>
-      </div>
-      <div>
-        <label for="region-select">Ciudad seleccionada</label>
-        <select id="region-select" name="region-select"></select>
-      </div>
-      <div>
-        <label>Latitud</label>
-        <input id="lat-display" type="text" readonly>
-        <label>Longitud</label>
-        <input id="lon-display" type="text" readonly>
-      </div>
-      <div>
-        <label>Mapa de la ciudad</label>
-        <div id="map-load-section">
-          <p style="margin-bottom:0.5rem; font-size:0.9em; color: var(--color-text-muted)">
-            Opcional: carga un archivo <code>.txt</code> con el diseño del mapa.
-            Si no cargas uno, se generará un terreno vacío.
-            Archivo de ejemplo: <code>assets/maps/example-map.txt</code>
-          </p>
-          <button type="button" id="btn-load-map">📂 Cargar mapa desde .txt</button>
-          <input id="map-file-input" type="file" accept=".txt" hidden>
-          <div id="map-preview" style="margin-top:0.5rem"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurar Ciudad | City Builder</title>
+    <link rel="stylesheet" href="../css/base/reset.css" />
+    <link rel="stylesheet" href="../css/base/variables.css" />
+    <link rel="stylesheet" href="../css/pages/setup.css" />
+    <link rel="stylesheet" href="../css/components/notifications.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Rajdhani:700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+3:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=JetBrains+Mono:400,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main>
+      <h1>Crear nueva ciudad</h1>
+      <form id="setup-form" autocomplete="off">
+        <div>
+          <label for="city-name">Nombre de la ciudad</label>
+          <input
+            id="city-name"
+            name="city-name"
+            type="text"
+            maxlength="50"
+            required
+          />
         </div>
-      </div>
-      <div>
-        <label>Tamaño del mapa (si no cargas archivo)</label>
-        <div style="display:flex;gap:1rem;margin-top:0.25rem">
-          <div>
-            <label for="map-width" style="font-size:0.85em">Ancho</label>
-            <input id="map-width" name="map-width" type="number" min="15" max="30" value="20">
-          </div>
-          <div>
-            <label for="map-height" style="font-size:0.85em">Alto</label>
-            <input id="map-height" name="map-height" type="number" min="15" max="30" value="20">
+        <div>
+          <label for="mayor-name">Nombre del alcalde</label>
+          <input
+            id="mayor-name"
+            name="mayor-name"
+            type="text"
+            maxlength="50"
+            required
+          />
+        </div>
+        <div>
+          <label for="region-search">Buscar ciudad colombiana</label>
+          <input
+            id="region-search"
+            name="region-search"
+            type="text"
+            placeholder="Ej: Bogotá"
+          />
+          <ul id="region-results"></ul>
+        </div>
+        <div>
+          <label for="region-select">Ciudad seleccionada</label>
+          <select id="region-select" name="region-select"></select>
+        </div>
+        <div>
+          <label>Latitud</label>
+          <input id="lat-display" type="text" readonly />
+          <label>Longitud</label>
+          <input id="lon-display" type="text" readonly />
+        </div>
+        <div>
+          <label>Mapa de la ciudad</label>
+          <div id="map-load-section">
+            <p class="map-load-description">
+              Opcional: carga un archivo <code>.txt</code> con el diseño del
+              mapa. Si no cargas uno, se generará un terreno vacío. Archivo de
+              ejemplo: <code>assets/maps/example-map.txt</code>
+            </p>
+            <button type="button" id="btn-load-map">
+              📂 Cargar mapa desde .txt
+            </button>
+            <input id="map-file-input" type="file" accept=".txt" hidden />
+            <div id="map-preview" class="map-preview-container"></div>
           </div>
         </div>
-      </div>
-      <div id="setup-errors"></div>
-      <button type="submit" id="btn-create-city">Crear ciudad</button>
-    </form>
-    <button id="btn-continue" style="display:none">Continuar partida guardada</button>
-  </main>
-  <script type="module" src="../js/main.js"></script>
-</body>
+        <div>
+          <label>Tamaño del mapa (si no cargas archivo)</label>
+          <div class="map-size-inputs">
+            <div>
+              <label for="map-width" class="map-size-label">Ancho</label>
+              <input
+                id="map-width"
+                name="map-width"
+                type="number"
+                min="15"
+                max="30"
+                value="20"
+              />
+            </div>
+            <div>
+              <label for="map-height" class="map-size-label">Alto</label>
+              <input
+                id="map-height"
+                name="map-height"
+                type="number"
+                min="15"
+                max="30"
+                value="20"
+              />
+            </div>
+          </div>
+        </div>
+        <div id="setup-errors"></div>
+        <button type="submit" id="btn-create-city">Crear ciudad</button>
+      </form>
+      <button id="btn-continue" class="btn-continue-hidden">
+        Continuar partida guardada
+      </button>
+    </main>
+    <script type="module" src="../js/main.js"></script>
+  </body>
 </html>

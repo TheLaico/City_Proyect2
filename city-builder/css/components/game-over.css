@@ -21,13 +21,21 @@
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
-  box-shadow: 0 0 60px rgba(239, 83, 80, 0.3), 0 0 120px rgba(239, 83, 80, 0.1);
+  box-shadow:
+    0 0 60px rgba(239, 83, 80, 0.3),
+    0 0 120px rgba(239, 83, 80, 0.1);
   animation: go-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes go-card-in {
-  from { transform: translateY(32px) scale(0.96); opacity: 0; }
-  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+  from {
+    transform: translateY(32px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 /* ── Header ── */
@@ -44,8 +52,13 @@
 }
 
 @keyframes go-pulse {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(239,83,80,0.4)); }
-  50%       { filter: drop-shadow(0 0 14px rgba(239,83,80,0.9)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(239, 83, 80, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(239, 83, 80, 0.9));
+  }
 }
 
 .game-over-header h1 {
@@ -96,9 +109,15 @@
   color: var(--color-accent);
 }
 
-.go-stat__value--sm  { font-size: 0.95rem; }
-.go-stat__value.danger { color: var(--color-danger); }
-.go-stat__value.gold   { color: var(--color-gold);   }
+.go-stat__value--sm {
+  font-size: 0.95rem;
+}
+.go-stat__value.danger {
+  color: var(--color-danger);
+}
+.go-stat__value.gold {
+  color: var(--color-gold);
+}
 
 /* ── Causa ── */
 .go-cause {
@@ -127,8 +146,8 @@
 }
 
 .go-cause__list li {
-  background: rgba(239,83,80,0.15);
-  border: 1px solid rgba(239,83,80,0.3);
+  background: rgba(239, 83, 80, 0.15);
+  border: 1px solid rgba(239, 83, 80, 0.3);
   border-radius: 4px;
   padding: 0.25rem 0.65rem;
   font-size: 0.88rem;
@@ -145,6 +164,11 @@
   margin: 0 0 0.6rem;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 0.5rem;
+}
+
+.go-ranking-loading {
+  text-align: center;
+  color: var(--color-text-muted);
 }
 
 .go-ranking-table {
@@ -175,10 +199,20 @@
   font-weight: 700;
 }
 
-.go-rank-pos       { font-family: var(--font-mono); font-weight: 700; color: var(--color-text-muted); }
-.go-rank-pos.top1  { color: #ffd700; }
-.go-rank-pos.top2  { color: #c0c0c0; }
-.go-rank-pos.top3  { color: #cd7f32; }
+.go-rank-pos {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.go-rank-pos.top1 {
+  color: #ffd700;
+}
+.go-rank-pos.top2 {
+  color: #c0c0c0;
+}
+.go-rank-pos.top3 {
+  color: #cd7f32;
+}
 
 /* ── Acciones ── */
 .go-actions {
@@ -198,11 +232,19 @@
   font-weight: 700;
   cursor: pointer;
   border: none;
-  transition: filter 0.15s ease, transform 0.15s ease;
+  transition:
+    filter 0.15s ease,
+    transform 0.15s ease;
 }
 
-.go-btn:hover  { filter: brightness(1.15); transform: translateY(-2px); }
-.go-btn:active { filter: brightness(0.95); transform: translateY(0); }
+.go-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+.go-btn:active {
+  filter: brightness(0.95);
+  transform: translateY(0);
+}
 
 .go-btn--primary {
   background: var(--color-accent);

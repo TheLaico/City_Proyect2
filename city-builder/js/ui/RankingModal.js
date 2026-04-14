@@ -5,12 +5,17 @@ class RankingModal {
     this.rankingService = rankingService;
     this.modal = document.getElementById('ranking-modal');
     this.btnOpen = document.getElementById('btn-ranking');
-    this.btnClose = document.getElementById('modal-close');
   }
 
   init() {
     this.btnOpen?.addEventListener('click', () => this.openModal());
-    this.btnClose?.addEventListener('click', () => this.closeModal());
+
+    // El botón de cierre se renderiza dinámicamente dentro del modal.
+    this.modal?.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.id === 'modal-close-ranking') this.closeModal();
+    });
   }
 
   // ─── Desglose ────────────────────────────────────────────────────────────
@@ -175,9 +180,6 @@ class RankingModal {
     this.modal.classList.remove('modal--hidden');
 
     // Listeners
-    this.modal.querySelector('#modal-close-ranking')
-      ?.addEventListener('click', () => this.closeModal());
-
     this.modal.querySelector('#btn-reset-ranking')
       ?.addEventListener('click', () => {
         if (window.confirm('¿Seguro que deseas borrar el ranking?')) {
