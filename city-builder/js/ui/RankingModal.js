@@ -180,6 +180,9 @@ class RankingModal {
     this.modal.classList.remove('modal--hidden');
 
     // Listeners
+    this.modal.querySelector('#modal-close-ranking')
+      ?.addEventListener('click', () => this.closeModal());
+
     this.modal.querySelector('#btn-reset-ranking')
       ?.addEventListener('click', () => {
         if (window.confirm('¿Seguro que deseas borrar el ranking?')) {

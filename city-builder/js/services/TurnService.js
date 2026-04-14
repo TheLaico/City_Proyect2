@@ -41,6 +41,9 @@ class TurnService {
 
   setTurnDuration(seconds) {
     this.#turnDurationMs = seconds * 1000;
+    const state = this.gameStore.getState();
+    const config = state.config || {};
+    this.gameStore.setState({ config: { ...config, turnDurationSeconds: seconds } });
     if (this.#intervalId) {
       this.stop();
       this.start(seconds);

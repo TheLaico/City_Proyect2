@@ -1,131 +1,146 @@
-city-builder/
+City_Proyect2/
 │
-├── index.html                          # Punto de entrada principal
+├── .env                               # Variables de entorno locales
+├── .git/                              # Metadatos de Git
+├── .gitignore                         # Archivos ignorados por Git
+├── estrutura                          # Mapa de estructura del proyecto
+├── index.html                          # Landing del proyecto (apunta a city-builder)
+├── README.md                           # Documentacion general del proyecto
 │
-├── pages/
-│   ├── setup.html                      # Pantalla de creación/carga de ciudad
-│   ├── ranking.html                    # Página de ranking local
-│   └── game-over.html                  # Pantalla de fin de juego
+├── backend/
+│   ├── main.py                         # API backend (Flask)
+│   ├── README.md                       # Documentacion del backend
+│   ├── requeriments.txt                # Dependencias de Python
+│   └── assets/
 │
-├── css/
-│   ├── base/
-│   │   ├── reset.css                   # Reset de estilos base
-│   │   └── variables.css               # Variables CSS globales (colores, tamaños, fuentes)
-│   ├── layout/
-│   │   ├── grid-layout.css             # Layout principal (3 columnas: sidebar-mapa-sidebar)
-│   │   └── responsive.css              # Media queries móvil / tablet / desktop
-│   ├── components/
-│   │   ├── map.css                     # Estilos del grid/mapa (celdas, hover, cursores)
-│   │   ├── sidebar.css                 # Panel lateral izquierdo y derecho
-│   │   ├── resources.css               # Barra/panel de recursos (dinero, agua, luz, comida)
-│   │   ├── build-menu.css              # Menú de construcción (tabs por tipo de edificio)
-│   │   ├── modal.css                   # Estilos base reutilizables para modales
-│   │   ├── building-info-modal.css     # Modal específico de info de edificio
-│   │   ├── ranking-modal.css           # Modal / tabla de ranking
-│   │   ├── notifications.css           # Toast / alertas de notificación
-│   │   ├── weather-widget.css          # Widget del clima
-│   │   ├── news-panel.css              # Panel / carrusel de noticias
-│   │   ├── citizen-panel.css           # Panel de ciudadanos y felicidad
-│   │   ├── score-panel.css             # Panel de puntuación
-│   │   ├── chart-panel.css             # Gráficas de histórico de recursos
-│   │   └── game-over.css               # Estilos de pantalla de fin de juego
-│   └── pages/
-│       ├── setup.css                   # Estilos exclusivos de la pantalla de setup
-│       └── ranking.css                 # Estilos exclusivos de la página de ranking
-│
-├── assets/
-│   ├── icons/
-│   │   ├── favicon.ico
-│   │   ├── buildings/                  # Íconos por tipo de edificio
-│   │   └── ui/                         # Íconos de interfaz (recursos, botones)
-│   └── maps/
-│       ├── 1map.txt
-│       ├── example-map.txt
-│       └── example-map-30x30.txt
-│
-├── js/
-│   ├── main.js                         # Bootstrap: inicializa todo
-│   ├── config/
-│   │   └── constants.js                # Costos, capacidades, radios, valores por defecto
-│   ├── models/
-│   │   ├── City.js
-│   │   ├── Map.js
-│   │   ├── Citizen.js
-│   │   ├── Resource.js
-│   │   ├── Score.js
-│   │   └── buildings/
-│   │       ├── Building.js
-│   │       ├── ResidentialBuilding.js
-│   │       ├── CommercialBuilding.js
-│   │       ├── IndustrialBuilding.js
-│   │       ├── ServiceBuilding.js
-│   │       ├── UtilityBuilding.js
-│   │       ├── Park.js
-│   │       └── Road.js
-│   ├── services/
-│   │   ├── TurnService.js
-│   │   ├── CitizenService.js
-│   │   ├── ResourceService.js
-│   │   ├── BuildingService.js
-│   │   ├── RouteService.js
-│   │   ├── ScoreService.js
-│   │   ├── RankingService.js
-│   │   ├── SaveService.js
-│   │   ├── ExportService.js
-│   │   ├── ImportService.js
-│   │   └── MapLoaderService.js
-│   ├── api/
-│   │   ├── WeatherAPI.js
-│   │   ├── NewsAPI.js
-│   │   └── ColombiaAPI.js
-│   ├── ui/
-│   │   ├── MapRenderer.js
-│   │   ├── ResourcePanel.js
-│   │   ├── BuildMenu.js
-│   │   ├── BuildingInfoModal.js
-│   │   ├── BuildingInfoRenderer.js
-│   │   ├── CitizenPanel.js
-│   │   ├── WeatherWidget.js
-│   │   ├── NewsPanel.js
-│   │   ├── ScorePanel.js
-│   │   ├── RankingModal.js
-│   │   ├── NotificationManager.js
-│   │   ├── SetupScreen.js
-│   │   ├── ChartPanel.js
-│   │   ├── GameOverScreen.js
-│   │   └── viewport/
-│   ├── controllers/
-│   │   ├── GameController.js
-│   │   ├── BuildController.js
-│   │   ├── InputController.js
-│   │   └── SetupController.js
-│   ├── store/
-│   │   └── GameStore.js
-│   ├── events/
-│   │   └── EventBus.js
-│   ├── validators/
-│   │   ├── BuildingValidator.js
-│   │   ├── MapValidator.js
-│   │   └── InputValidator.js
-│   ├── utils/
-│   │   ├── GridUtils.js
-│   │   ├── MathUtils.js
-│   │   ├── RandomUtils.js
-│   │   ├── DateUtils.js
-│   │   ├── Logger.js
-│   │   └── tests.manual-tests.md
-│   ├── adapters/
-│   │   ├── CityAdapter.js
-│   │   ├── BuildingAdapter.js
-│   │   └── ApiAdapter.js
-│   ├── history/
-│   │   └── ResourceHistory.js
-│   ├── types/
-│   │   ├── BuildingType.js
-│   │   ├── ResourceType.js
-│   │   └── EventType.js
-│   └── pages/
-│       ├── ranking-page.js
-│       └── GameOverPage.js
-│
-└── README.md
+└── city-builder/
+	├── index.html                      # Punto de entrada principal
+	├── pages/
+	│   ├── setup.html                  # Pantalla de creación/carga de ciudad
+	│   ├── ranking.html                # Página de ranking local
+	│   └── game-over.html              # Pantalla de fin de juego
+	│
+	├── css/
+	│   ├── base/
+	│   │   ├── reset.css               # Reset de estilos base
+	│   │   ├── variables.css           # Variables CSS globales (colores, tamaños, fuentes)
+	│   │   └── layout-tokens.css       # Tokens de layout
+	│   ├── layout/
+	│   │   ├── grid-layout.css         # Layout principal (3 columnas: sidebar-mapa-sidebar)
+	│   │   └── responsive.css          # Media queries móvil / tablet / desktop
+	│   ├── components/
+	│   │   ├── map.css                 # Estilos del grid/mapa (celdas, hover, cursores)
+	│   │   ├── sidebar.css             # Panel lateral izquierdo y derecho
+	│   │   ├── resources.css           # Barra/panel de recursos (dinero, agua, luz, comida)
+	│   │   ├── build-menu.css          # Menú de construcción (tabs por tipo de edificio)
+	│   │   ├── modal.css               # Estilos base reutilizables para modales
+	│   │   ├── building-info-modal.css # Modal específico de info de edificio
+	│   │   ├── ranking-modal.css       # Modal / tabla de ranking
+	│   │   ├── notifications.css       # Toast / alertas de notificación
+	│   │   ├── weather-widget.css      # Widget del clima
+	│   │   ├── news-panel.css          # Panel / carrusel de noticias
+	│   │   ├── citizen-panel.css       # Panel de ciudadanos y felicidad
+	│   │   ├── score-panel.css         # Panel de puntuación
+	│   │   ├── chart-panel.css         # Gráficas de histórico de recursos
+	│   │   └── game-over.css           # Estilos de pantalla de fin de juego
+	│   └── pages/
+	│       ├── setup.css               # Estilos exclusivos de la pantalla de setup
+	│       └── ranking.css             # Estilos exclusivos de la página de ranking
+	│
+	├── assets/
+	│   ├── icons/
+	│   │   ├── favicon.ico                # Favicon del proyecto
+	│   │   ├── buildings/              # Íconos por tipo de edificio
+	│   │   └── ui/                     # Íconos de interfaz (recursos, botones)
+	│   └── maps/
+	│       ├── 1map.txt                   # Mapa de ejemplo
+	│       ├── example-map.txt            # Mapa de ejemplo
+	│       └── example-map-30x30.txt      # Mapa de ejemplo 30x30
+	│
+	├── js/
+	│   ├── main.js                     # Bootstrap: inicializa todo
+	│   ├── config/
+	│   │   ├── constants.js            # Costos, capacidades, radios, valores por defecto
+	│   │   ├── env.example.js           # Plantilla de variables de entorno
+	│   │   └── env.js                   # Variables de entorno locales
+	│   ├── models/
+	│   │   ├── City.js                  # Modelo de ciudad
+	│   │   ├── Map.js                   # Modelo del mapa
+	│   │   ├── Citizen.js               # Modelo de ciudadano
+	│   │   ├── Resource.js              # Modelo de recurso
+	│   │   ├── Score.js                 # Modelo de puntuacion
+	│   │   └── buildings/
+	│   │       ├── Building.js          # Clase base de edificios
+	│   │       ├── ResidentialBuilding.js # Edificio residencial
+	│   │       ├── CommercialBuilding.js  # Edificio comercial
+	│   │       ├── IndustrialBuilding.js  # Edificio industrial
+	│   │       ├── ServiceBuilding.js     # Edificio de servicios
+	│   │       ├── UtilityBuilding.js     # Infraestructura/utilidades
+	│   │       ├── Park.js                # Parque
+	│   │       └── Road.js                # Via/carretera
+	│   ├── services/
+	│   │   ├── BuildingInfoService.js   # Info/datos de edificios
+	│   │   ├── TurnService.js           # Control de turnos
+	│   │   ├── CitizenService.js        # Logica de ciudadanos
+	│   │   ├── ResourceService.js       # Recursos por turno
+	│   │   ├── BuildingService.js       # Construccion/demolicion
+	│   │   ├── RouteService.js          # Rutas entre edificios
+	│   │   ├── ScoreService.js          # Calculo de puntuacion
+	│   │   ├── RankingService.js        # Ranking local
+	│   │   ├── SaveService.js           # Guardado/carga
+	│   │   ├── ExportService.js         # Exportar partida
+	│   │   ├── ImportService.js         # Importar partida
+	│   │   └── MapLoaderService.js      # Carga de mapas .txt
+	│   ├── api/
+	│   │   ├── WeatherAPI.js            # Cliente API clima
+	│   │   ├── NewsAPI.js               # Cliente API noticias
+	│   │   └── ColombiaAPI.js           # Cliente API ciudades de Colombia
+	│   ├── ui/
+	│   │   ├── MapRenderer.js           # Render del mapa
+	│   │   ├── ResourcePanel.js         # Panel de recursos
+	│   │   ├── BuildMenu.js             # Menu de construccion
+	│   │   ├── BuildingInfoModal.js     # Modal de info de edificio
+	│   │   ├── BuildingInfoRenderer.js  # Render de info de edificio
+	│   │   ├── CitizenPanel.js          # Panel de ciudadanos
+	│   │   ├── WeatherWidget.js         # Widget del clima
+	│   │   ├── NewsPanel.js             # Panel de noticias
+	│   │   ├── ScorePanel.js            # Panel de puntuacion
+	│   │   ├── RankingModal.js          # Modal de ranking
+	│   │   ├── NotificationManager.js   # Sistema de notificaciones
+	│   │   ├── SetupScreen.js           # UI de configuracion inicial
+	│   │   ├── ChartPanel.js            # Grafico de recursos
+	│   │   ├── GameOverScreen.js        # Pantalla de fin de juego
+	│   │   └── viewport/
+	│   ├── controllers/
+	│   │   ├── GameController.js        # Orquestacion del juego
+	│   │   ├── BuildController.js       # Control de construccion
+	│   │   ├── InputController.js       # Entradas del usuario
+	│   │   └── SetupController.js       # Logica de setup
+	│   ├── store/
+	│   │   └── GameStore.js             # Estado global del juego
+	│   ├── events/
+	│   │   └── EventBus.js              # Bus de eventos
+	│   ├── validators/
+	│   │   ├── BuildingValidator.js     # Validaciones de edificios
+	│   │   ├── MapValidator.js          # Validaciones del mapa
+	│   │   └── InputValidator.js        # Validaciones de formularios
+	│   ├── utils/
+	│   │   ├── GridUtils.js             # Utilidades para grillas
+	│   │   ├── MathUtils.js             # Utilidades matematicas
+	│   │   ├── RandomUtils.js           # Utilidades aleatorias
+	│   │   ├── DateUtils.js             # Utilidades de fecha
+	│   │   ├── Logger.js                # Logger simple
+	│   │   └── tests.manual-tests.md    # Guia de pruebas manuales
+	│   ├── adapters/
+	│   │   ├── CityAdapter.js           # Serializacion de ciudad
+	│   │   ├── BuildingAdapter.js       # Serializacion de edificios
+	│   │   └── ApiAdapter.js            # Adaptadores de API
+	│   ├── history/
+	│   │   └── ResourceHistory.js       # Historico de recursos
+	│   ├── types/
+	│   │   ├── BuildingType.js          # Tipos de edificios
+	│   │   ├── ResourceType.js          # Tipos de recursos
+	│   │   └── EventType.js             # Tipos de eventos
+	│   └── pages/
+	│       ├── ranking-page.js          # Logica de pagina de ranking
+	│       └── GameOverPage.js          # Logica de fin de juego

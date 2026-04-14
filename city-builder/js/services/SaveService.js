@@ -71,7 +71,20 @@ class SaveService {
       const citizens = data.citizens ?? [];
       const resources = data.resources ?? {};
       const turn = data.turn ?? 0;
-      const score = data.score ?? 0;
+      let score = data.score ?? 0;
+      if (typeof score === 'number') {
+        score = {
+          current: score,
+          breakdown: {
+            population: 0,
+            happiness: 0,
+            buildings: 0,
+            resources: 0,
+            bonuses: 0,
+            penalties: 0
+          }
+        };
+      }
       this.gameStore.setState({ city, map, buildings, roads, citizens, resources, turn, score });
       this.eventBus.emit(EventType.GAME_LOADED, { city });
     } catch (e) {

@@ -74,19 +74,18 @@ class ScoreService {
     }
 
     score = Math.round(score);
-    this.gameStore.setState({ score });
+
     const breakdown = {
-      base: {
-        population: population * 10,
-        avgHappiness: avgHappiness * 5,
-        money: money / 100,
-        numBuildings: numBuildings * 50,
-        balanceElectricity: balanceElectricity * 2,
-        balanceWater: balanceWater * 2
-      },
-      bonuses,
-      penalties
+      population: Math.round(population * 10),
+      happiness: Math.round(avgHappiness * 5),
+      buildings: Math.round(numBuildings * 50),
+      resources: Math.round((money / 100) + (balanceElectricity * 2) + (balanceWater * 2)),
+      bonuses: bonuses.reduce((sum, b) => sum + (b.value || 0), 0),
+      penalties: penalties.reduce((sum, p) => sum + (p.value || 0), 0)
     };
+
+    const scoreState = { current: score, breakdown };
+    this.gameStore.setState({ score: scoreState });
     this.eventBus.emit(EventType.SCORE_UPDATED, { score, breakdown });
   }
 }

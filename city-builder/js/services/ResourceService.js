@@ -1,5 +1,6 @@
 import { EventType } from '../types/EventType.js';
 import { ResourceType } from '../types/ResourceType.js';
+import { TURN_CONFIG } from '../config/constants.js';
 
 class ResourceService {
   constructor(gameStore, eventBus) {
@@ -64,7 +65,9 @@ class ResourceService {
       }
     }
 
-    this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources });
+    const summary = this.getResourceSummary();
+    this.gameStore.setState({ resourceSummary: summary });
+    this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources, summary });
   }
 
   getResourceSummary() {
@@ -89,30 +92,44 @@ class ResourceService {
     cons.food += (config.citizenFoodConsumption || 1) * citizens.length;
 
     const resources = state.resources;
+    const durationSeconds = state.config?.turnDurationSeconds || TURN_CONFIG.defaultDurationSeconds || 10;
+    const perSecond = (value) => durationSeconds > 0 ? value / durationSeconds : 0;
     return {
       money: {
         current: resources.money,
         productionPerTurn: prod.money,
         consumptionPerTurn: 0,
-        balance: prod.money
+        balance: prod.money,
+        productionPerSecond: perSecond(prod.money),
+        consumptionPerSecond: 0,
+        balancePerSecond: perSecond(prod.money)
       },
       electricity: {
         current: resources.electricity,
         productionPerTurn: prod.electricity,
         consumptionPerTurn: cons.electricity,
-        balance: prod.electricity - cons.electricity
+        balance: prod.electricity - cons.electricity,
+        productionPerSecond: perSecond(prod.electricity),
+        consumptionPerSecond: perSecond(cons.electricity),
+        balancePerSecond: perSecond(prod.electricity - cons.electricity)
       },
       water: {
         current: resources.water,
         productionPerTurn: prod.water,
         consumptionPerTurn: cons.water,
-        balance: prod.water - cons.water
+        balance: prod.water - cons.water,
+        productionPerSecond: perSecond(prod.water),
+        consumptionPerSecond: perSecond(cons.water),
+        balancePerSecond: perSecond(prod.water - cons.water)
       },
       food: {
         current: resources.food,
         productionPerTurn: prod.food,
         consumptionPerTurn: cons.food,
-        balance: prod.food - cons.food
+        balance: prod.food - cons.food,
+        productionPerSecond: perSecond(prod.food),
+        consumptionPerSecond: perSecond(cons.food),
+        balancePerSecond: perSecond(prod.food - cons.food)
       }
     };
   }

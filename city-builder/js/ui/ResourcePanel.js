@@ -40,13 +40,11 @@ class ResourcePanel {
           <span class="resource-icon">⚡</span>
           <span class="resource-value" id="resource-electricity">0</span>
           <span class="resource-label">Electricidad</span>
-          <span class="resource-balance" id="resource-electricity-balance"></span>
         </div>
         <div class="resource-card" title="Agua (producción/consumo por turno)">
           <span class="resource-icon">💧</span>
           <span class="resource-value" id="resource-water">0</span>
           <span class="resource-label">Agua</span>
-          <span class="resource-balance" id="resource-water-balance"></span>
         </div>
         <div class="resource-card" title="Alimentos acumulados">
           <span class="resource-icon">🌾</span>
@@ -87,30 +85,14 @@ class ResourcePanel {
 
     // Electricidad
     const elecEl = document.getElementById('resource-electricity');
-    const elecBal = document.getElementById('resource-electricity-balance');
     if (elecEl) {
-      const prod = summary?.electricity?.productionPerTurn ?? '';
-      const cons = summary?.electricity?.consumptionPerTurn ?? '';
       elecEl.textContent = res.electricity ?? 0;
-      if (elecBal && prod !== '' && cons !== '') {
-        const bal = prod - cons;
-        elecBal.textContent = '+' + prod + ' / -' + cons;
-        elecBal.className = 'resource-balance ' + (bal >= 0 ? 'resource--ok' : 'resource--critical');
-      }
     }
 
     // Agua
     const waterEl = document.getElementById('resource-water');
-    const waterBal = document.getElementById('resource-water-balance');
     if (waterEl) {
-      const prod = summary?.water?.productionPerTurn ?? '';
-      const cons = summary?.water?.consumptionPerTurn ?? '';
       waterEl.textContent = res.water ?? 0;
-      if (waterBal && prod !== '' && cons !== '') {
-        const bal = prod - cons;
-        waterBal.textContent = '+' + prod + ' / -' + cons;
-        waterBal.className = 'resource-balance ' + (bal >= 0 ? 'resource--ok' : 'resource--critical');
-      }
     }
 
     // Comida

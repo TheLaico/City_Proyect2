@@ -14,7 +14,17 @@ class GameStore {
       food: 0
     },
     turn: 0,
-    score: 0,
+    score: {
+      current: 0,
+      breakdown: {
+        population: 0,
+        happiness: 0,
+        buildings: 0,
+        resources: 0,
+        bonuses: 0,
+        penalties: 0
+      }
+    },
     selectedBuildingType: null,
     mode: 'view'
   };
@@ -54,7 +64,17 @@ class GameStore {
         food: 0
       },
       turn: 0,
-      score: 0,
+      score: {
+        current: 0,
+        breakdown: {
+          population: 0,
+          happiness: 0,
+          buildings: 0,
+          resources: 0,
+          bonuses: 0,
+          penalties: 0
+        }
+      },
       selectedBuildingType: null,
       mode: 'view'
     };

@@ -31,6 +31,10 @@ class GameController {
     });
     const startTurnsIfInGame = () => {
       if (!window.location.pathname.includes('setup.html')) {
+        this.scoreService.calculateScore();
+        const resources = this.gameStore.getState().resources;
+        const summary = this.resourceService.getResourceSummary();
+        this.eventBus.emit(EventType.RESOURCES_UPDATED, { resources, summary });
         this.turnService.stop(); // evitar doble intervalo
         this.turnService.start();
       }
