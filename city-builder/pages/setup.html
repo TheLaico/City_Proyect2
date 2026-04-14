@@ -22,10 +22,15 @@
     />
   </head>
   <body>
-    <main>
-      <h1>Crear nueva ciudad</h1>
-      <form id="setup-form" autocomplete="off">
-        <div>
+    <main class="setup-container">
+      <section class="setup-shell">
+        <header class="setup-header">
+          <p class="setup-kicker">City Builder</p>
+          <h1>Crear nueva ciudad</h1>
+          <p class="setup-subtitle">Configura tu ciudad, elige la region y define el mapa.</p>
+        </header>
+        <form id="setup-form" class="setup-form" autocomplete="off">
+          <div class="field-block">
           <label for="city-name">Nombre de la ciudad</label>
           <input
             id="city-name"
@@ -34,8 +39,8 @@
             maxlength="50"
             required
           />
-        </div>
-        <div>
+          </div>
+          <div class="field-block">
           <label for="mayor-name">Nombre del alcalde</label>
           <input
             id="mayor-name"
@@ -44,8 +49,8 @@
             maxlength="50"
             required
           />
-        </div>
-        <div>
+          </div>
+          <div class="field-block">
           <label for="region-search">Buscar ciudad colombiana</label>
           <input
             id="region-search"
@@ -53,19 +58,19 @@
             type="text"
             placeholder="Ej: Bogotá"
           />
-          <ul id="region-results"></ul>
+          <ul id="region-results" class="region-results-dropdown"></ul>
         </div>
-        <div>
+        <div class="field-block">
           <label for="region-select">Ciudad seleccionada</label>
           <select id="region-select" name="region-select"></select>
         </div>
-        <div>
+        <div class="field-block split-fields">
           <label>Latitud</label>
           <input id="lat-display" type="text" readonly />
           <label>Longitud</label>
           <input id="lon-display" type="text" readonly />
         </div>
-        <div>
+        <div class="field-block">
           <label>Mapa de la ciudad</label>
           <div id="map-load-section">
             <p class="map-load-description">
@@ -80,7 +85,7 @@
             <div id="map-preview" class="map-preview-container"></div>
           </div>
         </div>
-        <div>
+        <div class="field-block">
           <label>Tamaño del mapa (si no cargas archivo)</label>
           <div class="map-size-inputs">
             <div>
@@ -107,12 +112,13 @@
             </div>
           </div>
         </div>
-        <div id="setup-errors"></div>
-        <button type="submit" id="btn-create-city">Crear ciudad</button>
+        <div id="setup-errors" class="setup-error"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-create-city" class="button-primary">Crear ciudad</button>
+          <button id="btn-continue" class="btn-continue-hidden" type="button">Continuar partida guardada</button>
+        </div>
       </form>
-      <button id="btn-continue" class="btn-continue-hidden">
-        Continuar partida guardada
-      </button>
+      </section>
     </main>
     <script type="module" src="../js/main.js"></script>
   </body>

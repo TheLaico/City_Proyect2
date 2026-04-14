@@ -5,16 +5,22 @@ class ColombiaAPI {
   async getCities() {
     if (this.#cache) return this.#cache;
     try {
-      const res = await fetch(`${this.#baseUrl}/City`);
+      const res = await fetch(`${this.#baseUrl}/Department`);
       if (!res.ok) throw new Error('API error');
       const data = await res.json();
-      const mapped = (data || []).map(ciudad => ({
-        id: ciudad.id,
-        name: ciudad.nombre || ciudad.name,
-        latitude: parseFloat(ciudad.latitud || ciudad.latitude),
-        longitude: parseFloat(ciudad.longitud || ciudad.longitude),
-        department: ciudad.departamento || ciudad.department || ''
-      })).filter(c => c.name && !isNaN(c.latitude) && !isNaN(c.longitude));
+      const mapped = (data || []).map((dept) => {
+        const capital = dept.cityCapital || {};
+        const capitalName = capital.nombre || capital.name || '';
+        const latitude = parseFloat(capital.latitud || capital.latitude);
+        const longitude = parseFloat(capital.longitud || capital.longitude);
+        return {
+          id: dept.id,
+          name: capitalName || dept.nombre || dept.name || '',
+          latitude,
+          longitude,
+          department: dept.nombre || dept.name || ''
+        };
+      }).filter(c => c.name && !isNaN(c.latitude) && !isNaN(c.longitude));
 
       if (mapped.length === 0) throw new Error('Empty data');
       this.#cache = mapped;
@@ -52,7 +58,9 @@ class ColombiaAPI {
     const q = (query || '').trim().toLowerCase();
     // Si no hay query, mostrar todas (máx 8)
     if (!q) return cities.slice(0, 8);
-    return cities.filter(c => c.name.toLowerCase().includes(q)).slice(0, 8);
+    return cities.filter(c => {
+      return c.name.toLowerCase().includes(q) || c.department.toLowerCase().includes(q);
+    }).slice(0, 8);
   }
 
   async getCityByName(name) {

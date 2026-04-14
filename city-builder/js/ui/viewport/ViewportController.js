@@ -135,8 +135,10 @@ export class ViewportController {
   }
 
   #apply() {
+    const x = Math.round(this.#pan.x);
+    const y = Math.round(this.#pan.y);
     this.#canvas.style.transform =
-      `translate(${this.#pan.x}px,${this.#pan.y}px) scale(${this.#zoom.value})`;
+      `translate3d(${x}px, ${y}px, 0) scale(${this.#zoom.value})`;
   }
 
   #updateCursor() {

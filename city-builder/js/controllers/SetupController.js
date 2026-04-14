@@ -76,7 +76,7 @@ class SetupController {
       const city = payload?.city ?? this.gameStore.getState()?.city;
       if (city?.region?.lat && city?.region?.lon) {
         this.eventBus.emit('weather:init', { lat: city.region.lat, lon: city.region.lon });
-        this.eventBus.emit('news:init', { countryCode: 'co' });
+        this.eventBus.emit('news:init', { country: 'co' });
       }
     });
   }

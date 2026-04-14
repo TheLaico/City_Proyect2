@@ -65,36 +65,41 @@ class BuildMenu {
     if (!container) return;
     container.innerHTML = '';
     const tabs = document.createElement('div');
-    tabs.className = 'build-menu-tabs';
+    tabs.className = 'build-tab-header';
     const panels = document.createElement('div');
     panels.className = 'build-menu-panels';
     MENU_CATEGORIES.forEach((cat, i) => {
       const tab = document.createElement('button');
-      tab.className = 'build-menu-tab';
       tab.textContent = cat.label;
       tab.dataset.tab = i;
       if (i === 0) tab.classList.add('active');
       tab.addEventListener('click', () => {
-        container.querySelectorAll('.build-menu-tab').forEach(t => t.classList.remove('active'));
+        container.querySelectorAll('.build-tab-header button').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        container.querySelectorAll('.build-menu-panel').forEach((p, j) => {
+        container.querySelectorAll('.build-items-grid').forEach((p, j) => {
           p.style.display = j === i ? '' : 'none';
         });
       });
       tabs.appendChild(tab);
       // Panel
       const panel = document.createElement('div');
-      panel.className = 'build-menu-panel';
+      panel.className = 'build-items-grid';
       if (i !== 0) panel.style.display = 'none';
       cat.items.forEach(item => {
         const btn = document.createElement('button');
-        btn.className = 'build-menu-item';
-        btn.innerHTML = `<span class="icon">${item.icon}</span> <span class="name">${item.name}</span> <span class="cost">$${item.cost}</span>`;
+        btn.className = 'build-item';
+        btn.dataset.cost = item.cost;
+        btn.innerHTML = `
+          <span class="build-item__icon">${item.icon}</span>
+          <span class="build-item__name">${item.name}</span>
+          <span class="build-item__cost">$${item.cost}</span>
+        `;
         btn.addEventListener('click', () => {
+          if (btn.classList.contains('build-item--disabled')) return;
           this.activeType = item.type;
           this.eventBus.emit(EventType.BUILD_TYPE_SELECTED, { buildingType: item.type });
-          container.querySelectorAll('.build-menu-item').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+          container.querySelectorAll('.build-item').forEach(b => b.classList.remove('build-item--active'));
+          btn.classList.add('build-item--active');
         });
         btn.dataset.type = item.type;
         panel.appendChild(btn);
@@ -103,10 +108,24 @@ class BuildMenu {
     });
     container.appendChild(tabs);
     container.appendChild(panels);
+
+    const updateAffordability = () => {
+      const money = this.gameStore.getState().resources?.money ?? 0;
+      container.querySelectorAll('.build-item').forEach(btn => {
+        const cost = parseInt(btn.dataset.cost, 10) || 0;
+        const disabled = money < cost;
+        btn.classList.toggle('build-item--disabled', disabled);
+        btn.disabled = disabled;
+      });
+    };
+
+    updateAffordability();
+    this.eventBus.subscribe(EventType.RESOURCES_UPDATED, updateAffordability);
+
     // Resaltar ítem activo al cambiar modo
     this.eventBus.subscribe(EventType.MODE_CHANGED, ({ mode }) => {
-      container.querySelectorAll('.build-menu-item').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.type === this.gameStore.getState().selectedBuildingType && mode === 'build');
+      container.querySelectorAll('.build-item').forEach(btn => {
+        btn.classList.toggle('build-item--active', btn.dataset.type === this.gameStore.getState().selectedBuildingType && mode === 'build');
       });
     });
   }

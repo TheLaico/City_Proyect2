@@ -273,8 +273,14 @@ class MapRenderer {
 
     this.#eventBus.subscribe(EventType.GAME_STARTED, render);
     this.#eventBus.subscribe(EventType.GAME_LOADED,  render);
-    this.#eventBus.subscribe(EventType.BUILD_SUCCESS,    ({ building }) => this.#updateCell(building.x, building.y, building));
-    this.#eventBus.subscribe(EventType.DEMOLISH_SUCCESS, ({ x, y })     => this.#updateCell(x, y, null));
+    this.#eventBus.subscribe(EventType.BUILD_SUCCESS,    ({ building }) => {
+      const updated = this.#updateCell(building.x, building.y, building);
+      if (!updated) this.#renderFullMap();
+    });
+    this.#eventBus.subscribe(EventType.DEMOLISH_SUCCESS, ({ x, y })     => {
+      const updated = this.#updateCell(x, y, null);
+      if (!updated) this.#renderFullMap();
+    });
     this.#eventBus.subscribe(EventType.ROUTE_CALCULATED, ({ path })      => this.#highlighter.highlight(path));
     this.#eventBus.subscribe(EventType.ROUTE_PENDING,    ({ origin })    => this.#highlighter.markOrigin(origin));
 
@@ -306,7 +312,9 @@ class MapRenderer {
 
   #updateCell(x, y, content) {
     const el = this.#container?.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-    if (el) IsoCellRenderer.update(el, content);
+    if (!el) return false;
+    IsoCellRenderer.update(el, content);
+    return true;
   }
 }
 

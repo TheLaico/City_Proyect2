@@ -1,9 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import json
+import os
+from urllib.request import urlopen
+from urllib.parse import urlencode
 import heapq
 
 app = Flask(__name__)
 CORS(app)
+
+NEWS_API_KEY = os.environ.get('NEWS_API_KEY', '4e8e0bbd1cef4addaa3cf65582dafd14')
+NEWS_API_BASE = 'https://newsapi.org/v2/top-headlines'
 
 
 def tiene_acceso_a_vias(grid, pos):
@@ -90,6 +97,23 @@ def calculate_route():
 
     except Exception as e:
         return jsonify({"error": f"Error en el servidor: {str(e)}"}), 500
+
+
+@app.route('/api/news', methods=['GET'])
+def get_news():
+    country = request.args.get('country', 'co')
+    params = urlencode({
+        'country': country,
+        'apiKey': NEWS_API_KEY,
+    })
+    url = f"{NEWS_API_BASE}?{params}"
+
+    try:
+        with urlopen(url) as response:
+            data = json.load(response)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": f"Error NewsAPI: {str(e)}"}), 500
 
 
 if __name__ == '__main__':

@@ -31,6 +31,7 @@
     <span id="turn-display"></span>
     <span id="score-display"></span>
     <button id="btn-toggle-sidebars" type="button" aria-controls="left-sidebar right-sidebar" aria-label="Alternar paneles">☰</button>
+    <button id="btn-hacks" type="button" aria-controls="hacks-modal" aria-label="Editar recursos">Hacks</button>
     <span class="top-sep"></span>
     <button id="btn-new-city">Nueva Ciudad</button>
     <button id="btn-save">Guardar</button>
@@ -108,21 +109,68 @@
     </div>
   </main>
 
-  <!-- Config de recursos (se usa por JS, está oculto visualmente) -->
-  <section id="resource-config" aria-hidden="true">
-    <input type="number" id="turn-duration" value="10" min="1" max="60">
-    <input type="number" id="init-money" value="50000">
-    <button id="btn-set-money">Aplicar</button>
-    <input type="number" id="init-electricity" value="0">
-    <input type="number" id="init-water" value="0">
-    <input type="number" id="init-food" value="0">
-    <input type="number" id="citizen-water" value="1">
-    <input type="number" id="citizen-elec" value="1">
-    <input type="number" id="citizen-food" value="1">
-    <input type="number" id="bonus-police" value="10">
-    <input type="number" id="bonus-fire" value="10">
-    <input type="number" id="bonus-hospital" value="10">
-  </section>
+  <div id="modal-overlay" class="modal-overlay modal--hidden"></div>
+
+  <div id="hacks-modal" class="modal modal--hidden" role="dialog" aria-modal="true">
+    <div class="modal__header">
+      <span>Hacks</span>
+      <button class="modal__close" id="hacks-close-btn">&times;</button>
+    </div>
+    <div class="modal__body">
+      <p class="hacks-help">Ajusta recursos y consumo. Los cambios se aplican al momento.</p>
+      <section id="resource-config" aria-hidden="true">
+        <label class="hacks-field">
+          <span>Turno (segundos)</span>
+          <input type="number" id="turn-duration" value="10" min="1" max="60">
+        </label>
+        <label class="hacks-field">
+          <span>Dinero inicial</span>
+          <input type="number" id="init-money" value="50000">
+        </label>
+        <button id="btn-set-money" class="btn-primary" type="button">Aplicar dinero</button>
+        <label class="hacks-field">
+          <span>Electricidad inicial</span>
+          <input type="number" id="init-electricity" value="0">
+        </label>
+        <label class="hacks-field">
+          <span>Agua inicial</span>
+          <input type="number" id="init-water" value="0">
+        </label>
+        <label class="hacks-field">
+          <span>Alimentos inicial</span>
+          <input type="number" id="init-food" value="0">
+        </label>
+        <label class="hacks-field">
+          <span>Consumo agua por ciudadano</span>
+          <input type="number" id="citizen-water" value="1">
+        </label>
+        <label class="hacks-field">
+          <span>Consumo electricidad por ciudadano</span>
+          <input type="number" id="citizen-elec" value="1">
+        </label>
+        <label class="hacks-field">
+          <span>Consumo alimentos por ciudadano</span>
+          <input type="number" id="citizen-food" value="1">
+        </label>
+        <label class="hacks-field">
+          <span>Bonus policia</span>
+          <input type="number" id="bonus-police" value="10">
+        </label>
+        <label class="hacks-field">
+          <span>Bonus bomberos</span>
+          <input type="number" id="bonus-fire" value="10">
+        </label>
+        <label class="hacks-field">
+          <span>Bonus hospital</span>
+          <input type="number" id="bonus-hospital" value="10">
+        </label>
+      </section>
+    </div>
+    <div class="modal__footer">
+      <button class="btn-primary" id="hacks-apply" type="button">Aplicar cambios</button>
+      <button class="btn-primary" id="hacks-close-footer" type="button">Cerrar</button>
+    </div>
+  </div>
 
   <div id="building-info-modal" class="modal modal--hidden"></div>
   <div id="ranking-modal" class="modal modal--hidden"></div>

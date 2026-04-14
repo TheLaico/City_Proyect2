@@ -40,7 +40,11 @@ const saveService = new SaveService(gameStore, eventBus);
 // 3. APIs externas
 const colombiaAPI = new ColombiaAPI();
 const weatherAPI = new WeatherAPI(ENV.WEATHER_API_KEY);
-const newsAPI = new NewsAPI('');    // sin key → mock
+const newsAPI = new NewsAPI({
+  apiKey: ENV.NEWS_API_KEY,
+  country: ENV.NEWS_COUNTRY,
+  proxyUrl: ENV.NEWS_PROXY_URL,
+});
 
 // 4. Servicios de dominio
 const resourceHistory = new ResourceHistory();
@@ -99,15 +103,15 @@ const gameOverScreen = new GameOverScreen(gameStore, eventBus, rankingService, s
 eventBus.subscribe('weather:init', ({ lat, lon }) => {
   weatherWidget.init(lat, lon);
 });
-eventBus.subscribe('news:init', ({ countryCode }) => {
-  newsPanel.init(countryCode || 'co');
+eventBus.subscribe('news:init', ({ country }) => {
+  newsPanel.init(country || ENV.NEWS_COUNTRY || 'co');
 });
 
 eventBus.subscribe(EventType.GAME_LOADED, () => {
   const region = gameStore.getState()?.city?.region;
   if (region?.lat && region?.lon) {
     weatherWidget.init(region.lat, region.lon);
-    newsPanel.init('co');
+    newsPanel.init(ENV.NEWS_COUNTRY || 'co');
   }
 });
 
@@ -137,6 +141,67 @@ document.getElementById('btn-route')?.addEventListener('click', () => {
   eventBus.emit(EventType.NOTIFICATION_SHOW, {
     message: '🗺️ Modo ruta: haz clic en el edificio ORIGEN'
   });
+});
+
+// Hacks modal (editor de recursos)
+const hacksModal = document.getElementById('hacks-modal');
+const modalOverlay = document.getElementById('modal-overlay');
+const btnHacks = document.getElementById('btn-hacks');
+const btnHacksClose = document.getElementById('hacks-close-btn');
+const btnHacksCloseFooter = document.getElementById('hacks-close-footer');
+const btnHacksApply = document.getElementById('hacks-apply');
+
+const openHacks = () => {
+  hacksModal?.classList.remove('modal--hidden');
+  modalOverlay?.classList.remove('modal--hidden');
+};
+
+const closeHacks = () => {
+  hacksModal?.classList.add('modal--hidden');
+  modalOverlay?.classList.add('modal--hidden');
+};
+
+btnHacks?.addEventListener('click', openHacks);
+btnHacksClose?.addEventListener('click', closeHacks);
+btnHacksCloseFooter?.addEventListener('click', closeHacks);
+modalOverlay?.addEventListener('click', closeHacks);
+btnHacksApply?.addEventListener('click', () => {
+  const readNumber = (id) => {
+    const value = parseFloat(document.getElementById(id)?.value);
+    return Number.isFinite(value) ? value : 0;
+  };
+
+  const money = readNumber('init-money');
+  const resources = {
+    money,
+    electricity: readNumber('init-electricity'),
+    water: readNumber('init-water'),
+    food: readNumber('init-food'),
+  };
+
+  const config = {
+    initElectricity: resources.electricity,
+    initWater: resources.water,
+    initFood: resources.food,
+    citizenWaterConsumption: readNumber('citizen-water'),
+    citizenElecConsumption: readNumber('citizen-elec'),
+    citizenFoodConsumption: readNumber('citizen-food'),
+    bonusPolice: readNumber('bonus-police'),
+    bonusFire: readNumber('bonus-fire'),
+    bonusHospital: readNumber('bonus-hospital'),
+  };
+
+  const turnSeconds = parseInt(document.getElementById('turn-duration')?.value, 10);
+  if (!isNaN(turnSeconds) && turnSeconds > 0) {
+    eventBus.emit(EventType.TURN_DURATION_CHANGED, { seconds: turnSeconds });
+  }
+
+  gameStore.setState({ config });
+  const currentResources = gameStore.getState().resources || {};
+  gameStore.setState({ resources: { ...currentResources, ...resources } });
+  eventBus.emit(EventType.RESOURCES_UPDATED, { resources: gameStore.getState().resources });
+  eventBus.emit(EventType.CONFIG_CHANGED, { config });
+  eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '🛠️ Hacks aplicados' });
 });
 
 // Actualizar modo: clases del body, botón de ruta y cursor del viewport

@@ -10,6 +10,8 @@
 .iso-grid {
   display: block;
   position: relative;
+  transform-origin: 0 0;
+  backface-visibility: hidden;
 }
 
 /* ── Celda base ───────────────────────────────────────────── */
@@ -24,6 +26,7 @@
   display: block;
   width:  var(--iso-tw);
   height: var(--iso-th);
+  image-rendering: crisp-edges;
 }
 
 /* ── Hover ────────────────────────────────────────────────── */

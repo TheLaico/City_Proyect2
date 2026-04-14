@@ -70,6 +70,46 @@
   color: var(--color-text);
 }
 
+.hacks-help {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+}
+
+#hacks-modal {
+  width: min(560px, 92vw);
+}
+
+#hacks-modal #resource-config {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 0.9rem;
+}
+
+#hacks-modal #btn-set-money {
+  grid-column: span 2;
+  justify-self: start;
+}
+
+.hacks-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+.hacks-field input {
+  background: var(--color-surface-3);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.35rem 0.45rem;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+}
+
 .modal__footer {
   padding: 0.65rem 1.2rem;
   border-top: 1px solid var(--color-border);

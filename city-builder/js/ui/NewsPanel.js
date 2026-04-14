@@ -8,14 +8,14 @@ class NewsPanel {
     this.container = document.getElementById('news-panel');
   }
 
-  async init(countryCode = 'co') {
+  async init(country = 'co') {
     if (!this.container) return;
-    const articles = await this.newsAPI.getNews(countryCode);
+    const articles = await this.newsAPI.getNews(country);
     this.#lastArticles = articles;
     this.#render(articles);
     if (this.#intervalId) clearInterval(this.#intervalId);
     this.#intervalId = setInterval(async () => {
-      const newArticles = await this.newsAPI.getNews(countryCode);
+      const newArticles = await this.newsAPI.getNews(country);
       this.#lastArticles = newArticles;
       this.#render(newArticles);
     }, 30 * 60 * 1000);

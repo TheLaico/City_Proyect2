@@ -84,10 +84,8 @@ body.left-collapsed #left-sidebar > * {
 }
 
 #map-grid {
-  display: grid;
-  justify-content: start;
-  align-content: start;
-  gap: 0;
+  display: block;
+  position: relative;
 }
 
 /* ── Sidebar derecho ──────────────────────────────────────── */
