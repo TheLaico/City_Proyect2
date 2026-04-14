@@ -163,3 +163,71 @@ if (gameController.saveService.hasSavedGame()) {
 } else if (!window.location.pathname.includes('setup.html')) {
   window.location.href = 'pages/setup.html';
 }
+
+// Sidebars: visibles por defecto y colapsables con menu hamburguesa
+const leftSidebar = document.getElementById('left-sidebar');
+const rightSidebar = document.getElementById('right-sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const btnToggleSidebars = document.getElementById('btn-toggle-sidebars');
+const desktopQuery = window.matchMedia('(min-width: 1024px)');
+
+const openLeftSidebar = () => {
+  if (!leftSidebar) return;
+  leftSidebar.classList.add('open');
+  if (sidebarOverlay) sidebarOverlay.classList.add('visible');
+};
+
+const closeLeftSidebar = () => {
+  if (!leftSidebar) return;
+  leftSidebar.classList.remove('open');
+  if (sidebarOverlay) sidebarOverlay.classList.remove('visible');
+};
+
+const openRightSidebar = () => {
+  if (!rightSidebar) return;
+  rightSidebar.classList.add('open');
+  if (sidebarOverlay) sidebarOverlay.classList.add('visible');
+};
+
+const closeRightSidebar = () => {
+  if (!rightSidebar) return;
+  rightSidebar.classList.remove('open');
+  if (sidebarOverlay) sidebarOverlay.classList.remove('visible');
+};
+
+const syncSidebarState = () => {
+  if (desktopQuery.matches) {
+    document.body.classList.remove('left-collapsed');
+    document.body.classList.remove('right-collapsed');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('visible');
+    if (leftSidebar) leftSidebar.classList.remove('open');
+    if (rightSidebar) rightSidebar.classList.remove('open');
+  } else {
+    document.body.classList.remove('left-collapsed');
+    document.body.classList.remove('right-collapsed');
+    if (leftSidebar) leftSidebar.classList.add('open');
+    if (rightSidebar) rightSidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('visible');
+  }
+};
+
+syncSidebarState();
+desktopQuery.addEventListener('change', syncSidebarState);
+
+btnToggleSidebars?.addEventListener('click', () => {
+  if (desktopQuery.matches) {
+    document.body.classList.toggle('left-collapsed');
+    document.body.classList.toggle('right-collapsed');
+    return;
+  }
+  const leftOpen = leftSidebar ? leftSidebar.classList.toggle('open') : false;
+  const rightOpen = rightSidebar ? rightSidebar.classList.toggle('open') : false;
+  if (sidebarOverlay) sidebarOverlay.classList.toggle('visible', leftOpen || rightOpen);
+});
+
+sidebarOverlay?.addEventListener('click', () => {
+  if (!desktopQuery.matches) {
+    closeLeftSidebar();
+    closeRightSidebar();
+  }
+});

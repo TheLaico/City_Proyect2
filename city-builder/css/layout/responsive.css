@@ -12,7 +12,288 @@
     max-width: 100vw;
     height: 60vh;
     z-index: 20;
+    background: var/* ============================================================
+   RESPONSIVE  —  Overrides por breakpoint
+   Principio DIP: los valores de dimensión vienen de
+   css/base/layout-tokens.css. No hay literales de px aquí
+   salvo en los @media (CSS no admite custom props en queries).
+
+   Breakpoints (definidos en --layout-tokens.css):
+     Tablet  → 768px – 1023px
+     Móvil   → max-width 767px
+============================================================ */
+
+
+/* ══════════════════════════════════════════════════════════
+   TABLET  (768px – 1023px)
+   El sidebar izquierdo se convierte en overlay deslizable.
+   El sidebar derecho permanece visible y fijo.
+   El build-menu sube sobre el bottom-bar.
+══════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) and (min-width: 768px) {
+
+  /* Layout: solo columna derecha + área principal */
+  #game-layout {
+    grid-template-columns: 1fr var(--sidebar-right-width);
+    grid-template-areas: 'main right';
+  }
+
+  /* Sidebar izquierdo: overlay que cae desde arriba */
+  #left-sidebar {
+    position: absolute;
+    left: 0;
+    top: var(--topbar-height);
+    width: 100vw;
+    max-width: 100vw;
+    height: var(--sidebar-tablet-height);
+    z-index: var(--z-sidebar-tab);
     background: var(--color-surface);
+    transform: translateY(-100%);
+    transition: transform var(--transition-fast);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+  }
+
+  #left-sidebar.open {
+    transform: translateY(0);
+  }
+
+  /* Mapa: ocupa el ancho disponible */
+  #map-container {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Build menu: fijo sobre el bottom-bar */
+  #build-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--bottombar-height);
+    width: 100vw;
+    z-index: var(--z-build-tab);
+    background: var(--color-surface-2);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Top bar: texto más compacto */
+  #top-bar #city-name,
+  #top-bar #turn-display,
+  #top-bar #score-display {
+    font-size: 0.9rem;
+  }
+
+  #top-bar button {
+    font-size: 0.78rem;
+    padding: 0.2rem 0.55rem;
+  }
+
+  /* Bottom bar: ocultar atajos de teclado */
+  #bottom-bar span:not(#turn-info):not(#mode-display) {
+    display: none;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   MÓVIL  (max-width: 767px)
+   Ambos sidebars se convierten en drawers de pantalla completa
+   activados por botones flotantes (FAB).
+   El build-menu sube desde abajo como bottom sheet.
+══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Layout: bloque lineal, sin grid */
+  #game-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
+  }
+
+  /* ── Sidebars: drawers de pantalla completa ─────────────── */
+  #left-sidebar,
+  #right-sidebar {
+    position: fixed;
+    top: var(--topbar-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
+    z-index: var(--z-sidebar-tab);
+    background: var(--color-surface);
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transition-med);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  #right-sidebar {
+    background: var(--color-surface-2);
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  #left-sidebar.open  { transform: translateX(0); }
+  #right-sidebar.open { transform: translateX(0); }
+
+  /* ── Overlay de fondo al abrir un drawer ────────────────── */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-sidebar-tab) - 1);
+  }
+
+  #sidebar-overlay.visible {
+    display: block;
+  }
+
+  /* ── Botones FAB para abrir sidebars ────────────────────── */
+  #btn-open-left,
+  #btn-open-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: calc(var(--topbar-height) + var(--toggle-btn-offset));
+    z-index: var(--z-toggle-btn);
+    background: var(--color-accent);
+    color: #0f1923;
+    border: none;
+    border-radius: 50%;
+    width: var(--toggle-btn-size);
+    height: var(--toggle-btn-size);
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+  }
+
+  #btn-open-left  { left: var(--toggle-btn-offset); }
+  #btn-open-right { right: var(--toggle-btn-offset); }
+
+  #btn-open-left:hover,
+  #btn-open-right:hover {
+    background: var(--color-text);
+    transform: scale(1.08);
+  }
+
+  /* ── Área del mapa ──────────────────────────────────────── */
+  #map-container {
+    flex: 1;
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+    overflow: auto;
+    /* Espacio inferior para el build-menu cerrado */
+    padding-bottom: var(--build-menu-min-height);
+  }
+
+  #map-grid {
+    min-width: 100vw;
+    grid-auto-rows: minmax(var(--map-grid-row-min), auto);
+  }
+
+  /* ── Build menu: bottom sheet ───────────────────────────── */
+  #build-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--bottombar-height);
+    width: 100vw;
+    z-index: var(--z-build-mob);
+    background: var(--color-surface-2);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+    min-height: var(--build-menu-min-height);
+    max-height: var(--build-menu-max-height);
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform var(--transition-fast);
+  }
+
+  /* Handle visual para el bottom sheet */
+  #build-menu::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    margin: 10px auto 6px;
+  }
+
+  #build-menu.open {
+    transform: translateY(0);
+  }
+
+  /* ── Top bar en móvil ───────────────────────────────────── */
+  #top-bar {
+    padding: 0 0.5rem;
+    gap: 0.3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  #top-bar::-webkit-scrollbar { display: none; }
+
+  #top-bar #city-name,
+  #top-bar #turn-display,
+  #top-bar #score-display {
+    font-size: 0.8rem;
+    margin-right: 0.25rem;
+  }
+
+  #top-bar button {
+    font-size: 0.72rem;
+    padding: 0.18rem 0.45rem;
+  }
+
+  /* Ocultar botones secundarios para ahorrar espacio */
+  #btn-export,
+  #btn-import {
+    display: none;
+  }
+
+  /* ── Bottom bar en móvil ────────────────────────────────── */
+  #bottom-bar {
+    font-size: 0.65rem;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  #bottom-bar::-webkit-scrollbar { display: none; }
+
+  /* Solo mostrar turno y modo */
+  #bottom-bar span:not(#turn-info):not(#mode-display) {
+    display: none;
+  }
+
+  /* ── Notificaciones ─────────────────────────────────────── */
+  #notifications-container {
+    left: var(--toggle-btn-offset);
+    right: var(--toggle-btn-offset);
+    top: calc(var(--topbar-height) + var(--toggle-btn-offset));
+  }
+
+  .notification {
+    min-width: unset;
+    max-width: 100%;
+    font-size: 0.88rem;
+  }
+
+  /* ── Modales ────────────────────────────────────────────── */
+  .modal {
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+}(--color-surface);
     transform: translateY(-100%);
     transition: transform var(--transition-fast);
     box-shadow: 0 4px 16px rgba(0,0,0,0.18);

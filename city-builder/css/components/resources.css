@@ -1,107 +1,76 @@
+/* ============================================================
+   RESOURCES  —  Panel de recursos estilo HUD retro
+============================================================ */
+
 #resource-panel {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 1rem;
-  padding: 1rem;
+  padding: 0.5rem 0.7rem 0.6rem;
 }
 
-.resource-card {
-  background: var(--color-surface);
-  border-radius: 0.7rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+/* ── Fila de recurso ─────────────────────────────────────── */
+.resource-row {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 1.2rem 0.5rem 0.8rem 0.5rem;
-  min-width: 90px;
-  min-height: 90px;
-  transition: box-shadow 0.2s;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(26, 37, 53, 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
 }
 
-.resource-card .resource-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+.resource-row:last-child {
+  border-bottom: none;
 }
 
-.resource-card .resource-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.resource-card .resource-label {
+/* Icono del recurso */
+.resource-icon {
   font-size: 0.95rem;
-  opacity: 0.7;
+  width: 1.4rem;
+  text-align: center;
+  flex-shrink: 0;
 }
 
-.resource--ok {
-  color: var(--color-success);
+/* Nombre del recurso */
+.resource-label {
+  flex: 1;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-dim);
 }
 
-.resource--warning {
-  color: var(--color-warning);
+/* Valor del recurso */
+.resource-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: right;
+  min-width: 3.5rem;
 }
 
-.resource--critical {
+/* Variación (delta) */
+.resource-delta {
+  font-size: 0.6rem;
+  min-width: 2.5rem;
+  text-align: right;
+  opacity: 0.75;
+}
+
+.resource-delta.positive { color: var(--color-green); }
+.resource-delta.negative { color: var(--color-danger); }
+.resource-delta.neutral  { color: var(--color-text-muted); }
+
+/* ── Colores semánticos por recurso ──────────────────────── */
+.resource-row.money       .resource-value { color: var(--color-money); }
+.resource-row.electricity .resource-value { color: var(--color-electricity); }
+.resource-row.water       .resource-value { color: var(--color-water); }
+.resource-row.food        .resource-value { color: var(--color-food); }
+
+/* ── Estado crítico ──────────────────────────────────────── */
+.resource-row.critical .resource-value {
   color: var(--color-danger);
-  animation: resource-blink 0.8s steps(2, start) infinite;
+  animation: blink-critical 1.4s ease-in-out infinite;
 }
 
-@keyframes resource-blink {
+@keyframes blink-critical {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* --- Panel title y grid wrapper --- */
-.resource-panel__title {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.6;
-  margin: 0.75rem 1rem 0.5rem;
-}
-
-.resource-panel__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-  padding: 0.5rem 0.75rem 0.75rem;
-}
-
-/* Balance line (prod/cons) debajo del valor */
-.resource-balance {
-  font-size: 0.7rem;
-  margin-top: 0.15rem;
-  opacity: 0.8;
-  font-family: var(--font-mono, monospace);
-}
-
-/* Separador visual del panel de hacks */
-#resource-config {
-  border-top: 2px dashed var(--color-border, #333);
-  padding: 0.75rem 1rem;
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-#resource-config::before {
-  content: "🛠️ Configuración (hacks)";
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.75rem;
-}
-
-#resource-config input[type="number"] {
-  width: 60px;
-  margin: 0 0.25rem;
-  background: var(--color-surface, #1e1e1e);
-  border: 1px solid var(--color-border, #444);
-  color: inherit;
-  padding: 0.15rem 0.3rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
+  50%       { opacity: 0.4; }
 }

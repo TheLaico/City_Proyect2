@@ -1,0 +1,58 @@
+/* ============================================================
+   LAYOUT TOKENS  —  Fuente única de verdad para dimensiones
+   Principio DIP: ningún otro archivo usa valores numéricos
+   de layout directamente; todo referencia estas variables.
+
+   NOTA: CSS no permite custom properties dentro de @media,
+   por eso los breakpoints se documentan aquí pero se usan
+   como literales en los media queries. Al cambiar un valor,
+   solo hay que actualizar este archivo y los media queries
+   correspondientes en responsive.css.
+
+   Breakpoints canónicos:
+     Mobile  → max-width: 767px   (var --bp-mobile)
+     Tablet  → 768px – 1023px     (var --bp-tablet-min / --bp-tablet)
+     Desktop → min-width: 1024px  (var --bp-desktop)
+============================================================ */
+
+:root {
+
+  /* ── Breakpoints (referencia documental) ─────────────────── */
+  --bp-mobile:       767px;
+  --bp-tablet-min:   768px;
+  --bp-tablet:       1023px;
+  --bp-desktop:      1024px;
+
+  /* ── Sidebars ─────────────────────────────────────────────── */
+  --sidebar-left-width:       260px;
+  --sidebar-right-width:      360px;
+  --sidebar-collapsed-width:  0px;
+  --sidebar-tablet-height:    60vh;
+
+  /* ── Barras fijas ─────────────────────────────────────────── */
+  --topbar-height:    52px;
+  --bottombar-height: 36px;
+
+  /* ── Mapa / celda ─────────────────────────────────────────── */
+  --cell-size:          40px;
+  --map-grid-row-min:   44px;
+
+  /* ── Build menu ───────────────────────────────────────────── */
+  --build-menu-min-height: 60px;
+  --build-menu-max-height: 60vh;
+
+  /* ── Botones toggle (móvil) ───────────────────────────────── */
+  --toggle-btn-size:   44px;
+  --toggle-btn-offset: 12px;
+
+  /* ── Z-index scale ────────────────────────────────────────── */
+  --z-topbar:      10;
+  --z-sidebar-tab: 20;
+  --z-build-tab:   30;
+  --z-build-mob:   40;
+  --z-toggle-btn:  50;
+  --z-modal:       1000;
+  --z-modal-inner: 1010;
+  --z-notif:       2000;
+  --z-detail:      9999;
+}

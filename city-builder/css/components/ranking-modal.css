@@ -1,131 +1,191 @@
-/* Ranking Modal Styles */
+/* ============================================================
+   RANKING MODAL  —  Tabla de ranking estilo leaderboard retro
+============================================================ */
+
 .ranking-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
 }
-.ranking-table th, .ranking-table td {
-  padding: 0.6rem 0.8rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 0.88rem;
-}
+
 .ranking-table th {
-  font-weight: 700;
-  background: #f0f0f0;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-lit);
+  color: var(--color-accent);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 400;
 }
+
+.ranking-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
 .ranking-table tr:hover td {
-  background: #f5f5f5;
+  background: var(--color-accent-dim);
 }
+
 .ranking-row--current td {
-  background: rgba(33,150,243,0.08) !important;
+  background: rgba(0,229,255,0.05) !important;
+  color: var(--color-accent);
 }
+
 .ranking-current-info {
-  margin-top: 1rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #e0e0e0;
-  font-size: 0.88rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  border-radius: var(--border-radius);
+  background: var(--color-surface-3);
 }
 
-/* Botón Ver detalle */
+/* ── Botón detalle ────────────────────────────────────────── */
 .btn-detail {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid #bbb;
-  background: #fff;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-border-lit);
+  background: transparent;
   cursor: pointer;
-  font-size: 0.8rem;
-  border-radius: 3px;
-}
-.btn-detail:hover {
-  background: #f0f0f0;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--color-text-dim);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
 }
 
-/* Modal de detalle (se monta sobre todo) */
+.btn-detail:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+}
+
+/* ── Modal de detalle ─────────────────────────────────────── */
 .detail-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(8,9,13,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: var(--z-detail);
+  backdrop-filter: blur(2px);
 }
+
 .detail-modal {
-  background: #fff;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-lit);
   width: 100%;
-  max-width: 440px;
+  max-width: 420px;
   max-height: 85vh;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: var(--border-radius-lg);
   display: flex;
   flex-direction: column;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
+
 .detail-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.9rem 1.1rem 0.7rem;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 0.8rem 1rem 0.65rem;
+  border-bottom: 1px solid var(--color-border);
 }
+
 .detail-modal__header h2 {
-  font-size: 1rem;
-  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-shadow: var(--glow-accent);
 }
+
 .detail-modal__close {
   background: none;
-  border: none;
-  font-size: 1.4rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
   cursor: pointer;
-  line-height: 1;
-  color: #555;
-  padding: 0 0.2rem;
+  color: var(--color-text-dim);
+  padding: 0.05rem 0.3rem;
+  transition: all var(--transition-fast);
 }
+
+.detail-modal__close:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
 .detail-modal__body {
-  padding: 1rem 1.1rem 1.4rem;
+  padding: 0.85rem 1rem 1.2rem;
 }
+
 .detail-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
-  font-size: 0.88rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  margin-bottom: 0.8rem;
 }
+
 .detail-table td {
-  padding: 0.35rem 0.2rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.3rem 0.2rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
+
 .detail-table td:last-child {
   text-align: right;
+  color: var(--color-accent);
 }
+
 .detail-section-label {
-  font-weight: 700;
-  font-size: 0.8rem;
-  margin: 0.7rem 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  margin: 0.6rem 0 0.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #555;
+  letter-spacing: 0.1em;
+  color: var(--color-amber);
 }
+
 .detail-list {
-  margin: 0 0 0.4rem 1.1rem;
+  margin: 0 0 0.4rem 1rem;
   padding: 0;
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
 }
-.detail-list li {
-  margin-bottom: 0.15rem;
-}
+
+.detail-list li { margin-bottom: 0.12rem; }
+
 .detail-hr {
   border: none;
-  border-top: 1px solid #ddd;
-  margin: 0.9rem 0 0.6rem;
+  border-top: 1px solid var(--color-border);
+  margin: 0.7rem 0 0.5rem;
 }
+
 .detail-total {
-  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
   text-align: right;
+  color: var(--color-gold);
   margin: 0;
 }
+
 .detail-note {
-  font-size: 0.78rem;
-  opacity: 0.55;
-  margin: 0 0 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  opacity: 0.45;
+  margin: 0 0 0.8rem;
   font-style: italic;
+  color: var(--color-text-dim);
 }

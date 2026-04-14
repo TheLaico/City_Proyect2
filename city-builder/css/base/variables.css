@@ -1,47 +1,75 @@
+/* ============================================================
+   VARIABLES  —  Estética retro-moderna urbana
+   Paleta: negro profundo + cian eléctrico + ámbar neón
+   Tipografía: Orbitron (display) + Rajdhani (UI) + Share Tech Mono
+   Inspiración: consolas de control urbano, CRT, neón de ciudad
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap');
+
 :root {
-  /* Paleta de colores — temática urbana/estrategia */
-  --color-bg:            #0f1923;
-  --color-surface:       #1a2635;
-  --color-surface-2:     #243447;
-  --color-border:        #2e4460;
-  --color-text:          #c8d8e8;
-  --color-text-muted:    #6b8299;
-  --color-accent:        #4fc3f7;
-  --color-success:       #66bb6a;
-  --color-warning:       #ffa726;
-  --color-danger:        #ef5350;
-  --color-gold:          #ffd54f;
 
-  /* Recursos */
-  --color-money:         #66bb6a;
-  --color-electricity:   #ffd54f;
-  --color-water:         #4fc3f7;
-  --color-food:          #a5d6a7;
+  /* ── Paleta base ──────────────────────────────────────────── */
+  --color-bg:          #08090d;
+  --color-surface:     #0d1117;
+  --color-surface-2:   #111820;
+  --color-surface-3:   #161e28;
+  --color-border:      #1a2535;
+  --color-border-lit:  #2a4060;
 
-  /* Edificios — colores por tipo */
-  --color-building-residential: #81c784;
-  --color-building-commercial:  #64b5f6;
-  --color-building-industrial:  #ffb74d;
-  --color-building-service:     #f48fb1;
-  --color-building-utility:     #ce93d8;
-  --color-building-park:        #a5d6a7;
-  --color-road:                 #78909c;
+  /* ── Textos ───────────────────────────────────────────────── */
+  --color-text:        #c8dce8;
+  --color-text-dim:    #5a7a90;
+  --color-text-muted:  #2a3f50;
 
-  /* Tipografía */
-  --font-ui:     'Rajdhani', sans-serif;
-  --font-body:   'Source Sans 3', sans-serif;
-  --font-mono:   'JetBrains Mono', monospace;
+  /* ── Acentos neón ─────────────────────────────────────────── */
+  --color-accent:      #00e5ff;
+  --color-accent-dim:  rgba(0,229,255,0.10);
+  --color-accent-glow: rgba(0,229,255,0.40);
+  --color-amber:       #ffb300;
+  --color-amber-dim:   rgba(255,179,0,0.10);
+  --color-amber-glow:  rgba(255,179,0,0.45);
+  --color-green:       #00ff88;
+  --color-green-dim:   rgba(0,255,136,0.08);
+  --color-green-glow:  rgba(0,255,136,0.38);
 
-  /* Tamaños */
-  --sidebar-left-width:  260px;
-  --sidebar-right-width: 300px;
-  --topbar-height:       52px;
-  --bottombar-height:    36px;
-  --cell-size:           40px;
-  --border-radius:       6px;
-  --border-radius-lg:    12px;
+  /* ── Semánticos ───────────────────────────────────────────── */
+  --color-success:  #00c97a;
+  --color-warning:  #ffb300;
+  --color-danger:   #ff3d5a;
+  --color-gold:     #ffd740;
 
-  /* Transiciones */
-  --transition-fast:  0.15s ease;
-  --transition-med:   0.3s ease;
+  /* ── Recursos ─────────────────────────────────────────────── */
+  --color-money:       #00c97a;
+  --color-electricity: #ffb300;
+  --color-water:       #00e5ff;
+  --color-food:        #76ff60;
+
+  /* ── Edificios ────────────────────────────────────────────── */
+  --color-building-residential: #64dd17;
+  --color-building-commercial:  #00b0ff;
+  --color-building-industrial:  #ff6d00;
+  --color-building-service:     #e040fb;
+  --color-building-utility:     #ffb300;
+  --color-building-park:        #69f0ae;
+  --color-road:                 #546e7a;
+
+  /* ── Tipografía ───────────────────────────────────────────── */
+  --font-display: 'Orbitron', monospace;
+  --font-ui:      'Rajdhani', sans-serif;
+  --font-mono:    'Share Tech Mono', monospace;
+
+  /* ── Glows ────────────────────────────────────────────────── */
+  --glow-accent: 0 0 6px var(--color-accent-glow), 0 0 20px rgba(0,229,255,0.12);
+  --glow-amber:  0 0 6px var(--color-amber-glow),  0 0 20px rgba(255,179,0,0.12);
+  --glow-green:  0 0 6px var(--color-green-glow),  0 0 20px rgba(0,255,136,0.10);
+  --glow-danger: 0 0 6px rgba(255,61,90,0.55),     0 0 18px rgba(255,61,90,0.18);
+
+  /* ── Radios ───────────────────────────────────────────────── */
+  --border-radius:    3px;
+  --border-radius-lg: 6px;
+
+  /* ── Transiciones ─────────────────────────────────────────── */
+  --transition-fast: 0.12s ease;
+  --transition-med:  0.25s ease;
 }

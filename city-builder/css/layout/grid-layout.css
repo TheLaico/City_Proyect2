@@ -1,19 +1,72 @@
-/* Layout principal desktop (≥1024px) */
+/* ============================================================
+   GRID LAYOUT  —  Desktop (min-width: 1024px)
+   Estética: paneles con bordes de "consola de control"
+============================================================ */
+
+/* ── Layout principal ─────────────────────────────────────── */
 #game-layout {
   display: grid;
   grid-template-columns: var(--sidebar-left-width) 1fr var(--sidebar-right-width);
-  grid-template-areas:
-    'left main right';
+  grid-template-areas: 'left main right';
   height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
   min-height: 0;
 }
+
+body.left-collapsed #game-layout {
+  grid-template-columns: 0 1fr var(--sidebar-right-width);
+}
+
+body.right-collapsed #game-layout {
+  grid-template-columns: var(--sidebar-left-width) 1fr 0;
+}
+
+body.left-collapsed.right-collapsed #game-layout {
+  grid-template-columns: 0 1fr 0;
+}
+
+/* ── Sidebar izquierdo ────────────────────────────────────── */
 #left-sidebar {
   grid-area: left;
   overflow-y: auto;
   background: var(--color-surface);
   min-width: var(--sidebar-left-width);
   max-width: var(--sidebar-left-width);
+  border-right: 1px solid var(--color-border);
+  position: relative;
+  transition: max-width var(--transition-fast), min-width var(--transition-fast);
 }
+
+body.left-collapsed #left-sidebar {
+  min-width: 0;
+  max-width: 0;
+  border-right: none;
+  overflow: hidden;
+}
+
+body.left-collapsed #left-sidebar > * {
+  display: none;
+}
+
+/* Línea de acento izquierda */
+#left-sidebar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    var(--color-accent) 20%,
+    var(--color-amber) 60%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Área del mapa ────────────────────────────────────────── */
 #map-container {
   grid-area: main;
   overflow: auto;
@@ -22,75 +75,208 @@
   min-width: 0;
   min-height: 0;
   position: relative;
+
+  /* Grid retro de fondo */
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
+
 #map-grid {
   display: grid;
-  /* grid-template-columns se define dinámicamente desde JS */
   justify-content: start;
   align-content: start;
   gap: 0;
 }
+
+/* ── Sidebar derecho ──────────────────────────────────────── */
 #right-sidebar {
   grid-area: right;
   overflow-y: auto;
   background: var(--color-surface-2);
   min-width: var(--sidebar-right-width);
   max-width: var(--sidebar-right-width);
+  border-left: 1px solid var(--color-border);
+  position: relative;
+  transition: max-width var(--transition-fast), min-width var(--transition-fast);
 }
+
+body.right-collapsed #right-sidebar {
+  min-width: 0;
+  max-width: 0;
+  border-left: none;
+  overflow: hidden;
+}
+
+body.right-collapsed #right-sidebar > * {
+  display: none;
+}
+
+#right-sidebar::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    var(--color-amber) 25%,
+    var(--color-accent) 75%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Top bar ──────────────────────────────────────────────── */
 #top-bar {
   height: var(--topbar-height);
   background: var(--color-surface);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0 1.5rem;
+  gap: 0.4rem;
+  padding: 0 1.2rem;
   border-bottom: 1px solid var(--color-border);
-  z-index: 10;
+  z-index: var(--z-topbar);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
 }
-#top-bar #city-name,
-#top-bar #turn-display,
-#top-bar #score-display {
-  margin-right: 0.5rem;
-  font-family: var(--font-ui);
-  font-size: 1rem;
-  color: var(--color-text);
+
+#top-bar::-webkit-scrollbar { display: none; }
+
+#top-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--color-accent) 30%,
+    var(--color-amber) 70%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  pointer-events: none;
 }
-#top-bar button {
-  padding: 0.25rem 0.75rem;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  color: var(--color-text);
-  font-family: var(--font-ui);
+
+/* Logo / nombre ciudad */
+#city-name {
+  font-family: var(--font-display);
   font-size: 0.85rem;
-  cursor: pointer;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-}
-#top-bar button:hover {
-  background: var(--color-border);
-  border-color: var(--color-accent);
-}
-#btn-route {
-  background: var(--color-surface-2) !important;
-  border-color: var(--color-accent) !important;
-  color: var(--color-accent) !important;
   font-weight: 700;
+  color: var(--color-accent);
+  text-shadow: var(--glow-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+
+#turn-display,
+#score-display {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-amber);
+  background: var(--color-amber-dim);
+  border: 1px solid rgba(255,179,0,0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Separador decorativo */
+#top-bar .top-sep {
+  flex: 1;
+  min-width: 0.5rem;
+}
+
+/* Botones del top bar */
+#top-bar button {
+  padding: 0.22rem 0.65rem;
+  background: transparent;
+  border: 1px solid var(--color-border-lit);
+  border-radius: var(--border-radius);
+  color: var(--color-text-dim);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+#btn-toggle-sidebars {
+  padding: 0.22rem 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+#top-bar button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  box-shadow: var(--glow-accent);
+}
+
+#btn-route {
+  border-color: var(--color-amber) !important;
+  color: var(--color-amber) !important;
+  background: var(--color-amber-dim) !important;
+}
+
 #btn-route:hover,
 #btn-route.active {
-  background: var(--color-accent) !important;
+  background: var(--color-amber) !important;
   color: var(--color-bg) !important;
+  box-shadow: var(--glow-amber) !important;
 }
+
+/* ── Bottom bar ───────────────────────────────────────────── */
 #bottom-bar {
   height: var(--bottombar-height);
-  background: var(--color-surface-2);
+  background: var(--color-surface);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
   padding: 0 1rem;
   border-top: 1px solid var(--color-border);
-  z-index: 10;
+  z-index: var(--z-topbar);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   color: var(--color-text-muted);
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+#bottom-bar::-webkit-scrollbar { display: none; }
+
+#turn-info, #mode-display {
+  color: var(--color-green);
+  font-size: 0.65rem;
+}
+
+#bottom-bar span:not(#turn-info):not(#mode-display) {
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  font-size: 0.6rem;
+}
+
+/* ── Resource config (panel de debug oculto) ──────────────── */
+#resource-config {
+  display: none;
 }
