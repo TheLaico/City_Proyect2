@@ -4,9 +4,7 @@ class Logger {
   }
 
   static #format(module, message) {
-    const turn = window?.gameStore?.getState?.().turn;
-    const turnStr = typeof turn === 'number' ? `[TURN-${turn}]` : '';
-    return `${turnStr}[${module}] ${message}`;
+    return `[${module}] ${message}`;
   }
 
   static debug(module, message, data) {

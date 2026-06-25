@@ -1,6 +1,6 @@
 import { EventType } from '../types/EventType.js';
-
-const BACKEND_URL = 'http://127.0.0.1:5000/api/calculate-route';
+import Logger from '../utils/Logger.js';
+import ENV from '../config/env.js';
 
 class RouteService {
   constructor(gameStore, eventBus) {
@@ -24,8 +24,15 @@ class RouteService {
       end:   [destY,   destX]
     };
 
+    const backendUrl = ENV.ROUTE_API_URL;
+
+    if (!backendUrl) {
+      this.#localDijkstra(matrix, originX, originY, destX, destY);
+      return;
+    }
+
     try {
-      const response = await fetch(BACKEND_URL, {
+      const response = await fetch(backendUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -45,8 +52,7 @@ class RouteService {
       this.eventBus.emit(EventType.ROUTE_CALCULATED, { path });
 
     } catch (_err) {
-      // Backend no disponible → fallback al algoritmo local
-      console.warn('[RouteService] Backend no disponible, usando Dijkstra local.');
+      Logger.warn('RouteService', 'Backend no disponible, usando Dijkstra local.');
       this.#localDijkstra(matrix, originX, originY, destX, destY);
     }
   }

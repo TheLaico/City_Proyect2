@@ -4,7 +4,7 @@
  */
 class Citizen {
   constructor({ id, homeId = null, jobId = null, happiness = 50 } = {}) {
-    this.id        = id ?? (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+    this.id        = id ?? crypto.randomUUID();
     this.homeId    = homeId;
     this.jobId     = jobId;
     this.happiness = Math.max(0, Math.min(100, happiness));

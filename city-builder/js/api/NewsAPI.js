@@ -6,6 +6,8 @@
 //    D — Recibe apiKey por constructor (inyección de dependencia)
 // ─────────────────────────────────────────────
 
+import Logger from '../utils/Logger.js';
+
 class NewsAPI {
   #apiKey;
   #country;
@@ -49,7 +51,7 @@ class NewsAPI {
       return articles;
 
     } catch (e) {
-      console.warn(`[NewsAPI] Error para "${country}":`, e.message);
+      Logger.warn('NewsAPI', `Error para "${country}": ${e.message}`);
       return this.#mockNews();
     }
   }

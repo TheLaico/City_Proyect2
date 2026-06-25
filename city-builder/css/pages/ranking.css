@@ -3,7 +3,7 @@
 body,
 html {
   min-height: 100vh;
-  background: var(--color-bg, #f5f7fa);
+  background: var(--color-bg);
   margin: 0;
   padding: 0;
 }
@@ -18,6 +18,7 @@ h1 {
   margin-bottom: 1.5rem;
   font-family: var(--font-ui, "Rajdhani", sans-serif);
   font-size: 2rem;
+  color: var(--color-text);
 }
 
 /* ── Tabla principal ─────────────────────────────────────────────────────── */
@@ -25,28 +26,30 @@ h1 {
 #ranking-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 #ranking-table th,
 #ranking-table td {
   padding: 0.6rem 0.8rem;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
   font-size: 0.9rem;
+  color: var(--color-text);
 }
 
 #ranking-table th {
   font-weight: 700;
-  background: #f0f0f0;
+  background: var(--color-surface-2);
+  color: var(--color-text-dim);
 }
 
 #ranking-table tr:hover td {
-  background: #f5f5f5;
+  background: var(--color-surface-3);
 }
 
 .ranking-row--current td {
-  background: rgba(33, 150, 243, 0.08) !important;
+  background: var(--color-accent-dim) !important;
 }
 
 .ranking-empty {
@@ -60,9 +63,10 @@ h1 {
 .ranking-current-info {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  border: 1px solid #e0e0e0;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   font-size: 0.9rem;
+  color: var(--color-text);
 }
 
 .ranking-current-info--hidden {
@@ -81,16 +85,20 @@ h1 {
 .ranking-actions button,
 .btn-detail {
   padding: 0.5rem 1rem;
-  border: 1px solid #bbb;
-  background: #fff;
+  border: 1px solid var(--color-border-lit);
+  background: var(--color-surface);
+  color: var(--color-text-dim);
   cursor: pointer;
   font-size: 0.85rem;
   border-radius: 3px;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
 }
 
 .ranking-actions button:hover,
 .btn-detail:hover {
-  background: #f0f0f0;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
 }
 
 /* ── Modal de detalle ────────────────────────────────────────────────────── */
@@ -98,21 +106,21 @@ h1 {
 .detail-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-modal);
 }
 
 .detail-modal {
-  background: #fff;
+  background: var(--color-surface);
   width: 100%;
   max-width: 460px;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
 }
@@ -122,13 +130,14 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .detail-modal__header h2 {
   font-size: 1.1rem;
   font-family: var(--font-ui, "Rajdhani", sans-serif);
   margin: 0;
+  color: var(--color-text);
 }
 
 .detail-modal__close {
@@ -138,7 +147,12 @@ h1 {
   cursor: pointer;
   line-height: 1;
   padding: 0 0.25rem;
-  color: #555;
+  color: var(--color-text-dim);
+  transition: color var(--transition-fast);
+}
+
+.detail-modal__close:hover {
+  color: var(--color-accent);
 }
 
 .detail-modal__body {
@@ -156,7 +170,8 @@ h1 {
 
 .detail-table td {
   padding: 0.4rem 0.25rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
 
 .detail-table td:last-child {
@@ -169,13 +184,14 @@ h1 {
   margin: 0.75rem 0 0.3rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .detail-list {
   margin: 0 0 0.5rem 1.2rem;
   padding: 0;
   font-size: 0.88rem;
+  color: var(--color-text);
 }
 
 .detail-list li {
@@ -184,7 +200,7 @@ h1 {
 
 .detail-hr {
   border: none;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-border);
   margin: 1rem 0 0.75rem;
 }
 
@@ -192,6 +208,7 @@ h1 {
   font-size: 1rem;
   text-align: right;
   margin: 0;
+  color: var(--color-amber);
 }
 
 .detail-note {
@@ -199,4 +216,5 @@ h1 {
   opacity: 0.55;
   margin: 0 0 1rem;
   font-style: italic;
+  color: var(--color-text-dim);
 }

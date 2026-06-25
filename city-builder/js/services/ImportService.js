@@ -1,4 +1,5 @@
 import { EventType } from '../types/EventType.js';
+import Logger from '../utils/Logger.js';
 import CityAdapter from '../adapters/CityAdapter.js';
 import Map from '../models/Map.js';
 
@@ -35,7 +36,7 @@ class ImportService {
           message: 'Error al leer el archivo JSON: formato inválido.',
           type: 'error'
         });
-        console.error('[ImportService]', err);
+        Logger.error('ImportService', 'Formato JSON inválido', err);
       }
     };
     reader.onerror = () => {

@@ -1,3 +1,5 @@
+const NEWS_REFRESH_MS = 30 * 60 * 1000; // 30 minutos
+
 class NewsPanel {
   #intervalId = null;
   #lastArticles = null;
@@ -18,7 +20,7 @@ class NewsPanel {
       const newArticles = await this.newsAPI.getNews(country);
       this.#lastArticles = newArticles;
       this.#render(newArticles);
-    }, 30 * 60 * 1000);
+    }, NEWS_REFRESH_MS);
   }
 
   #render(articles) {
@@ -48,6 +50,13 @@ class NewsPanel {
       `;
       ul.appendChild(li);
     });
+  }
+
+  destroy() {
+    if (this.#intervalId) {
+      clearInterval(this.#intervalId);
+      this.#intervalId = null;
+    }
   }
 
   #truncate(str, n) {

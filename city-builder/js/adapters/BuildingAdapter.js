@@ -1,3 +1,4 @@
+import Logger from '../utils/Logger.js';
 // Convierte datos a instancias de edificios correctos
 import { BuildingType } from '../types/BuildingType.js';
 import ResidentialBuilding from '../models/buildings/ResidentialBuilding.js';
@@ -38,7 +39,7 @@ class BuildingAdapter {
       case BuildingType.ROAD:
         return new Road({ id, x, y });
       default:
-        console.warn('Tipo de edificio desconocido en BuildingAdapter.fromJSON:', type, data);
+        Logger.warn('BuildingAdapter', `Tipo de edificio desconocido: ${type}`);
         return null;
     }
   }

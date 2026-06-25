@@ -2,6 +2,7 @@ import { EventType } from '../types/EventType.js';
 import CityAdapter from '../adapters/CityAdapter.js';
 import BuildingAdapter from '../adapters/BuildingAdapter.js';
 import Map from '../models/Map.js';
+import Logger from '../utils/Logger.js';
 
 class SaveService {
   constructor(gameStore, eventBus) {
@@ -13,11 +14,10 @@ class SaveService {
   saveGame() {
     const state = this.gameStore.getState();
     if (!state.city || !state.map) {
-      console.warn('[SaveService] No se puede guardar: city o map es null', { city: state.city, map: state.map });
+      Logger.warn('SaveService', 'No se puede guardar: city o map es null');
       return;
     }
     const mapJSON = state.map.toJSON();
-    console.log(`[SaveService] Guardando mapa ${state.map.width}x${state.map.height}, filas:`, mapJSON.length);
     const data = {
       city:      state.city.toJSON(),
       map:       mapJSON,
@@ -30,7 +30,6 @@ class SaveService {
       savedAt:   new Date().toISOString()
     };
     localStorage.setItem(this.saveKey, JSON.stringify(data));
-    console.log('[SaveService] Guardado OK en localStorage');
     this.eventBus.emit(EventType.SAVE_COMPLETED);
   }
 
@@ -88,7 +87,7 @@ class SaveService {
       this.gameStore.setState({ city, map, buildings, roads, citizens, resources, turn, score });
       this.eventBus.emit(EventType.GAME_LOADED, { city });
     } catch (e) {
-      console.error('Error cargando partida:', e);
+      Logger.error('SaveService', 'Error cargando partida', e);
       this.eventBus.emit(EventType.SETUP_REQUESTED);
     }
   }

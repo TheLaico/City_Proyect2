@@ -1,3 +1,5 @@
+import Logger from '../utils/Logger.js';
+
 // Sistema de eventos para comunicar módulos sin acoplarlos (ej: "cambio_turno")
 class EventBus {
   #listeners = new Map();
@@ -28,7 +30,7 @@ class EventBus {
         try {
           cb(payload);
         } catch (err) {
-          console.error(`[EventBus] Error in callback for event '${eventType}':`, err);
+          Logger.error('EventBus', `Error en callback del evento '${eventType}'`, err);
         }
       }
     }

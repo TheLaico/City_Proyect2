@@ -1,5 +1,7 @@
 import { EventType } from '../types/EventType.js';
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 class SetupScreen {
   #selectedRegion = null;
   #cities = [];
@@ -52,7 +54,7 @@ class SetupScreen {
 
     regionSearch?.addEventListener('input', (e) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => doSearch(e.target.value), 300);
+      debounceTimer = setTimeout(() => doSearch(e.target.value), SEARCH_DEBOUNCE_MS);
     });
 
     regionSelect?.addEventListener('change', async (e) => {

@@ -1,3 +1,5 @@
+import Logger from '../utils/Logger.js';
+
 class ColombiaAPI {
   #baseUrl = 'https://api-colombia.com/api/v1';
   #cache = null;
@@ -65,7 +67,7 @@ class ColombiaAPI {
       this.#cache = withCoords;
       return this.#cache;
     } catch (e) {
-      console.warn('ColombiaAPI: usando fallback de ciudades.', e.message);
+      Logger.warn('ColombiaAPI', `Usando fallback de ciudades: ${e.message}`);
       this.#cache = this.#getFallbackCities();
       return this.#cache;
     }
@@ -82,7 +84,7 @@ class ColombiaAPI {
       if (isNaN(latitude) || isNaN(longitude)) return null;
       return { latitude, longitude };
     } catch (e) {
-      console.warn('ColombiaAPI: no se pudo cargar la ciudad.', e.message);
+      Logger.warn('ColombiaAPI', `No se pudo cargar la ciudad: ${e.message}`);
       return null;
     }
   }
@@ -106,7 +108,7 @@ class ColombiaAPI {
           }
         });
       } catch (e) {
-        console.warn('ColombiaAPI: no se pudo cargar listado de ciudades.', e.message);
+        Logger.warn('ColombiaAPI', `No se pudo cargar listado de ciudades: ${e.message}`);
         this.#cityCoords = new Map();
         this.#cityCoordsByName = new Map();
       }
