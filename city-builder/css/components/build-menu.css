@@ -143,6 +143,11 @@
   color: var(--color-green);
 }
 
+/* ── Panel oculto (tab inactivo) ──────────────────────────── */
+.build-items-grid--hidden {
+  display: none;
+}
+
 /* ── Estado activo (modo construcción) ────────────────────── */
 .build-item--active {
   border-color: var(--color-accent) !important;

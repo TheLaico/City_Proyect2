@@ -1,31 +1,17 @@
 import { STORAGE_KEYS } from '../config/constants.js';
+import RankingService from '../services/RankingService.js';
+import GameStore from '../store/GameStore.js';
+import EventBus from '../events/EventBus.js';
+
+const rankingService = new RankingService(new GameStore(), new EventBus());
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function getAllRaw() {
-  const raw = localStorage.getItem(STORAGE_KEYS.ranking);
-  if (!raw) return { ranking: [] };
-  try { return JSON.parse(raw); } catch { return { ranking: [] }; }
-}
-
-function getSorted() {
-  return getAllRaw().ranking
-    .filter(e => e.cityName && e.mayor)
-    .slice()
-    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-}
-
-function getTop10() {
-  return getSorted().slice(0, 10);
-}
-
 function getCurrentCityKey() {
-  return sessionStorage.getItem('current_city_key') ?? null;
+  return sessionStorage.getItem(STORAGE_KEYS.currentCityKey) ?? null;
 }
 
 // ─── Desglose ─────────────────────────────────────────────────────────────────
-// Si la entrada tiene breakdown guardado, lo usa.
-// Si no (entradas viejas), reconstruye una estimación con los campos disponibles.
 
 function buildBreakdownHTML(entry) {
   let byPop, byHappy, byBuildings, byResources, bonuses, penalties, totalBonus, totalPenal;
@@ -44,7 +30,6 @@ function buildBreakdownHTML(entry) {
       (base.balanceWater       ?? 0)
     );
   } else {
-    // Reconstrucción estimada desde campos básicos
     byPop       = (entry.population ?? 0) * 10;
     byHappy     = Math.round((entry.happiness ?? 0) * 5);
     byBuildings = 0;
@@ -130,8 +115,11 @@ function openDetailModal(entry) {
 function renderCurrentCityInfo(entry, position) {
   const el = document.getElementById('ranking-current-info');
   if (!el) return;
-  if (!entry) { el.style.display = 'none'; return; }
-  el.style.display = 'block';
+  if (!entry) {
+    el.classList.add('ranking-current-info--hidden');
+    return;
+  }
+  el.classList.remove('ranking-current-info--hidden');
   el.textContent = 'Tu ciudad: posición ' + position
     + ' — ' + entry.cityName
     + ' (' + entry.mayor + ')'
@@ -142,8 +130,8 @@ function renderTable() {
   const tbody = document.querySelector('#ranking-table tbody');
   if (!tbody) return;
 
-  const top10      = getTop10();
-  const allSorted  = getSorted();
+  const top10      = rankingService.getRanking();
+  const allSorted  = rankingService.getAllSorted();
   const currentKey = getCurrentCityKey();
 
   if (top10.length === 0) {
@@ -198,21 +186,13 @@ function renderTable() {
 
 document.getElementById('btn-reset-ranking').addEventListener('click', function() {
   if (confirm('¿Seguro que deseas borrar el ranking? Esta acción no se puede deshacer.')) {
-    localStorage.removeItem(STORAGE_KEYS.ranking);
+    rankingService.resetRanking();
     renderTable();
   }
 });
 
 document.getElementById('btn-export-ranking').addEventListener('click', function() {
-  const raw  = localStorage.getItem(STORAGE_KEYS.ranking) ?? '{"ranking":[]}';
-  const blob = new Blob([raw], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'city_ranking.json';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+  rankingService.exportRanking();
 });
 
 document.getElementById('btn-back').addEventListener('click', function() {

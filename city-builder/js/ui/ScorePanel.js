@@ -1,10 +1,10 @@
 import { EventType } from '../types/EventType.js';
-import { STORAGE_KEYS } from '../config/constants.js';
 
 class ScorePanel {
-  constructor(gameStore, eventBus) {
+  constructor(gameStore, eventBus, rankingService) {
     this.gameStore = gameStore;
     this.eventBus = eventBus;
+    this.rankingService = rankingService;
     this.container = document.getElementById('score-panel');
     this.turnDisplay = document.getElementById('turn-display');
     this.expanded = false;
@@ -43,7 +43,7 @@ class ScorePanel {
         <span class="score-total">${score}</span>
         <button class="score-toggle" id="score-toggle">${this.expanded ? '▲' : '▼'}</button>
       </div>
-      <div class="score-breakdown" style="display:${this.expanded ? 'block' : 'none'}">
+      <div class="score-breakdown${this.expanded ? ' score-breakdown--visible' : ''}">
         <ul>
           <li>Población: <b>+${breakdown.population ?? 0}</b></li>
           <li>Felicidad: <b>+${breakdown.happiness ?? 0}</b></li>
@@ -62,18 +62,8 @@ class ScorePanel {
 
   #getRankingScore(state) {
     const city = state.city;
-    if (!city) return null;
-    const raw = localStorage.getItem(STORAGE_KEYS.ranking);
-    if (!raw) return null;
-    let data = null;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      return null;
-    }
-    const ranking = data?.ranking ?? [];
-    const key = `${city.name}::${city.mayorName}`;
-    const entry = ranking.find((e) => `${e.cityName}::${e.mayor}` === key);
+    if (!city || !this.rankingService) return null;
+    const entry = this.rankingService.getEntryForCity(city.name, city.mayorName);
     if (!entry) return null;
     return {
       score: entry.score ?? 0,

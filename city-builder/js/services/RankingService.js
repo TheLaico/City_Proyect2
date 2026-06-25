@@ -28,6 +28,18 @@ class RankingService {
     return this.#getRaw().ranking;
   }
 
+  getAllSorted() {
+    return this.#getRaw().ranking
+      .filter(e => e.cityName && e.mayor)
+      .slice()
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+  }
+
+  getEntryForCity(cityName, mayorName) {
+    const key = `${cityName}::${mayorName}`;
+    return this.#getRaw().ranking.find(e => `${e.cityName}::${e.mayor}` === key) ?? null;
+  }
+
   getCurrentCityRank() {
     const state = this.gameStore.getState();
     const { city } = state;
@@ -107,7 +119,7 @@ class RankingService {
 
     // Exponemos la clave de la ciudad actual para que ranking.html pueda
     // identificar cuál es la partida en curso sin acceso al GameStore.
-    sessionStorage.setItem('current_city_key', key);
+    sessionStorage.setItem(STORAGE_KEYS.currentCityKey, key);
   }
 }
 

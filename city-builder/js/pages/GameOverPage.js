@@ -2,6 +2,7 @@ import RankingService from '../services/RankingService.js';
 import GameStore from '../store/GameStore.js';
 import EventBus from '../events/EventBus.js';
 import SaveService from '../services/SaveService.js';
+import { STORAGE_KEYS } from '../config/constants.js';
 
 /**
  * GameOverPage
@@ -35,7 +36,7 @@ function setClass(id, cls) {
 
 function loadSnapshot() {
   try {
-    const raw = sessionStorage.getItem('game_over_snapshot');
+    const raw = sessionStorage.getItem(STORAGE_KEYS.gameOverSnapshot);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -121,7 +122,7 @@ function bindActions() {
     const eventBus   = new EventBus();
     const saveService = new SaveService(gameStore, eventBus);
     saveService.deleteSave();
-    sessionStorage.removeItem('game_over_snapshot');
+    sessionStorage.removeItem(STORAGE_KEYS.gameOverSnapshot);
     window.location.href = 'setup.html';
   });
 }

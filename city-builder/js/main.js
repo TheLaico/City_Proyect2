@@ -70,12 +70,13 @@ if (document.getElementById('setup-form')) {
 }
 
 // 8. UI principal
+const rankingService = new RankingService(gameStore, eventBus);
 const mapRenderer = new MapRenderer(gameStore, eventBus);
 const resourcePanel = new ResourcePanel(gameStore, eventBus);
 const buildMenu = new BuildMenu(gameStore, eventBus);
 const notifManager = new NotificationManager(eventBus);
 const citizenPanel = new CitizenPanel(gameStore, eventBus);
-const scorePanel = new ScorePanel(gameStore, eventBus);
+const scorePanel = new ScorePanel(gameStore, eventBus, rankingService);
 const weatherWidget = new WeatherWidget(
   eventBus,
   weatherAPI,
@@ -84,7 +85,6 @@ const weatherWidget = new WeatherWidget(
 );
 const newsPanel = new NewsPanel(eventBus, newsAPI);
 const chartPanel = new ChartPanel(gameStore, eventBus);
-const rankingService = new RankingService(gameStore, eventBus);
 const exportService = new ExportService(gameStore, eventBus);
 const importService = new ImportService(gameStore, eventBus, saveService);
 importService.init();

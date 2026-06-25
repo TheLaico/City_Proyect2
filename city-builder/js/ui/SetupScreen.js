@@ -76,7 +76,7 @@ class SetupScreen {
       const preview = document.getElementById('map-preview');
       if (preview) {
         preview.textContent = `✅ Mapa cargado: ${file.name}`;
-        preview.style.color = 'green';
+        preview.classList.add('map-preview--success');
       }
     });
 
@@ -85,7 +85,7 @@ class SetupScreen {
       const preview = document.getElementById('map-preview');
       if (preview) {
         preview.textContent = `✅ Mapa listo: ${map.width}×${map.height} celdas`;
-        preview.style.color = 'green';
+        preview.classList.add('map-preview--success');
       }
       // Actualizar inputs de tamaño para reflejar el mapa cargado
       const wInput = document.getElementById('map-width');
@@ -130,7 +130,7 @@ class SetupScreen {
     if (this.hasSavedGame?.()) {
       const btnContinue = document.getElementById('btn-continue');
       if (btnContinue) {
-        btnContinue.style.display = 'block';
+        btnContinue.classList.remove('btn-continue-hidden');
         btnContinue.addEventListener('click', () => {
           this.eventBus.emit(EventType.GAME_LOAD_REQUESTED);
         });
@@ -158,7 +158,6 @@ class SetupScreen {
         : '(coords)';
       const deptLabel = city.department ? ` — ${city.department}` : '';
       li.textContent = `${city.name}${deptLabel} ${coordsLabel}`;
-      li.style.cursor = 'pointer';
       li.addEventListener('click', async () => {
         await this.#applyCitySelection(city);
       });
@@ -217,11 +216,6 @@ class SetupScreen {
     if (lonInput) {
       lonInput.value = lon;
       lonInput.setAttribute('readonly', 'readonly');
-    }
-    const label = document.getElementById('region-selected-label');
-    if (label) {
-      label.textContent = `✅ ${city.name} (${lat}, ${lon})`;
-      label.style.display = 'block';
     }
     const results = document.getElementById('region-results');
     if (results) results.innerHTML = '';

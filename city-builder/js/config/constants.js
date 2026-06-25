@@ -126,7 +126,9 @@ export const TURN_CONFIG = Object.freeze({
 
 // PERSISTENCIA
 export const STORAGE_KEYS = Object.freeze({
-  save:    'city_builder_save',
-  ranking: 'city_builder_ranking',
-  debug:   'debug_mode',
+  save:             'city_builder_save',
+  ranking:          'city_builder_ranking',
+  debug:            'debug_mode',
+  gameOverSnapshot: 'game_over_snapshot',
+  currentCityKey:   'current_city_key',
 });

@@ -1,4 +1,5 @@
 import { EventType } from '../types/EventType.js';
+import { STORAGE_KEYS } from '../config/constants.js';
 
 /**
  * GameOverScreen
@@ -88,7 +89,7 @@ class GameOverScreen {
   // ── Persistencia del snapshot ─────────────────────────────────────────────
 
   _persist(snapshot) {
-    sessionStorage.setItem('game_over_snapshot', JSON.stringify(snapshot));
+    sessionStorage.setItem(STORAGE_KEYS.gameOverSnapshot, JSON.stringify(snapshot));
   }
 }
 

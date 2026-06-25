@@ -77,14 +77,14 @@ class BuildMenu {
         container.querySelectorAll('.build-tab-header button').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         container.querySelectorAll('.build-items-grid').forEach((p, j) => {
-          p.style.display = j === i ? '' : 'none';
+          p.classList.toggle('build-items-grid--hidden', j !== i);
         });
       });
       tabs.appendChild(tab);
       // Panel
       const panel = document.createElement('div');
       panel.className = 'build-items-grid';
-      if (i !== 0) panel.style.display = 'none';
+      if (i !== 0) panel.classList.add('build-items-grid--hidden');
       cat.items.forEach(item => {
         const btn = document.createElement('button');
         btn.className = 'build-item';
