@@ -1,3 +1,5 @@
+//Catalogo de nombres (eventos) el cual lo usa EventBus
+
 export const EventType = Object.freeze({
   // Ciclo de juego
   GAME_LOAD_REQUESTED: 'game:load_requested',

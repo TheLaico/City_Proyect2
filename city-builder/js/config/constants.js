@@ -108,6 +108,8 @@ export const SCORE_BONUSES = Object.freeze({
   populationAbove1000: 1000,
 });
 
+
+// PENALIZACIONES
 export const SCORE_PENALTIES = Object.freeze({
   negativeMonney:     -500,
   negativeElectricity: -300,
