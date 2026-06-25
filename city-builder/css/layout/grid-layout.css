@@ -227,17 +227,17 @@ body.right-collapsed #right-sidebar > * {
   box-shadow: var(--glow-accent);
 }
 
-#btn-route {
-  border-color: var(--color-amber) !important;
-  color: var(--color-amber) !important;
-  background: var(--color-amber-dim) !important;
+#top-bar #btn-route {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+  background: var(--color-amber-dim);
 }
 
-#btn-route:hover,
-#btn-route.active {
-  background: var(--color-amber) !important;
-  color: var(--color-bg) !important;
-  box-shadow: var(--glow-amber) !important;
+#top-bar #btn-route:hover,
+#top-bar #btn-route.active {
+  background: var(--color-amber);
+  color: var(--color-bg);
+  box-shadow: var(--glow-amber);
 }
 
 /* ── Bottom bar ───────────────────────────────────────────── */

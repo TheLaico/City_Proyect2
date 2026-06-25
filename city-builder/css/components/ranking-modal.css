@@ -30,8 +30,8 @@
   background: var(--color-accent-dim);
 }
 
-.ranking-row--current td {
-  background: rgba(0,229,255,0.05) !important;
+.ranking-table .ranking-row--current td {
+  background: rgba(0,229,255,0.05);
   color: var(--color-accent);
 }
 

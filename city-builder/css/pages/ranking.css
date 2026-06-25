@@ -48,13 +48,13 @@ h1 {
   background: var(--color-surface-3);
 }
 
-.ranking-row--current td {
-  background: var(--color-accent-dim) !important;
+#ranking-table .ranking-row--current td {
+  background: var(--color-accent-dim);
 }
 
-.ranking-empty {
+#ranking-table .ranking-empty {
   text-align: center;
-  padding: 2rem !important;
+  padding: 2rem;
   opacity: 0.6;
 }
 

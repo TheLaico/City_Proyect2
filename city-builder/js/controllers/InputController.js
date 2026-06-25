@@ -3,6 +3,8 @@ import { BuildingType } from '../types/BuildingType.js';
 import RouteService from '../services/RouteService.js';
 
 class InputController {
+  #keydownHandler = null;
+
   constructor(gameStore, eventBus) {
     this.gameStore = gameStore;
     this.eventBus = eventBus;
@@ -45,7 +47,7 @@ class InputController {
     }
 
     // Atajos de teclado
-    document.addEventListener('keydown', (e) => {
+    this.#keydownHandler = (e) => {
       if (e.repeat) return;
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
@@ -81,7 +83,8 @@ class InputController {
           this.eventBus.emit(EventType.NOTIFICATION_SHOW, { message: '💾 Guardando partida...' });
           break;
       }
-    });
+    };
+    document.addEventListener('keydown', this.#keydownHandler);
 
     const turnDurationInput = document.getElementById('turn-duration');
     if (turnDurationInput) {
@@ -128,6 +131,13 @@ class InputController {
         });
       }
     });
+  }
+
+  destroy() {
+    if (this.#keydownHandler) {
+      document.removeEventListener('keydown', this.#keydownHandler);
+      this.#keydownHandler = null;
+    }
   }
 
   #handleRouteClick(x, y) {
